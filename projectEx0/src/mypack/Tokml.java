@@ -7,7 +7,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 import org.apache.commons.csv.CSVFormat;
@@ -164,7 +168,7 @@ public class Tokml {
 	 * @param get the ArrayList<WifiSpots> c and set it by the strongest macs with the best signal
 	 * @return ArrayList<WifiSpots>
 	 */
-
+//lol
 	public ArrayList<WifiSpot> Macim(ArrayList<WifiSpots> c){
 
 		ArrayList<WifiSpot> macim=new ArrayList<WifiSpot>();
@@ -218,7 +222,6 @@ public class Tokml {
 			e.printStackTrace();
 		}
 	}
-
 	/**
 	 * 
 	 * @param get String byFilt,startRange and endRange: choose the correct filter by wordKey(byFilt),and take the ranges for specific users filt
@@ -279,14 +282,25 @@ public class Tokml {
 			//System.out.println(bet);
 			return big>=mid && mid>=low;
 		}
+		
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm"); 
+		Date betDate;
+		Date startDate;
+		Date endDate;
+		try {
+		    betDate = df.parse(bet);
+		    startDate=df.parse(start);
+		    endDate=df.parse(end);
+		    if(startDate.after(betDate)&&endDate.before(endDate)){
+				return true;
+		    }
+		    String newDateString = df.format(betDate);
+		    System.out.println(newDateString);
+		} catch (ParseException e) {
+		    e.printStackTrace();
+		}
+		return false;
 
-		//System.out.println(start+ " "+end);
-		String[] ba = bet.split(" ");
-		// System.out.println(ba[1]);
-		String str = ba[1];
-		String[] st = str.split(":");
-		//System.out.println(st[0]+ " "+st[1]);
-		return st[0].equals(start) && st[1].equals(end);
 
 	}
 
