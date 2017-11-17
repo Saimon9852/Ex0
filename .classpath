@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="projectEx0/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/Rachel Plaksin/Desktop/commons-csv-1.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rachel Plaksin/Desktop/JavaAPIforKml-2.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rachel Plaksin/Desktop/stuff/jaxb-ri/lib/jaxb-api.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rachel Plaksin/Desktop/stuff/jaxb-ri/lib/jaxb-core.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rachel Plaksin/Desktop/stuff/jaxb-ri/lib/jaxb-impl.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rachel Plaksin/Desktop/stuff/jaxb-ri/lib/jaxb-jxc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rachel Plaksin/Desktop/stuff/jaxb-ri/lib/jaxb-xjc.jar"/>
+	<classpathentry kind="output" path="projectEx0/bin"/>
+</classpath>

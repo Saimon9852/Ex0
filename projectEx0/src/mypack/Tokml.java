@@ -2,6 +2,8 @@ package mypack;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,6 +12,9 @@ import java.util.Scanner;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+
+import de.micromata.opengis.kml.v_2_2_0.Document;
+import de.micromata.opengis.kml.v_2_2_0.Kml;
 /**
  * this class is used to write Kml files
  * the class varialbes DB and macim are used to hold the data we want to write.
@@ -185,8 +190,7 @@ public class Tokml {
 		return macim;
 
 	}
-
-
+	
 	//searches for the mac address in the macim data structure
 	//returns the index or -1 if not found.
 
@@ -198,7 +202,22 @@ public class Tokml {
 			}
 		}return -1;
 	}
-
+	public static void cKml(ArrayList<WifiSpots> dp){
+		final Kml kml = new Kml();
+		Document doc=kml.createAndSetDocument();
+		for(int i=0;i<dp.size();i++){
+			doc.createAndAddPlacemark()
+			   .withName(dp.get(i).getSpots().get(0).getSsid()).withDescription("sup").withOpen(Boolean.TRUE)
+			   .createAndSetPoint().addToCoordinates(Double.parseDouble(dp.get(i).getLongtitude()), 
+					   Double.parseDouble(dp.get(i).getLatitude()),Double.parseDouble(dp.get(i).getAltitude()));
+		}
+		try {
+			kml.marshal(new File("HelloKml.kml"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * 

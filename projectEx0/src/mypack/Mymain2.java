@@ -13,6 +13,7 @@ public class Mymain2 {
 		Ariel.writescan("take2");
 		Tokml kml=new Tokml("take2.csv");
 		kml.CreatBasicKml("test1");
+		kml.cKml(kml.DB);
 
 	}
 }
