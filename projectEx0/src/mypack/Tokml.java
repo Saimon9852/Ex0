@@ -162,13 +162,11 @@ public class Tokml {
 		CreateKml(DB,name);
 
 	}
-
 	/**
 	 * 
 	 * @param get the ArrayList<WifiSpots> c and set it by the strongest macs with the best signal
 	 * @return ArrayList<WifiSpots>
 	 */
-//lol
 	public ArrayList<WifiSpot> Macim(ArrayList<WifiSpots> c){
 
 		ArrayList<WifiSpot> macim=new ArrayList<WifiSpot>();
@@ -206,14 +204,15 @@ public class Tokml {
 			}
 		}return -1;
 	}
-	public static void cKml(ArrayList<WifiSpots> dp){
+	public  void cKml(){
 		final Kml kml = new Kml();
 		Document doc=kml.createAndSetDocument();
-		for(int i=0;i<dp.size();i++){
+		for(int i=0;i<DB.size();i++){
+
 			doc.createAndAddPlacemark()
-			   .withName(dp.get(i).getSpots().get(0).getSsid()).withDescription("sup").withOpen(Boolean.TRUE)
-			   .createAndSetPoint().addToCoordinates(Double.parseDouble(dp.get(i).getLongtitude()), 
-					   Double.parseDouble(dp.get(i).getLatitude()),Double.parseDouble(dp.get(i).getAltitude()));
+			   .withName(DB.get(i).getSpots().get(0).getSsid()).withDescription("sup").withOpen(Boolean.TRUE)
+			   .createAndSetPoint().addToCoordinates(Double.parseDouble(DB.get(i).getLongtitude()), 
+					   Double.parseDouble(DB.get(i).getLatitude()),Double.parseDouble(DB.get(i).getAltitude()));
 		}
 		try {
 			kml.marshal(new File("HelloKml.kml"));
