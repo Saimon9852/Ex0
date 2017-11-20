@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="C:/Users/Rachel Plaksin/Desktop/stuff/jaxb-ri/lib/jaxb-impl.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Rachel Plaksin/Desktop/stuff/jaxb-ri/lib/jaxb-jxc.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Rachel Plaksin/Desktop/stuff/jaxb-ri/lib/jaxb-xjc.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="projectEx0/bin"/>
 </classpath>
