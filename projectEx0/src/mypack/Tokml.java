@@ -100,58 +100,6 @@ public class Tokml {
 		}
 	}
 
-	/**
-	 * 
-	 * @param gets ArrayList<WifiSpots> and String name, Create KML file from the WifiSpots List 
-	 * @return void function
-	 */
-	//creating the kml, kml template was found online.
-	private void CreateKml(ArrayList<WifiSpots> dp,String name){
-		try{
-			FileWriter writer = new FileWriter(name+".kml", true);
-			BufferedWriter bw = new BufferedWriter(writer);
-			bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-			bw.newLine();
-			bw.write("<kml xmlns=\"http://www.opengis.net/kml/2.2\">");
-			bw.newLine();
-			bw.write("<Document>");
-			bw.newLine();
-			bw.write("<name>Ex0</name>");
-			bw.newLine();
-
-			for (int i = 0; i < dp.size(); i++) {
-				bw.write("<Placemark>");
-				bw.newLine();
-				bw.write("<name>"+dp.get(i).getID()+"</name>");bw.newLine();
-				bw.write("<description>"+dp.get(i).getSpots().get(0).getSsid()+ "</description>");bw.newLine();
-				bw.write("<Point>");bw.newLine();
-				bw.write("<coordinates>"+dp.get(i).getLongtitude()+","+dp.get(i).Latitude+"," + dp.get(i).Altitude +"</coordinates>");bw.newLine();
-				bw.write("</Point>");bw.newLine();
-				bw.write("</Placemark>");bw.newLine();	 
-			}
-			//writing the Strongest instance of each mac address to the kml.
-			for(int i=0;i<macim.size();i++){
-				bw.write("<Placemark>");
-				bw.newLine();
-				
-				bw.write("<name>"+macim.get(i).mac+"</name>");bw.newLine();
-				bw.write("<description>"+macim.get(i).getRssi()+ "</description>");bw.newLine();
-				bw.write("<Point>");bw.newLine();
-				bw.write("<coordinates>"+macim.get(i).getLongtitude()+","+macim.get(i).getLatitude()+"," + macim.get(i).altitude +"</coordinates>");bw.newLine();
-				bw.write("</Point>");bw.newLine();
-				bw.write("</Placemark>");bw.newLine();
-			}
-			bw.write("</Document>");bw.newLine();
-			bw.write("</kml>");bw.newLine();
-			bw.close();
-			System.out.println(name + ".kml was created successfully");
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
-
 	
 	/**
 	 * 
@@ -203,24 +151,28 @@ public class Tokml {
 	 */
 	public void CreateKmlByFilter(String name){
 
-		String[] filtersKind = {"None","Time","Lat","Lon","Alt"};
+		
+		String[] filtersKind = {"None","Time","Lat","Lon","Alt","inRadius"};
 		final Kml kml = new Kml();
 		Document doc=kml.createAndSetDocument();
 		int k = typeOfSort(filtersKind);
-		boolean time = k==1;
-		String[] values = new String [2];
+		boolean istime = k==1;
+		
+		String[] values = new String [3];
 		if(k!=0) values = validValues(k);
+		double rad = -1;
+		if(k==5) rad = Double.parseDouble(values[2]);
 		
 		for (int j = 0; j < DB.size(); j++) {
 			boolean check;
 			if(k!=0){
-				
-				String hold = selectByFilter(k,j);
-				check=inRange(values[0],values[1],hold,time);
+				String[] hold = selectByFilter(k,j);
+				check=inRange(values[0],values[1],hold,istime,rad);
 			}
 			else check = true;
 			
 			if(check){
+				
 				doc.createAndAddPlacemark()
 				   .withName(DB.get(j).getSpots().get(0).getSsid()).withDescription("sup").withOpen(Boolean.TRUE)
 				   .createAndSetPoint().addToCoordinates(Double.parseDouble(DB.get(j).getLongtitude()), 
@@ -231,7 +183,8 @@ public class Tokml {
 		try {
 			
 			kml.marshal(new File(name+".kml"));
-			System.out.println(name + ".kml was created successfully,By filter" + filtersKind[k]);
+			System.out.println(name + ".kml was created successfully, By filter " + filtersKind[k]);
+			
 		}
 		catch (FileNotFoundException e) {
 			
@@ -273,10 +226,12 @@ public class Tokml {
 		String c = "";
 		int val1 =0,val2=0,val3=0,val4 =0;
 		String s = "";
-		if(typeFilt==1){val2 = 59;val4=24; c = ":"; s= "please enter the hour the scan was taken in the following format <hr>:<mins>"; }
-		else if(typeFilt == 2){val1 = -180;val2=180;val3=-180;val4=180; c="-";s= "insert an Latitude range with the format NUMBER-NUMBER(in meters)";}
-		else if(typeFilt ==3){val1=-90;val2=90;val3=-90;val4=90; c="-";s = "insert an Longtitude range with the format NUMBER-NUMBER(in meters between -90 to 90)";}
-		else {val1=-300;val2=15000;val3=-300;val3=15000; c="-";s="insert an Altitude range with the format NUMBER-NUMBER(in meters)";}
+		if(typeFilt==1){val2 = 59;val4=24; c = ":"; s= "Please enter the hour the scan was taken in the following format <hr>:<mins>"; }
+		else if(typeFilt == 2){val1 = -180;val2=180;val3=-180;val4=180; c="-";s= "Please insert an Latitude range with the format NUMBER-NUMBER(in meters)";}
+		else if(typeFilt ==3){val1=-90;val2=90;val3=-90;val4=90; c="-";s = "Please insert an Longtitude range with the format NUMBER-NUMBER(in meters between -90 to 90)";}
+		else if(typeFilt == 4){val1=-300;val2=15000;val3=-300;val3=15000; c="-";s="Please insert an Altitude range with the format NUMBER-NUMBER(in meters)";}
+		else {c=","; s = "Please insert coordinates and radius in the format: Longtitude,Latitude,Radius";}
+		
 		
 		System.out.println(s);
 		String[] test = new String[2];
@@ -288,15 +243,24 @@ public class Tokml {
 				filter = scanner.nextLine();
 				int a = howManyexist(filter,c.charAt(0));
 				test=filter.split(c);
-				if(a==1)
+				boolean isNum = isArrInt(test);
+				if(a==1 && isNum)
 				{
-					if((Integer.parseInt(test[1])>=val1&&Integer.parseInt(test[1])<=val2)
-							&&Integer.parseInt(test[1])>=val3&&Integer.parseInt(test[1])<=val4){
+					if((Double.parseDouble(test[1])>=val1&&Double.parseDouble(test[1])<=val2)
+							&&Double.parseDouble(test[1])>=val3&&Double.parseDouble(test[1])<=val4){
 						btest=true;
 					}
 					else{
 						System.out.println("the input format is incorrect");
 					}
+				}
+				else if(a==2 && isNum)
+				{
+					if((Double.parseDouble(test[0]) >= -90 && Double.parseDouble(test[0]) <= 90)
+							&& (Double.parseDouble(test[1]) >= -180 && Double.parseDouble(test[1]) <= 180)
+							&& Double.parseDouble(test[2]) > 0)
+					btest = true;
+					
 				}
 				else
 					System.out.println("the input format is incorrect");
@@ -311,21 +275,60 @@ public class Tokml {
 		
 		
 	}
+		
+	private boolean isArrInt(String[] st){
+		
+		for (int i = 0; i < st.length; i++) {
+			 try 
+			 {  
+		         Double.parseDouble(st[i]);  
+		         
+		      } catch (NumberFormatException e) {  
+		         return false;  
+		      }
+		}
+		return true;
+	}
 	
+	private boolean inCircle(String x1,String y1,String x2,String y2,double radius){
+	
+		 return distance(Double.parseDouble(x1),Double.parseDouble(y1),Double.parseDouble(x2),
+				 Double.parseDouble(y2)) <= radius;
+	}
 
+	private double distance(double lat1, double lon1, double lat2, double lon2) {
+		
+		double theta = lon1 - lon2;
+		double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+		dist = Math.acos(dist);
+		dist = rad2deg(dist);
+		return dist * 60 * 1.1515 * 1.609344;
+	}
+	
+	private double deg2rad(double deg) {
+		return (deg * Math.PI / 180.0);
+	}
+	
+	private double rad2deg(double rad) {
+		return (rad * 180 / Math.PI);
+	}
+	
+	
 	/**
 	 * 
 	 * @param gets Integer k, and Integer index , k present which filter is been done and index send for drawing the right data from the DB
 	 * @return String 
 	 */
+	private String[] selectByFilter(int k ,int index){
 
-	private String selectByFilter(int k ,int index){
-
-		String  s = "";
-		if(k==4) s = DB.get(index).getAltitude();
-		if(k==3) s = DB.get(index).getLongtitude();
-		if(k==2) s = DB.get(index).getLatitude();
-		if(k==1) s = DB.get(index).getFirstSeen();
+		String[] s = new String[2];
+		s[1] = "TEST";
+		if(k==4) s[0] = DB.get(index).getAltitude();
+		if(k==3) s[0] = DB.get(index).getLongtitude();
+		if(k==2) s[0] = DB.get(index).getLatitude();
+		if(k==1) s[0] = DB.get(index).getFirstSeen();
+		if(k==5) {s[0] = DB.get(index).getLongtitude();s[1]= DB.get(index).getLatitude();}
+		
 		return s;
 	}
 
@@ -335,16 +338,20 @@ public class Tokml {
 	 * bet shows the data from the DB and checked for his stand in conditions
 	 * @return boolean 
 	 */
-	private boolean inRange(String start,String end,String bet,boolean b){
+	private boolean inRange(String start,String end,String[] bet,boolean b,double rad){
 
-		if(!b)
+		if(!b && bet[1].equals("TEST"))
 		{
 			double low = (Double.parseDouble(start));
 
 			double big = (Double.parseDouble(end));
-			double mid = (Double.parseDouble(bet));
-			//System.out.println(bet);
+			double mid = (Double.parseDouble(bet[0]));
 			return big>=mid && mid>=low;
+		}
+		
+		if(bet[1].equals("TEST") == false)
+		{
+			return inCircle(start,end,bet[0],bet[1],rad);
 		}
 		
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm"); 
@@ -352,7 +359,7 @@ public class Tokml {
 		Date startDate;
 		Date endDate;
 		try {
-		    betDate = df.parse(bet);
+		    betDate = df.parse(bet[0]);
 		    startDate=df.parse(start);
 		    endDate=df.parse(end);
 		    if(startDate.after(betDate)&&endDate.before(endDate)){
