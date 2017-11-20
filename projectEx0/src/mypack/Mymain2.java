@@ -17,29 +17,7 @@ public class Mymain2 {
 		Csv Ariel=new Csv("C:\\Users\\Saimon\\Desktop\\test");
 		Ariel.writescan("take2");
 		Tokml kml=new Tokml("take2.csv");
-        kml.CreateKmlByFilter("dude");
-		
-		//kml.cKml(kml.DB);
-		/*String start="28/10/2017 20:10";
-		String bet="29/10/2017 20:10";
-		String end="30/10/2017 20:10";
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm"); 
-		Date betDate;
-		Date startDate;
-		Date endDate;
-		try {
-		    betDate = df.parse(bet);
-		    startDate=df.parse(start);
-		    endDate=df.parse(end);
-		    if(startDate.before(betDate)&&endDate.after(betDate)){
-				System.out.println("yep");
-		    }
-		    String newDateString = df.format(betDate);
-		    System.out.println(newDateString);
-		} catch (ParseException e) {
-		    e.printStackTrace();
-		}
-	}*/
+        kml.CreateKmlByFilter("circle");
 	}
 }
 
