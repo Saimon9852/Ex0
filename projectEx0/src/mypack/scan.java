@@ -21,7 +21,9 @@ public class scan {
 	// by using the scan function and cut access function
 
 	ArrayList<WifiSpots> scan=new ArrayList<WifiSpots>();
-
+	public scan(){
+		
+	}
 	public scan(WifiSpots sp){
 		setScan(sp);
 		cutAcces();

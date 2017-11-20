@@ -34,6 +34,9 @@ public class WifiSpot {
 		this.longtitude=longtitude;
 		this.altitude=altitude;
 	}
+	public WifiSpot(){
+		
+	}
 	public WifiSpot(String ssid,String mac,String chanel,String rssi){
 		this.rssi=rssi;
 		this.ssid=ssid;
