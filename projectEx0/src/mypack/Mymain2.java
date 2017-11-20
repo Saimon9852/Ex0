@@ -13,10 +13,12 @@ public class Mymain2 {
 
 
 	public static void main(String[] args)  throws DataException{
-		Csv Ariel=new Csv("C:\\Users\\Rachel Plaksin\\Desktop\\Ariel\\");
+		
+		Csv Ariel=new Csv("C:\\Users\\Saimon\\Desktop\\test");
 		Ariel.writescan("take2");
 		Tokml kml=new Tokml("take2.csv");
-		kml.CreatBasicKml("test1");
+        kml.CreateKmlByFilter("dude");
+		
 		//kml.cKml(kml.DB);
 		/*String start="28/10/2017 20:10";
 		String bet="29/10/2017 20:10";

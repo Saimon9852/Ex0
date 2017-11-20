@@ -29,7 +29,7 @@ import de.micromata.opengis.kml.v_2_2_0.Kml;
  */
 public class Tokml {
 	ArrayList<WifiSpots> DB=new ArrayList<WifiSpots>();
-	ArrayList<WifiSpot>macim=new ArrayList<WifiSpot>();
+	ArrayList<WifiSpot> macim=new ArrayList<WifiSpot>();
 	String path;
 
 	public Tokml(String path){
@@ -133,6 +133,7 @@ public class Tokml {
 			for(int i=0;i<macim.size();i++){
 				bw.write("<Placemark>");
 				bw.newLine();
+				
 				bw.write("<name>"+macim.get(i).mac+"</name>");bw.newLine();
 				bw.write("<description>"+macim.get(i).getRssi()+ "</description>");bw.newLine();
 				bw.write("<Point>");bw.newLine();
@@ -151,17 +152,7 @@ public class Tokml {
 		}
 	}
 
-	/**
-	 * 
-	 * @param gets String name and create basic KML Format with the ListArray<WifiSpots> DB
-	 * @return void function
-	 */
-
-	public void CreatBasicKml(String name){
-		macim = Macim(DB);
-		CreateKml(DB,name);
-
-	}
+	
 	/**
 	 * 
 	 * @param get the ArrayList<WifiSpots> c and set it by the strongest macs with the best signal
@@ -195,8 +186,6 @@ public class Tokml {
 	
 	//searches for the mac address in the macim data structure
 	//returns the index or -1 if not found.
-
-
 	public int sMacim(String mac,ArrayList<WifiSpot> macim){
 		for(int i=0;i<macim.size();i++){
 			if(mac.equals(macim.get(i).getMac())){
@@ -204,48 +193,125 @@ public class Tokml {
 			}
 		}return -1;
 	}
-	public  void cKml(){
-		final Kml kml = new Kml();
-		Document doc=kml.createAndSetDocument();
-		for(int i=0;i<DB.size();i++){
-
-			doc.createAndAddPlacemark()
-			   .withName(DB.get(i).getSpots().get(0).getSsid()).withDescription("sup").withOpen(Boolean.TRUE)
-			   .createAndSetPoint().addToCoordinates(Double.parseDouble(DB.get(i).getLongtitude()), 
-					   Double.parseDouble(DB.get(i).getLatitude()),Double.parseDouble(DB.get(i).getAltitude()));
-		}
-		try {
-			kml.marshal(new File("HelloKml.kml"));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	
+		
+	
 	/**
 	 * 
 	 * @param get String byFilt,startRange and endRange: choose the correct filter by wordKey(byFilt),and take the ranges for specific users filt
 	 * @return ArrayList<WifiSpots>
 	 */
+	public void CreateKmlByFilter(String name){
 
-	private ArrayList<WifiSpots> FilterDB(String byFilt,String startRange,String endRange){
-
-		ArrayList<WifiSpots> dbFilt = new ArrayList<WifiSpots>();
-		int k = 0;
-		boolean time = false;
-		if(byFilt.equals("Alt")) k = 4;
-		if(byFilt.equals("Lon")) k = 3;
-		if(byFilt.equals("Lat")) k = 2;
-		if(byFilt.equals("Time")){k = 1;time=true;}
+		String[] filtersKind = {"None","Time","Lat","Lon","Alt"};
+		final Kml kml = new Kml();
+		Document doc=kml.createAndSetDocument();
+		int k = typeOfSort(filtersKind);
+		boolean time = k==1;
+		String[] values = new String [2];
+		if(k!=0) values = validValues(k);
+		
 		for (int j = 0; j < DB.size(); j++) {
-			String hold = selectByFilter(k,j);
-			//System.out.println(hold);
-			if(inRange(startRange,endRange,hold,time)){
-				dbFilt.add(DB.get(j));
+			boolean check;
+			if(k!=0){
+				
+				String hold = selectByFilter(k,j);
+				check=inRange(values[0],values[1],hold,time);
+			}
+			else check = true;
+			
+			if(check){
+				doc.createAndAddPlacemark()
+				   .withName(DB.get(j).getSpots().get(0).getSsid()).withDescription("sup").withOpen(Boolean.TRUE)
+				   .createAndSetPoint().addToCoordinates(Double.parseDouble(DB.get(j).getLongtitude()), 
+						   Double.parseDouble(DB.get(j).getLatitude()),Double.parseDouble(DB.get(j).getAltitude()));	
 			}
 		}
-		return dbFilt;
+			
+		try {
+			
+			kml.marshal(new File(name+".kml"));
+			System.out.println(name + ".kml was created successfully,By filter" + filtersKind[k]);
+		}
+		catch (FileNotFoundException e) {
+			
+			e.printStackTrace();
+		}
 
 	}
+ 
+	private int typeOfSort(String[] filtersKind){
+		
+		String allfilt = "";
+		for (int i = 0; i < filtersKind.length; i++) {
+			   if(i+1<filtersKind.length)
+				   allfilt += filtersKind[i] + ",";
+			   else allfilt += filtersKind[i];
+		}
+		boolean b = false;
+		String filter = "";
+		int index = 0;
+		while(!b){
+			  System.out.println("Choose type of filter:" + allfilt);
+				Scanner scanner = new Scanner(System.in);
+				filter = scanner.nextLine();
+				for (int i = 0; i < filtersKind.length; i++) {
+					   if(filter.equals(filtersKind[i])){
+						   b= true;
+						   index = i;
+					   }
+				}
+				if(b==false)System.out.println("The filter is not exist in the list");
+		  
+		}
+		
+		return index;
+	}
+
+	private String[] validValues(int typeFilt){
+		
+		String c = "";
+		int val1 =0,val2=0,val3=0,val4 =0;
+		String s = "";
+		if(typeFilt==1){val2 = 59;val4=24; c = ":"; s= "please enter the hour the scan was taken in the following format <hr>:<mins>"; }
+		else if(typeFilt == 2){val1 = -180;val2=180;val3=-180;val4=180; c="-";s= "insert an Latitude range with the format NUMBER-NUMBER(in meters)";}
+		else if(typeFilt ==3){val1=-90;val2=90;val3=-90;val4=90; c="-";s = "insert an Longtitude range with the format NUMBER-NUMBER(in meters between -90 to 90)";}
+		else {val1=-300;val2=15000;val3=-300;val3=15000; c="-";s="insert an Altitude range with the format NUMBER-NUMBER(in meters)";}
+		
+		System.out.println(s);
+		String[] test = new String[2];
+		boolean btest=false;
+		String filter="";
+		try{
+			while(btest==false){
+				Scanner scanner = new Scanner(System.in);
+				filter = scanner.nextLine();
+				int a = howManyexist(filter,c.charAt(0));
+				test=filter.split(c);
+				if(a==1)
+				{
+					if((Integer.parseInt(test[1])>=val1&&Integer.parseInt(test[1])<=val2)
+							&&Integer.parseInt(test[1])>=val3&&Integer.parseInt(test[1])<=val4){
+						btest=true;
+					}
+					else{
+						System.out.println("the input format is incorrect");
+					}
+				}
+				else
+					System.out.println("the input format is incorrect");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+
+		
+		return test;
+		
+		
+	}
+	
 
 	/**
 	 * 
@@ -269,7 +335,6 @@ public class Tokml {
 	 * bet shows the data from the DB and checked for his stand in conditions
 	 * @return boolean 
 	 */
-
 	private boolean inRange(String start,String end,String bet,boolean b){
 
 		if(!b)
@@ -303,152 +368,13 @@ public class Tokml {
 
 	}
 
-	/**
-	 * 
-	 * @param gets String name and create KML file filtered by Time
-	 * @ void Function
-	 */
-
-	public void createByTime(String name)
-	{	System.out.println("please enter the hour the scan was taken in the following format <hr>:<mins>");
-	String[] test = new String[2];
-	boolean btest=false;
-	String filter="";
-	try{
-		while(btest==false){
-			Scanner scanner = new Scanner(System.in);
-			filter = scanner.nextLine();
-			int a = howManyexist(filter,':');
-			test=filter.split(":");
-			if(a==1)
-			{
-				if((Integer.parseInt(test[1])>=0&&Integer.parseInt(test[1])<=59)
-						&&Integer.parseInt(test[1])>=0&&Integer.parseInt(test[1])<=24){
-					btest=true;
-				}
-				else{
-					System.out.println("the input format is incorrect");
-				}
-			}
-			else
-				System.out.println("the input format is incorrect");
-		}
-	}
-	catch(Exception e){
-		e.printStackTrace();
-	}
-
-	ArrayList<WifiSpots> newdb = FilterDB("Time",test[0],test[1]);
-	macim = Macim(newdb);
-	CreateKml(newdb,name);
-
-	}
-
-	/**
-	 * 
-	 * @param gets String name and create KML file filtered by Longtitude
-	 * @ void Function
-	 */
-
-	public void createByLon(String name)
-	{	
-		boolean btest=false;
-		String filter="";
-		String[] range = new String[2];
-		System.out.println("insert an Longtitude range with the format NUMBER-NUMBER(in meters between -90 to 90)");
-		while(btest==false){
-			Scanner scanner = new Scanner(System.in);
-			filter = scanner.nextLine();
-			int a = howManyexist(filter,'-');
-			range = filter.split("-");
-			if(a == 1){
-				if((Integer.parseInt(range[0])>=-90&Integer.parseInt(range[0])<=90)&&(Integer.parseInt(range[1])>=-90&Integer.parseInt(range[1])<=90))
-					btest=true;
-
-				else
-					System.out.println("wrong Longtitude format");
-			}
-			else
-				System.out.println("wrong Longtitude format");
-		}
-
-		ArrayList<WifiSpots> newdb = FilterDB("Lon",range[0],range[1]);
-		macim = Macim(newdb);
-		CreateKml(newdb,name);
-	}
-
-	/**
-	 * 
-	 * @param gets String name and create KML file filtered by Latitude
-	 * @ void Function
-	 */
-
-	public void createByLat(String name)
-	{
-		boolean btest=false;
-		String filter="";
-		String[] range = new String[2];
-		System.out.println("insert an Latitude range with the format NUMBER-NUMBER(in meters)");
-		while(btest==false){
-			Scanner scanner = new Scanner(System.in);
-			filter = scanner.nextLine();
-			int a = howManyexist(filter,'-');
-			range = filter.split("-");
-			if(a == 1){
-				if((Integer.parseInt(range[0])>=-180&Integer.parseInt(range[0])<=180)&&(Integer.parseInt(range[1])>=-180&Integer.parseInt(range[1])<=180)){
-					btest=true;
-				}
-				else
-					System.out.println("wrong Latitude format");
-			}
-			else
-				System.out.println("wrong Latitude format");
-		}
-
-		ArrayList<WifiSpots> newdb = FilterDB("Lat",range[0],range[1]);
-		macim = Macim(newdb);
-		CreateKml(newdb,name);
-	}
-
-	/**
-	 * 
-	 * @param gets String name and create KML file filtered by Altitude
-	 * @ void Function
-	 */
-
-	public void createByAlt(String name)
-	{
-		boolean btest=false;
-		String filter="";
-		String[] range = new String[2];
-		System.out.println("insert an Altitude range with the format NUMBER-NUMBER(in meters)");
-		while(btest==false){
-			Scanner scanner = new Scanner(System.in);
-			filter = scanner.nextLine();
-			int a = howManyexist(filter,'-');
-			range = filter.split("-");
-			if(a == 1){
-				if((Integer.parseInt(range[0])>=-300&Integer.parseInt(range[0])<=15000)&&(Integer.parseInt(range[1])>=-300&Integer.parseInt(range[1])<=15000)){
-					btest=true;
-				}
-				else
-					System.out.println("wrong Altitude format");
-			}
-			else
-				System.out.println("wrong Altitude format");
-		}
-		ArrayList<WifiSpots> newdb = FilterDB("Alt",range[0],range[1]);
-		macim = Macim(newdb);
-		CreateKml(newdb,name);
-	}
 
 	/**
 	 * 
 	 * @param get String s and char symbol, check how many times the char symbol exists in the string s
 	 * @ Integer
 	 */
-
-	public int howManyexist(String s , char symbol){
+	private int howManyexist(String s , char symbol){
 
 		int count = 0;
 		for (int i = 0; i < s.length(); i++) {
