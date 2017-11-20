@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="C:/Users/Saimon/Desktop/API&apos;S/API&apos;S (2)/jaxb-api-2.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Saimon/Desktop/API&apos;S/API&apos;S (2)/jaxb-impl-2.1.17.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Saimon/Desktop/API&apos;S/API&apos;S (2)/jsr173_api-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Saimon/Desktop/API&apos;S/jar/org.junit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
