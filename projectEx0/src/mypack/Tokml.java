@@ -98,7 +98,7 @@ public class Tokml {
 		ArrayList<WifiSpot> macim=new ArrayList<WifiSpot>();
 		for(int i=0;i<c.size();i++){
 			for(int j=0;j<c.get(i).getSpots().size();j++){
-				int check=sMacim(c.get(i).getSpots().get(j).mac,macim);
+				int check=sMacim(c.get(i).getSpots().get(j).getMac(),macim);
 				if(check==-1){
 					c.get(i).getSpots().get(j).setAltitude(c.get(i).getAltitude());
 					c.get(i).getSpots().get(j).setLongtitude(c.get(i).getLongtitude());
@@ -361,6 +361,7 @@ public class Tokml {
 		double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
 		dist = Math.acos(dist);
 		dist = rad2deg(dist);
+		System.out.println(dist * 60 * 1.1515 * 1.609344);
 		return dist * 60 * 1.1515 * 1.609344;
 	}
 	
@@ -396,7 +397,7 @@ public class Tokml {
 		if(k==3) s[0] = DB.get(index).getLongtitude();
 		if(k==2) s[0] = DB.get(index).getLatitude();
 		if(k==1) s[0] = DB.get(index).getFirstSeen();
-		if(k==5) {s[0] = DB.get(index).getLongtitude();s[1]= DB.get(index).getLatitude();}
+		if(k==5) {s[0] = DB.get(index).getLatitude();s[1]= DB.get(index).getLongtitude();}
 		
 		return s;
 	}

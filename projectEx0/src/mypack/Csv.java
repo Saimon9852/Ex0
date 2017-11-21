@@ -17,12 +17,15 @@ import java.util.ArrayList;
  */
 public class Csv {
 	
-	String path;
-	ArrayList<scan> Scans=new ArrayList<scan>();
-	ArrayList<String> files=new ArrayList<String>();
+	private String path;
+	private ArrayList<scan> Scans=new ArrayList<scan>();
+	private ArrayList<String> files=new ArrayList<String>();
 	/**
 	 * sets the csv object
 	 */
+	public Csv(){
+		
+	}
 	public Csv(String path)  throws DataException
 	{
 		
@@ -79,7 +82,7 @@ public class Csv {
 		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
 		ArrayList<String> paths=new ArrayList<String>();
-
+		
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()){
 				if(isCsv(listOfFiles[i].getName()))
@@ -90,6 +93,8 @@ public class Csv {
 				}
 			}
 
+		} if(paths.size()==0){
+			throw new DataException("No currect input files");
 		}
 		return paths;
 	}

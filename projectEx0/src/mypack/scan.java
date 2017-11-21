@@ -49,7 +49,7 @@ public class scan {
 			cur.setLatitude(sp.getSpots().get(i).getLatitude());
 			cur.setLongtitude(sp.getSpots().get(i).getLongtitude());
 			// we test if there are 2 or more spots who share the same "firstseen" property
-			if(!(sp.getSpots().get(i).firsseen.equals(sp.getSpots().get(i+1).firsseen))){
+			if(!(sp.getSpots().get(i).getFirsseen().equals(sp.getSpots().get(i+1).getFirsseen()))){
 				//if this spot dosent share time stamp with other spots
 				//we add it to cur and then add it as its own scan.
 				cur.getSpots().add(sp.getSpots().get(i));
@@ -58,7 +58,7 @@ public class scan {
 			}
 			//if we have 2 or more spots that share the same time stamp we add them all to cur 
 			// and THEN set them up as their own scan.
-			while(i<sp.getSpots().size()-1&&(sp.getSpots().get(i).firsseen.equals(sp.getSpots().get(i+1).firsseen))){
+			while(i<sp.getSpots().size()-1&&(sp.getSpots().get(i).getFirsseen().equals(sp.getSpots().get(i+1).getFirsseen()))){
 				//System.out.println(sp.getSpots().get(i).firsseen+" "+sp.getSpots().get(i+1).firsseen);
 				cur.getSpots().add(sp.getSpots().get(i));
 				i++;

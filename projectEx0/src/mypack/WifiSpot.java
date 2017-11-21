@@ -15,14 +15,14 @@ import org.apache.commons.csv.CSVRecord;
  *
  */
 public class WifiSpot {
-	String ssid;
-	String mac;
-	String firsseen;
-	String chanel;
-	String rssi;
-	String latitude;
-	String longtitude;
-	String altitude;
+	private String ssid;
+	private String mac;
+	private String firsseen;
+	private String chanel;
+	private String rssi;
+	private String latitude;
+	private String longtitude;
+	private String altitude;
 	public WifiSpot(String ssid,String mac,String firstseen,String chanel,String rssi,String latitude
 			,String longtitude,String altitude){
 		this.ssid=ssid;

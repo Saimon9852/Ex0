@@ -11,7 +11,6 @@ import java.util.Date;
 public class Mymain2 {
 
 
-
 	public static void main(String[] args)  throws DataException{
 		
 		Csv Ariel=new Csv("C:\\Users\\Saimon\\Desktop\\test");
