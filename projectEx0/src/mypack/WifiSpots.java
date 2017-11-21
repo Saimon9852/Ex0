@@ -17,11 +17,11 @@ import org.apache.commons.csv.CSVRecord;
  *
  */
 public class WifiSpots {
-	String FirstSeen;
-	String Altitude;
-	String Longtitude;
-	String ID;
-	String Latitude;
+	private String FirstSeen;
+	private String Altitude;
+	private String Longtitude;
+	private String ID;
+	private String Latitude;
 	public ArrayList<WifiSpot> spots=new ArrayList<WifiSpot>();
 
 	WifiSpots(String path){
