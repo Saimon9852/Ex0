@@ -19,6 +19,8 @@ import org.apache.commons.csv.CSVRecord;
 
 import de.micromata.opengis.kml.v_2_2_0.Document;
 import de.micromata.opengis.kml.v_2_2_0.Kml;
+import de.micromata.opengis.kml.v_2_2_0.Placemark;
+import de.micromata.opengis.kml.v_2_2_0.TimePrimitive;
 /**
  * this class is used to write Kml files
  * the class varialbes DB and macim are used to hold the data we want to write.
@@ -173,10 +175,12 @@ public class Tokml {
 			
 			if(check){
 				
-				doc.createAndAddPlacemark()
-				   .withName(DB.get(j).getSpots().get(0).getSsid()).withDescription("sup").withOpen(Boolean.TRUE)
+				Placemark p = doc.createAndAddPlacemark();
+				p.createAndSetTimeStamp().withWhen(DB.get(j).getFirstSeen().replace(' ', 'T'));
+				p.withName(DB.get(j).getSpots().get(0).getSsid()).withDescription("sup").withOpen(Boolean.TRUE)
 				   .createAndSetPoint().addToCoordinates(Double.parseDouble(DB.get(j).getLongtitude()), 
-						   Double.parseDouble(DB.get(j).getLatitude()),Double.parseDouble(DB.get(j).getAltitude()));	
+						   Double.parseDouble(DB.get(j).getLatitude()),Double.parseDouble(DB.get(j).getAltitude()));
+				
 			}
 		}
 			
