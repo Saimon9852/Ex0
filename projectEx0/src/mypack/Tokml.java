@@ -30,32 +30,17 @@ import de.micromata.opengis.kml.v_2_2_0.TimePrimitive;
  *
  */
 public class Tokml {
-	ArrayList<WifiSpots> DB=new ArrayList<WifiSpots>();
-	ArrayList<WifiSpot> macim=new ArrayList<WifiSpot>();
-	String path;
+	
+	private ArrayList<WifiSpots> DB=new ArrayList<WifiSpots>();
+	private ArrayList<WifiSpot> macim=new ArrayList<WifiSpot>();
 
 	public Tokml(String path){
-		this.path=path;
 		readcsv(path);
 		macim=Macim(DB);
 	}
 
 	public ArrayList<WifiSpots> getDB() {
 		return DB;
-	}
-
-
-	public void setDB(ArrayList<WifiSpots> dB) {
-		DB = dB;
-	}
-
-
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
 	}
 
 	/**
@@ -108,7 +93,7 @@ public class Tokml {
 	 * @param get the ArrayList<WifiSpots> c and set it by the strongest macs with the best signal
 	 * @return ArrayList<WifiSpots>
 	 */
-	public ArrayList<WifiSpot> Macim(ArrayList<WifiSpots> c){
+	private ArrayList<WifiSpot> Macim(ArrayList<WifiSpots> c){
 
 		ArrayList<WifiSpot> macim=new ArrayList<WifiSpot>();
 		for(int i=0;i<c.size();i++){
@@ -118,12 +103,14 @@ public class Tokml {
 					c.get(i).getSpots().get(j).setAltitude(c.get(i).getAltitude());
 					c.get(i).getSpots().get(j).setLongtitude(c.get(i).getLongtitude());
 					c.get(i).getSpots().get(j).setLatitude(c.get(i).getLatitude());
+					c.get(i).getSpots().get(j).setFirsseen(c.get(i).getFirstSeen());
 					macim.add(c.get(i).getSpots().get(j));
 				}else{
 					if(Integer.parseInt(macim.get(check).getRssi())
 							>Integer.parseInt(c.get(i).getSpots().get(j).getRssi())){
 						macim.get(check).setAltitude(c.get(i).getLongtitude());
 						macim.get(check).setLatitude(c.get(i).getLatitude());
+						macim.get(check).setFirsseen(c.get(i).getFirstSeen());
 						macim.get(check).getLongtitude();
 						macim.get(check).setRssi(c.get(i).getSpots().get(j).getRssi());
 					}
@@ -134,9 +121,10 @@ public class Tokml {
 
 	}
 	
+	
 	//searches for the mac address in the macim data structure
 	//returns the index or -1 if not found.
-	public int sMacim(String mac,ArrayList<WifiSpot> macim){
+	private int sMacim(String mac,ArrayList<WifiSpot> macim){
 		for(int i=0;i<macim.size();i++){
 			if(mac.equals(macim.get(i).getMac())){
 				return i;
@@ -153,50 +141,96 @@ public class Tokml {
 	 */
 	public void CreateKmlByFilter(String name){
 
-		
 		String[] filtersKind = {"None","Time","Lat","Lon","Alt","inRadius"};
 		final Kml kml = new Kml();
 		Document doc=kml.createAndSetDocument();
 		int k = typeOfSort(filtersKind);
 		boolean istime = k==1;
-		
 		String[] values = new String [3];
 		if(k!=0) values = validValues(k);
 		double rad = -1;
 		if(k==5) rad = Double.parseDouble(values[2]);
+		boolean check;
+		String[] hold;
 		
 		for (int j = 0; j < DB.size(); j++) {
-			boolean check;
+			
 			if(k!=0){
-				String[] hold = selectByFilter(k,j);
+				hold = selectByFilter(k,j);
 				check=inRange(values[0],values[1],hold,istime,rad);
 			}
-			else check = true;
+			else 
+				check = true;
 			
 			if(check){
-				
 				Placemark p = doc.createAndAddPlacemark();
 				p.createAndSetTimeStamp().withWhen(DB.get(j).getFirstSeen().replace(' ', 'T'));
-				p.withName(DB.get(j).getSpots().get(0).getSsid()).withDescription("sup").withOpen(Boolean.TRUE)
-				   .createAndSetPoint().addToCoordinates(Double.parseDouble(DB.get(j).getLongtitude()), 
-						   Double.parseDouble(DB.get(j).getLatitude()),Double.parseDouble(DB.get(j).getAltitude()));
-				
+				p.withName(DB.get(j).getID()).withDescription(DB.get(j).getSpots().get(0).getSsid())
+				.createAndSetPoint().addToCoordinates(Double.parseDouble(DB.get(j).getLongtitude()), 
+			    Double.parseDouble(DB.get(j).getLatitude()),Double.parseDouble(DB.get(j).getAltitude()));
 			}
 		}
 			
+		
+	for (int i = 0; i < macim.size(); i++) {
+			
+			if(k!=0){
+				hold = selectMacFilt(i,k);
+				check=inRange(values[0],values[1],hold,istime,rad);
+			}
+			else 
+				check = true;
+	
+			if(check){
+				Placemark p = doc.createAndAddPlacemark();
+				p.createAndSetTimeStamp().withWhen(macim.get(i).getFirsseen().replace(' ','T'));
+				p.withName(macim.get(i).getMac()).withDescription(macim.get(i).getRssi())
+				.createAndSetPoint().addToCoordinates(Double.parseDouble(macim.get(i).getLongtitude()), 
+				 Double.parseDouble(macim.get(i).getLatitude()),Double.parseDouble(macim.get(i).getAltitude()));	
+			}  
+		}
+		
+		
 		try {
-			
 			kml.marshal(new File(name+".kml"));
-			System.out.println(name + ".kml was created successfully, By filter " + filtersKind[k]);
-			
+			System.out.println(name + ".kml was created successfully, By filter " + filtersKind[k]);	
 		}
 		catch (FileNotFoundException e) {
-			
-			e.printStackTrace();
+			   e.printStackTrace();
 		}
 
 	}
  
+	
+	/**
+	 * 
+	 * @param gets Integer filt, and Integer index , filt present which filter is been done and index send for drawing the right data from the macim
+	 * @return String[] 
+	 */
+	private String[] selectMacFilt(int index,int filt)
+	{
+		String[] s = new String[2];
+		s[1] = "TEST";
+		switch (filt){
+			case 1: s[0] = macim.get(index).getFirsseen();
+			case 2: s[0] = macim.get(index).getLatitude();
+					break;
+			case 3: s[0] = macim.get(index).getLongtitude();
+					break;
+			case 4: s[0] = macim.get(index).getAltitude();
+					break;
+			case 5: s[0] = macim.get(index).getLongtitude();
+					s[1] = macim.get(index).getLatitude();
+					break;
+		}
+		return s;
+	}
+	
+	/**
+	 * 
+	 * @param gets String[] filtersKind , The choose of the filter happens here 
+	 * @return Integer
+	 */
 	private int typeOfSort(String[] filtersKind){
 		
 		String allfilt = "";
@@ -225,15 +259,20 @@ public class Tokml {
 		return index;
 	}
 
+	/**
+	 * 
+	 * @param gets Integer typeFilt, by typeFilt the user asked to input a valid data for the filter
+	 * @return String[] 
+	 */
 	private String[] validValues(int typeFilt){
 		
 		String c = "";
 		int val1 =0,val2=0,val3=0,val4 =0;
 		String s = "";
 		if(typeFilt==1){val2 = 59;val4=24; c = ":"; s= "Please enter the hour the scan was taken in the following format <hr>:<mins>"; }
-		else if(typeFilt == 2){val1 = -180;val2=180;val3=-180;val4=180; c="-";s= "Please insert an Latitude range with the format NUMBER-NUMBER(in meters)";}
+		else if(typeFilt == 2){val1 = -180;val2=180;val3=-180;val4=180; c="-";s= "Please insert an Latitude range with the format NUMBER-NUMBER(in meters between -180 to 180)";}
 		else if(typeFilt ==3){val1=-90;val2=90;val3=-90;val4=90; c="-";s = "Please insert an Longtitude range with the format NUMBER-NUMBER(in meters between -90 to 90)";}
-		else if(typeFilt == 4){val1=-300;val2=15000;val3=-300;val3=15000; c="-";s="Please insert an Altitude range with the format NUMBER-NUMBER(in meters)";}
+		else if(typeFilt == 4){val1=-300;val2=15000;val3=-300;val4=15000; c="-";s="Please insert an Altitude range with the format NUMBER-NUMBER(in meters between -300 to 15000)";}
 		else {c=","; s = "Please insert coordinates and radius in the format: Longtitude,Latitude,Radius";}
 		
 		
@@ -250,12 +289,13 @@ public class Tokml {
 				boolean isNum = isArrInt(test);
 				if(a==1 && isNum)
 				{
-					if((Double.parseDouble(test[1])>=val1&&Double.parseDouble(test[1])<=val2)
+					
+					if((Double.parseDouble(test[0])>=val1&&Double.parseDouble(test[0])<=val2)
 							&&Double.parseDouble(test[1])>=val3&&Double.parseDouble(test[1])<=val4){
 						btest=true;
 					}
 					else{
-						System.out.println("the input format is incorrect");
+						System.out.println("the input format is incorrect what the");
 					}
 				}
 				else if(a==2 && isNum)
@@ -267,7 +307,7 @@ public class Tokml {
 					
 				}
 				else
-					System.out.println("the input format is incorrect");
+					System.out.println("the input format is incorrect ppppp");
 			}
 		}
 		catch(Exception e){
@@ -280,6 +320,11 @@ public class Tokml {
 		
 	}
 		
+	/**
+	 * 
+	 * @param gets String[] st and check if each element in the Array is a number
+	 * @return boolean
+	 */
 	private boolean isArrInt(String[] st){
 		
 		for (int i = 0; i < st.length; i++) {
@@ -294,12 +339,22 @@ public class Tokml {
 		return true;
 	}
 	
+	/**
+	 * 
+	 * @param gets String x1,x2,y1,y2 and double radius , check if the coordinate x2,y2 is in the circle (x-x1)^2 + (y-y1)^2 = (radius)^2
+	 * @return boolean
+	 */
 	private boolean inCircle(String x1,String y1,String x2,String y2,double radius){
 	
 		 return distance(Double.parseDouble(x1),Double.parseDouble(y1),Double.parseDouble(x2),
 				 Double.parseDouble(y2)) <= radius;
 	}
 
+	/**
+	 * 
+	 * @param gets Double lat1,lat2,lon1,lon2 calculates the distance between two point with longitude and latitude
+	 * @return double
+	 */
 	private double distance(double lat1, double lon1, double lat2, double lon2) {
 		
 		double theta = lon1 - lon2;
@@ -309,10 +364,20 @@ public class Tokml {
 		return dist * 60 * 1.1515 * 1.609344;
 	}
 	
+	/**
+	 * 
+	 * @param gets double deg, change degree to radians
+	 * @return double
+	 */
 	private double deg2rad(double deg) {
 		return (deg * Math.PI / 180.0);
 	}
 	
+	/**
+	 * 
+	 * @param gets double rad , change radians to degree
+	 * @return double
+	 */
 	private double rad2deg(double rad) {
 		return (rad * 180 / Math.PI);
 	}
@@ -321,7 +386,7 @@ public class Tokml {
 	/**
 	 * 
 	 * @param gets Integer k, and Integer index , k present which filter is been done and index send for drawing the right data from the DB
-	 * @return String 
+	 * @return String[] 
 	 */
 	private String[] selectByFilter(int k ,int index){
 
@@ -338,7 +403,8 @@ public class Tokml {
 
 	/**
 	 * 
-	 * @param gets String start,end,bet,boolean b: if b=false using Coordinates filter else time filter,start and end present the ranges from the user,
+	 * @param gets String start,end,String[] bet,boolean b,double rad
+	 * if b=false using Coordinates filter else time filter,start and end present the ranges from the user,rad used while the filter is "all spots in the circle"
 	 * bet shows the data from the DB and checked for his stand in conditions
 	 * @return boolean 
 	 */

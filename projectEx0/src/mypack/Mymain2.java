@@ -17,7 +17,8 @@ public class Mymain2 {
 		Csv Ariel=new Csv("C:\\Users\\Saimon\\Desktop\\test");
 		Ariel.writescan("take2");
 		Tokml kml=new Tokml("take2.csv");
-        kml.CreateKmlByFilter("newBasic");
+        kml.CreateKmlByFilter("nOfilter");
+        
 	}
 }
 
