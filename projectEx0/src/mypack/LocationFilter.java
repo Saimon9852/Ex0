@@ -1,0 +1,53 @@
+package mypack;
+
+import java.util.Scanner;
+
+public class LocationFilter {
+	static double Latitude=35.23583;
+	static double Longtitude=31.77617;
+	static double Radius=5;
+
+	static boolean  Filt(Double Lat,Double Long){
+		if(distance(Latitude,Longtitude,Lat,Long)<=Radius)return true;
+		return false;
+	}
+	static void SetData(){
+		try {	
+			Scanner sc=new Scanner(System.in);
+			System.out.println("please enter the Latitude coordinate");
+			double tLatitude=sc.nextDouble();
+			System.out.println("please enter the Longtitude coordinate");
+			double tLongtitude=sc.nextDouble();
+			System.out.println("please enter the Radius");
+			double tRadius=sc.nextDouble();
+			if((tLatitude>=-90&&tLatitude<=90
+					&&tLongtitude>=-180&&tLongtitude<=180
+					&&tRadius>0)){
+				Latitude=tLatitude;
+				Longtitude=tLongtitude;
+				Radius=tRadius;
+			}
+			else{
+				throw new DataException ("User Input for Geographical Data is incorrect");
+			}
+		} catch (DataException e) {
+			e.printStackTrace();
+		}
+	}
+	static private double distance(double lat1, double lon1, double lat2, double lon2) {
+		double theta = lon1 - lon2;
+		double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+		dist = Math.acos(dist);
+		dist = rad2deg(dist);
+		return dist * 60 * 1.1515 * 1.609344;
+	}
+
+	static private double deg2rad(double deg) {
+		return (deg * Math.PI / 180.0);
+	}
+
+	static private double rad2deg(double rad) {
+		return (rad * 180 / Math.PI);
+	}
+
+}
