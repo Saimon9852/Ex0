@@ -295,7 +295,7 @@ public class Tokml {
 						btest=true;
 					}
 					else{
-						System.out.println("the input format is incorrect what the");
+						System.out.println("the time input format is incorrect");
 					}
 				}
 				else if(a==2 && isNum)
@@ -307,7 +307,7 @@ public class Tokml {
 					
 				}
 				else
-					System.out.println("the input format is incorrect ppppp");
+					System.out.println("the lat format is incorrect");
 			}
 		}
 		catch(Exception e){
@@ -463,6 +463,3 @@ public class Tokml {
 		return count;
 	}
 }
-
-
-

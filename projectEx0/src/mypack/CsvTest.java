@@ -11,6 +11,7 @@ public class CsvTest {
 
 	@Before
 	public void setUp() throws Exception {
+		
 	}
 
 	@Test(expected = NullPointerException.class)
