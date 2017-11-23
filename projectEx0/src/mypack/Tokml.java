@@ -30,7 +30,7 @@ import de.micromata.opengis.kml.v_2_2_0.TimePrimitive;
  *
  */
 public class Tokml {
-	
+
 	private ArrayList<WifiSpots> DB=new ArrayList<WifiSpots>();
 	private ArrayList<WifiSpot> macim=new ArrayList<WifiSpot>();
 
@@ -50,7 +50,6 @@ public class Tokml {
 	 */
 	private void readcsv(String path){
 		try{
-
 			FileReader in = new FileReader(path);
 			Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(in);
 			for (CSVRecord record : records) {
@@ -73,9 +72,7 @@ public class Tokml {
 					String rssi=record.get("Signal"+i);
 					WifiSpot q=new WifiSpot(ssid,mac,chanel,rssi);
 					s.getSpots().add(q);
-
 				}
-
 				s.setAltitude(altitude);
 				s.setLatitude(latitude);
 				s.setLongtitude(longtitude);
@@ -87,9 +84,7 @@ public class Tokml {
 		}
 	}
 
-	
 	/**
-	 * 
 	 * @param get the ArrayList<WifiSpots> c and set it by the strongest macs with the best signal
 	 * @return ArrayList<WifiSpots>
 	 */
@@ -116,12 +111,8 @@ public class Tokml {
 					}
 				}
 			}
-		}
-		return macim;
-
+		}	return macim;
 	}
-	
-	
 	//searches for the mac address in the macim data structure
 	//returns the index or -1 if not found.
 	private int sMacim(String mac,ArrayList<WifiSpot> macim){
@@ -131,335 +122,88 @@ public class Tokml {
 			}
 		}return -1;
 	}
-	
-		
-	
+
 	/**
-	 * 
 	 * @param get String byFilt,startRange and endRange: choose the correct filter by wordKey(byFilt),and take the ranges for specific users filt
 	 * @return ArrayList<WifiSpots>
 	 */
 	public void CreateKmlByFilter(String name){
-
-		String[] filtersKind = {"None","Time","Lat","Lon","Alt","inRadius"};
-		final Kml kml = new Kml();
-		Document doc=kml.createAndSetDocument();
-		int k = typeOfSort(filtersKind);
-		boolean istime = k==1;
-		String[] values = new String [3];
-		if(k!=0) values = validValues(k);
-		double rad = -1;
-		if(k==5) rad = Double.parseDouble(values[2]);
-		boolean check;
-		String[] hold;
-		
-		for (int j = 0; j < DB.size(); j++) {
-			
-			if(k!=0){
-				hold = selectByFilter(k,j);
-				check=inRange(values[0],values[1],hold,istime,rad);
-			}
-			else 
-				check = true;
-			
-			if(check){
-				Placemark p = doc.createAndAddPlacemark();
-				p.createAndSetTimeStamp().withWhen(DB.get(j).getFirstSeen().replace(' ', 'T'));
-				p.withName(DB.get(j).getID()).withDescription(DB.get(j).getSpots().get(0).getSsid())
-				.createAndSetPoint().addToCoordinates(Double.parseDouble(DB.get(j).getLongtitude()), 
-			    Double.parseDouble(DB.get(j).getLatitude()),Double.parseDouble(DB.get(j).getAltitude()));
-			}
-		}
-			
-		
-	for (int i = 0; i < macim.size(); i++) {
-			
-			if(k!=0){
-				hold = selectMacFilt(i,k);
-				check=inRange(values[0],values[1],hold,istime,rad);
-			}
-			else 
-				check = true;
-	
-			if(check){
-				Placemark p = doc.createAndAddPlacemark();
-				p.createAndSetTimeStamp().withWhen(macim.get(i).getFirsseen().replace(' ','T'));
-				p.withName(macim.get(i).getMac()).withDescription(macim.get(i).getRssi())
-				.createAndSetPoint().addToCoordinates(Double.parseDouble(macim.get(i).getLongtitude()), 
-				 Double.parseDouble(macim.get(i).getLatitude()),Double.parseDouble(macim.get(i).getAltitude()));	
-			}  
-		}
-		
 		
 		try {
-			kml.marshal(new File(name+".kml"));
-			System.out.println(name + ".kml was created successfully, By filter " + filtersKind[k]);	
-		}
-		catch (FileNotFoundException e) {
-			   e.printStackTrace();
-		}
-
-	}
- 
-	
-	/**
-	 * 
-	 * @param gets Integer filt, and Integer index , filt present which filter is been done and index send for drawing the right data from the macim
-	 * @return String[] 
-	 */
-	private String[] selectMacFilt(int index,int filt)
-	{
-		String[] s = new String[2];
-		s[1] = "TEST";
-		switch (filt){
-			case 1: s[0] = macim.get(index).getFirsseen();
-			case 2: s[0] = macim.get(index).getLatitude();
-					break;
-			case 3: s[0] = macim.get(index).getLongtitude();
-					break;
-			case 4: s[0] = macim.get(index).getAltitude();
-					break;
-			case 5: s[0] = macim.get(index).getLongtitude();
-					s[1] = macim.get(index).getLatitude();
-					break;
-		}
-		return s;
-	}
-	
-	/**
-	 * 
-	 * @param gets String[] filtersKind , The choose of the filter happens here 
-	 * @return Integer
-	 */
-	private int typeOfSort(String[] filtersKind){
-		
-		String allfilt = "";
-		for (int i = 0; i < filtersKind.length; i++) {
-			   if(i+1<filtersKind.length)
-				   allfilt += filtersKind[i] + ",";
-			   else allfilt += filtersKind[i];
-		}
-		boolean b = false;
-		String filter = "";
-		int index = 0;
-		while(!b){
-			  System.out.println("Choose type of filter:" + allfilt);
-				Scanner scanner = new Scanner(System.in);
-				filter = scanner.nextLine();
-				for (int i = 0; i < filtersKind.length; i++) {
-					   if(filter.equals(filtersKind[i])){
-						   b= true;
-						   index = i;
-					   }
-				}
-				if(b==false)System.out.println("The filter is not exist in the list");
-		  
-		}
-		
-		return index;
-	}
-
-	/**
-	 * 
-	 * @param gets Integer typeFilt, by typeFilt the user asked to input a valid data for the filter
-	 * @return String[] 
-	 */
-	private String[] validValues(int typeFilt){
-		
-		String c = "";
-		int val1 =0,val2=0,val3=0,val4 =0;
-		String s = "";
-		if(typeFilt==1){val2 = 59;val4=24; c = ":"; s= "Please enter the hour the scan was taken in the following format <hr>:<mins>"; }
-		else if(typeFilt == 2){val1 = -180;val2=180;val3=-180;val4=180; c="-";s= "Please insert an Latitude range with the format NUMBER-NUMBER(in meters between -180 to 180)";}
-		else if(typeFilt ==3){val1=-90;val2=90;val3=-90;val4=90; c="-";s = "Please insert an Longtitude range with the format NUMBER-NUMBER(in meters between -90 to 90)";}
-		else if(typeFilt == 4){val1=-300;val2=15000;val3=-300;val4=15000; c="-";s="Please insert an Altitude range with the format NUMBER-NUMBER(in meters between -300 to 15000)";}
-		else {c=","; s = "Please insert coordinates and radius in the format: Longtitude,Latitude,Radius";}
-		
-		
-		System.out.println(s);
-		String[] test = new String[2];
-		boolean btest=false;
-		String filter="";
-		try{
-			while(btest==false){
-				Scanner scanner = new Scanner(System.in);
-				filter = scanner.nextLine();
-				int a = howManyexist(filter,c.charAt(0));
-				test=filter.split(c);
-				boolean isNum = isArrInt(test);
-				if(a==1 && isNum)
-				{
-					
-					if((Double.parseDouble(test[0])>=val1&&Double.parseDouble(test[0])<=val2)
-							&&Double.parseDouble(test[1])>=val3&&Double.parseDouble(test[1])<=val4){
-						btest=true;
-					}
-					else{
-						System.out.println("the time input format is incorrect");
-					}
-				}
-				else if(a==2 && isNum)
-				{
-					if((Double.parseDouble(test[0]) >= -90 && Double.parseDouble(test[0]) <= 90)
-							&& (Double.parseDouble(test[1]) >= -180 && Double.parseDouble(test[1]) <= 180)
-							&& Double.parseDouble(test[2]) > 0)
-					btest = true;
-					
-				}
-				else
-					System.out.println("the lat format is incorrect");
+			DateFormat format=new SimpleDateFormat("MM/dd/yyyy HH:mm");
+			Date d;
+			boolean check=false;
+			String tFilter=userInput();
+			final Kml kml = new Kml();
+			Document doc=kml.createAndSetDocument();
+			switch(tFilter){
+			case "Location":LocationFilter.SetData();
+			break;
+			case "Date":TimeFilter.setfrom();
+			TimeFilter.setTo();
+			break;
 			}
+			for (int j = 0; j < DB.size(); j++) {
+				switch(tFilter){
+				case "Location": check=LocationFilter.Filt(Double.parseDouble(DB.get(j).getLatitude())
+						,Double.parseDouble(DB.get(j).getLongtitude()));
+				break;
+				case "Date": check=TimeFilter.Filt(d=format.parse(DB.get(j).getFirstSeen()));
+				break;
+				default: check=true;
+				}
+
+				if(check){
+					Placemark p = doc.createAndAddPlacemark();
+					p.createAndSetTimeStamp().withWhen(DB.get(j).getFirstSeen().replace(' ', 'T'));
+					p.withName(DB.get(j).getID()).withDescription(DB.get(j).getSpots().get(0).getSsid())
+					.createAndSetPoint().addToCoordinates(Double.parseDouble(DB.get(j).getLongtitude()), 
+							Double.parseDouble(DB.get(j).getLatitude()),Double.parseDouble(DB.get(j).getAltitude()));
+				}
+
+			}
+
+			for (int i = 0; i < macim.size(); i++) {
+				switch(tFilter){
+				case "Location": check=LocationFilter.Filt(Double.parseDouble(macim.get(i).getLatitude()),
+						Double.parseDouble(macim.get(i).getLongtitude()));
+				break;
+				case "Date": check=TimeFilter.Filt(d=format.parse(macim.get(i).getFirsseen()));
+				break;
+				default: check=true;
+				}
+				if(check){
+					Placemark p = doc.createAndAddPlacemark();
+					p.createAndSetTimeStamp().withWhen(macim.get(i).getFirsseen().replace(' ','T'));
+					p.withName(macim.get(i).getMac()).withDescription(macim.get(i).getRssi())
+					.createAndSetPoint().addToCoordinates(Double.parseDouble(macim.get(i).getLongtitude()), 
+							Double.parseDouble(macim.get(i).getLatitude()),Double.parseDouble(macim.get(i).getAltitude()));	
+				}  
+			}
+
+			kml.marshal(new File(name+".kml"));
+			System.out.println(name + ".kml was created successfully, By filter " + tFilter);
 		}
-		catch(Exception e){
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		
-		return test;
-		
-		
+
 	}
-		
-	/**
-	 * 
-	 * @param gets String[] st and check if each element in the Array is a number
-	 * @return boolean
-	 */
-	private boolean isArrInt(String[] st){
-		
-		for (int i = 0; i < st.length; i++) {
-			 try 
-			 {  
-		         Double.parseDouble(st[i]);  
-		         
-		      } catch (NumberFormatException e) {  
-		         return false;  
-		      }
+
+	public String userInput(){
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Press 1 for Date Filter,Press 2 for Location Filter,Press anykey for unFilterd.");
+		String input=sc.nextLine();
+		switch(Integer.parseInt(input)){
+		case 1: return "Date";
+		case 2:return "Location";
+		default:return "None";
 		}
-		return true;
-	}
-	
-	/**
-	 * 
-	 * @param gets String x1,x2,y1,y2 and double radius , check if the coordinate x2,y2 is in the circle (x-x1)^2 + (y-y1)^2 = (radius)^2
-	 * @return boolean
-	 */
-	private boolean inCircle(String x1,String y1,String x2,String y2,double radius){
-	
-		 return distance(Double.parseDouble(x1),Double.parseDouble(y1),Double.parseDouble(x2),
-				 Double.parseDouble(y2)) <= radius;
-	}
-
-	/**
-	 * 
-	 * @param gets Double lat1,lat2,lon1,lon2 calculates the distance between two point with longitude and latitude
-	 * @return double
-	 */
-	private double distance(double lat1, double lon1, double lat2, double lon2) {
-		
-		double theta = lon1 - lon2;
-		double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
-		dist = Math.acos(dist);
-		dist = rad2deg(dist);
-		System.out.println(dist * 60 * 1.1515 * 1.609344);
-		return dist * 60 * 1.1515 * 1.609344;
-	}
-	
-	/**
-	 * 
-	 * @param gets double deg, change degree to radians
-	 * @return double
-	 */
-	private double deg2rad(double deg) {
-		return (deg * Math.PI / 180.0);
-	}
-	
-	/**
-	 * 
-	 * @param gets double rad , change radians to degree
-	 * @return double
-	 */
-	private double rad2deg(double rad) {
-		return (rad * 180 / Math.PI);
-	}
-	
-	
-	/**
-	 * 
-	 * @param gets Integer k, and Integer index , k present which filter is been done and index send for drawing the right data from the DB
-	 * @return String[] 
-	 */
-	private String[] selectByFilter(int k ,int index){
-
-		String[] s = new String[2];
-		s[1] = "TEST";
-		if(k==4) s[0] = DB.get(index).getAltitude();
-		if(k==3) s[0] = DB.get(index).getLongtitude();
-		if(k==2) s[0] = DB.get(index).getLatitude();
-		if(k==1) s[0] = DB.get(index).getFirstSeen();
-		if(k==5) {s[0] = DB.get(index).getLatitude();s[1]= DB.get(index).getLongtitude();}
-		
-		return s;
-	}
-
-	/**
-	 * 
-	 * @param gets String start,end,String[] bet,boolean b,double rad
-	 * if b=false using Coordinates filter else time filter,start and end present the ranges from the user,rad used while the filter is "all spots in the circle"
-	 * bet shows the data from the DB and checked for his stand in conditions
-	 * @return boolean 
-	 */
-	private boolean inRange(String start,String end,String[] bet,boolean b,double rad){
-
-		if(!b && bet[1].equals("TEST"))
-		{
-			double low = (Double.parseDouble(start));
-
-			double big = (Double.parseDouble(end));
-			double mid = (Double.parseDouble(bet[0]));
-			return big>=mid && mid>=low;
-		}
-		
-		if(bet[1].equals("TEST") == false)
-		{
-			return inCircle(start,end,bet[0],bet[1],rad);
-		}
-		
-		DateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm"); 
-		Date betDate;
-		Date startDate;
-		Date endDate;
-		try {
-		    betDate = df.parse(bet[0]);
-		    startDate=df.parse(start);
-		    endDate=df.parse(end);
-		    if(startDate.after(betDate)&&endDate.before(endDate)){
-				return true;
-		    }
-		    String newDateString = df.format(betDate);
-		    System.out.println(newDateString);
-		} catch (ParseException e) {
-		    e.printStackTrace();
-		}
-		return false;
-
-
 	}
 
 
-	/**
-	 * 
-	 * @param get String s and char symbol, check how many times the char symbol exists in the string s
-	 * @ Integer
-	 */
-	private int howManyexist(String s , char symbol){
 
-		int count = 0;
-		for (int i = 0; i < s.length(); i++) {
-			if(s.charAt(i) == symbol){
-				count++;
-			}
-		}
-		return count;
-	}
+
+
 }
