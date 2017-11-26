@@ -33,7 +33,9 @@ public class Tokml {
 
 	private ArrayList<WifiSpots> DB=new ArrayList<WifiSpots>();
 	private ArrayList<WifiSpot> macim=new ArrayList<WifiSpot>();
-
+	public Tokml(){
+		
+	}
 	public Tokml(String path){
 		readcsv(path);
 		macim=Macim(DB);
@@ -42,6 +44,10 @@ public class Tokml {
 	public ArrayList<WifiSpots> getDB() {
 		return DB;
 	}
+	public ArrayList<WifiSpot>getMacim(){
+		return macim;
+	}
+	
 
 	/**
 	 * // we read the csv we wrote in the csv class.
@@ -126,9 +132,10 @@ public class Tokml {
 	/**
 	 * @param get String byFilt,startRange and endRange: choose the correct filter by wordKey(byFilt),and take the ranges for specific users filt
 	 * @return ArrayList<WifiSpots>
+	 * @throws DataException 
 	 */
-	public void CreateKmlByFilter(String name){
-		
+	public void CreateKmlByFilter(String name) throws DataException{
+		boolean isEmpty=false;
 		try {
 			DateFormat format=new SimpleDateFormat("MM/dd/yyyy HH:mm");
 			Date d;
@@ -136,6 +143,7 @@ public class Tokml {
 			String tFilter=userInput();
 			final Kml kml = new Kml();
 			Document doc=kml.createAndSetDocument();
+		
 			switch(tFilter){
 			case "Location":LocationFilter.SetData();
 			break;
@@ -143,6 +151,7 @@ public class Tokml {
 			TimeFilter.setTo();
 			break;
 			}
+			
 			for (int j = 0; j < DB.size(); j++) {
 				switch(tFilter){
 				case "Location": check=LocationFilter.Filt(Double.parseDouble(DB.get(j).getLatitude())
@@ -154,6 +163,7 @@ public class Tokml {
 				}
 
 				if(check){
+					isEmpty=true;
 					Placemark p = doc.createAndAddPlacemark();
 					p.createAndSetTimeStamp().withWhen(DB.get(j).getFirstSeen().replace(' ', 'T'));
 					p.withName(DB.get(j).getID()).withDescription(DB.get(j).getSpots().get(0).getSsid())
@@ -173,6 +183,7 @@ public class Tokml {
 				default: check=true;
 				}
 				if(check){
+					isEmpty=true;
 					Placemark p = doc.createAndAddPlacemark();
 					p.createAndSetTimeStamp().withWhen(macim.get(i).getFirsseen().replace(' ','T'));
 					p.withName(macim.get(i).getMac()).withDescription(macim.get(i).getRssi())
@@ -187,7 +198,9 @@ public class Tokml {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		if(isEmpty==false){
+			throw new DataException("the filter requested didnot match any result");
+		}
 
 	}
 
