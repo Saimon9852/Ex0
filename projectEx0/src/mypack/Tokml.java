@@ -150,6 +150,7 @@ public class Tokml {
 			case "Date":TimeFilter.setfrom();
 			TimeFilter.setTo();
 			break;
+			case "Id":IdFilter.SetData();
 			}
 			
 			for (int j = 0; j < DB.size(); j++) {
@@ -158,6 +159,8 @@ public class Tokml {
 						,Double.parseDouble(DB.get(j).getLongtitude()));
 				break;
 				case "Date": check=TimeFilter.Filt(d=format.parse(DB.get(j).getFirstSeen()));
+				break;
+				case "Id":check=IdFilter.Filt(DB.get(j).getID());
 				break;
 				default: check=true;
 				}
@@ -179,6 +182,8 @@ public class Tokml {
 						Double.parseDouble(macim.get(i).getLongtitude()));
 				break;
 				case "Date": check=TimeFilter.Filt(d=format.parse(macim.get(i).getFirsseen()));
+				break;
+				case "Id":check=IdFilter.Filt(macim.get(i).getSsid());
 				break;
 				default: check=true;
 				}
@@ -206,11 +211,13 @@ public class Tokml {
 
 	public String userInput(){
 		Scanner sc=new Scanner(System.in);
-		System.out.println("Press 1 for Date Filter,Press 2 for Location Filter,Press anykey for unFilterd.");
+		System.out.println("Press 1 for Date Filter,Press 2 for Location Filter,Press 3 for Id filter"
+				+ "Press anykey for unFilterd.");
 		String input=sc.nextLine();
 		switch(Integer.parseInt(input)){
 		case 1: return "Date";
 		case 2:return "Location";
+		case 3:return "Id";
 		default:return "None";
 		}
 	}
