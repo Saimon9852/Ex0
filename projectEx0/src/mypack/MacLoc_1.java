@@ -17,6 +17,7 @@ public class MacLoc_1 {
 		dbsamp = new ArrayList<WifiSpot>();
 		samples = sam;
 		macAddress = mac;
+		Findmacim();
 		try {
 			checkInput();
 		} catch (DataException e) {
