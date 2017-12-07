@@ -14,6 +14,8 @@ public class CustomComparator implements Comparator<WifiSpot> {
 			return (o1.getFirsseen().compareTo(o2.getFirsseen()));
 		}
 	}
+	
+	
 }
 
 
