@@ -2,28 +2,32 @@ package mypack;
 
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-
+/*
+ * holds all of our samples that we extracted from the csv files and processed.
+ * macim holds the strongest macs.
+ */
 public class Database {
-	
+
 	private ArrayList<WifiSpots> DB=new ArrayList<WifiSpots>();
-	private ArrayList<WifiSpot> macim=new ArrayList<WifiSpot>();
-	
-	
+	private HashMap<String,ArrayList<WifiSpot>> macim=new HashMap<>();
+
+
 	public Database(String path){
 		readcsv(path);
 		macim=Macim(DB);
 	}
-	
+
 	public ArrayList<WifiSpots> getDB() {
 		return DB;
 	}
-	public ArrayList<WifiSpot>getMacim(){
+	public HashMap<String,ArrayList<WifiSpot>>getMacim(){
 		return macim;
 	}
-	
+
 	/**
 	 * // we read the csv we wrote in the csv class.
 	 * @param gets path of a csv file and read him to ArrayList<WifiSpots> DB
@@ -51,7 +55,7 @@ public class Database {
 					String mac = record.get("MAC"+i);
 					String chanel=record.get("Frequancy"+i);
 					String rssi=record.get("Signal"+i);
-					WifiSpot q=new WifiSpot(ssid,mac,chanel,rssi);
+					WifiSpot q=new WifiSpot(ssid,mac,time,chanel,rssi,latitude,longtitude,altitude);
 					s.getSpots().add(q);
 				}
 				s.setAltitude(altitude);
@@ -69,39 +73,31 @@ public class Database {
 	 * @param get the ArrayList<WifiSpots> c and set it by the strongest macs with the best signal
 	 * @return ArrayList<WifiSpots>
 	 */
-	private ArrayList<WifiSpot> Macim(ArrayList<WifiSpots> c){
+	private HashMap<String,ArrayList<WifiSpot>> Macim(ArrayList<WifiSpots> c){
 
-		ArrayList<WifiSpot> macim=new ArrayList<WifiSpot>();
+		HashMap<String,ArrayList<WifiSpot>> macim=new HashMap<>();
 		for(int i=0;i<c.size();i++){
 			for(int j=0;j<c.get(i).getSpots().size();j++){
-				int check=sMacim(c.get(i).getSpots().get(j).getMac(),macim);
-				if(check==-1){
-					c.get(i).getSpots().get(j).setAltitude(c.get(i).getAltitude());
-					c.get(i).getSpots().get(j).setLongtitude(c.get(i).getLongtitude());
-					c.get(i).getSpots().get(j).setLatitude(c.get(i).getLatitude());
-					c.get(i).getSpots().get(j).setFirsseen(c.get(i).getFirstSeen());
-					macim.add(c.get(i).getSpots().get(j));
+				boolean check=sMacim(c.get(i).getSpots().get(j).getMac(),macim);
+				if(check==true){
+					macim.get(c.get(i).getSpots().get(j).getMac()).add(c.get(i).getSpots().get(j));
 				}else{
-					if(Integer.parseInt(macim.get(check).getRssi())
-							>Integer.parseInt(c.get(i).getSpots().get(j).getRssi())){
-						macim.get(check).setAltitude(c.get(i).getLongtitude());
-						macim.get(check).setLatitude(c.get(i).getLatitude());
-						macim.get(check).setFirsseen(c.get(i).getFirstSeen());
-						macim.get(check).getLongtitude();
-						macim.get(check).setRssi(c.get(i).getSpots().get(j).getRssi());
-					}
+					ArrayList<WifiSpot> macs=new ArrayList<>();
+					macs.add(c.get(i).getSpots().get(j));
+					macim.put(c.get(i).getSpots().get(j).getMac(), macs);
 				}
 			}
-		}	return macim;
-	}
+		}return macim;
+	}	
+private void sortMacim(){
+	
+}
 	//searches for the mac address in the macim data structure
 	//returns the index or -1 if not found.
-	private int sMacim(String mac,ArrayList<WifiSpot> macim){
-		for(int i=0;i<macim.size();i++){
-			if(mac.equals(macim.get(i).getMac())){
-				return i;
-			}
-		}return -1;
+	private boolean sMacim(String mac,HashMap<String,ArrayList<WifiSpot>> macim){
+		if(macim.containsKey(mac)){
+			return true;
+		}return false;
 	}
 
 

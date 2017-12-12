@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import org.apache.commons.csv.CSVFormat;
@@ -32,12 +33,13 @@ import de.micromata.opengis.kml.v_2_2_0.TimePrimitive;
 public class Tokml {
 
 	private ArrayList<WifiSpots> DB=new ArrayList<WifiSpots>();
-	private ArrayList<WifiSpot> macim=new ArrayList<WifiSpot>();
+	private HashMap<String,ArrayList<WifiSpot>> macim=new HashMap<>();
+	Database db;
 	public Tokml(){
 		
 	}
 	public Tokml(String path){
-		Database db = new Database(path);
+	    db = new Database(path);
 		DB = db.getDB();
 		macim= db.getMacim();
 	}
@@ -45,8 +47,11 @@ public class Tokml {
 	public ArrayList<WifiSpots> getDB() {
 		return DB;
 	}
-	public ArrayList<WifiSpot>getMacim(){
+	public HashMap<String,ArrayList<WifiSpot>>getMacim(){
 		return macim;
+	}
+	public Database getdb(){
+		return db;
 	}
 	
 	/**
@@ -96,24 +101,22 @@ public class Tokml {
 
 			}
 
-			for (int i = 0; i < macim.size(); i++) {
+			for (String key : macim.keySet()) {
 				switch(tFilter){
-				case "Location": check=LocationFilter.Filt(Double.parseDouble(macim.get(i).getLatitude()),
-						Double.parseDouble(macim.get(i).getLongtitude()));
+				case "Location": check=LocationFilter.Filt(Double.parseDouble(macim.get(key).get(0).getLatitude()),
+						Double.parseDouble(macim.get(key).get(0).getLongtitude()));
 				break;
-				case "Date": check=TimeFilter.Filt(d=format.parse(macim.get(i).getFirsseen()));
-				break;
-				case "Id":check=IdFilter.Filt(macim.get(i).getSsid());
+				case "Date": check=TimeFilter.Filt(d=format.parse(macim.get(key).get(0).getFirsseen()));
 				break;
 				default: check=true;
 				}
 				if(check){
 					isEmpty=true;
 					Placemark p = doc.createAndAddPlacemark();
-					p.createAndSetTimeStamp().withWhen(macim.get(i).getFirsseen().replace(' ','T'));
-					p.withName(macim.get(i).getMac()).withDescription(macim.get(i).getRssi())
-					.createAndSetPoint().addToCoordinates(Double.parseDouble(macim.get(i).getLongtitude()), 
-							Double.parseDouble(macim.get(i).getLatitude()),Double.parseDouble(macim.get(i).getAltitude()));	
+					p.createAndSetTimeStamp().withWhen(macim.get(key).get(0).getFirsseen().replace(' ','T'));
+					p.withName(macim.get(key).get(0).getMac()).withDescription(macim.get(key).get(0).getRssi())
+					.createAndSetPoint().addToCoordinates(Double.parseDouble(macim.get(key).get(0).getLongtitude()), 
+							Double.parseDouble(macim.get(key).get(0).getLatitude()),Double.parseDouble(macim.get(key).get(0).getAltitude()));	
 				}  
 			}
 
