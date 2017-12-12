@@ -1,7 +1,10 @@
 package mypack;
 
 import java.util.ArrayList;
-
+/**
+ * for reading and storing Csv of Wifispots without location.
+ *
+ */
 public class Csv_noGPS {
 	ArrayList<WifiSpots>csv=new ArrayList<>();
 	String path;
