@@ -3,6 +3,7 @@ package mypack;
 import java.util.ArrayList;
 
 public class Wscan {
+	
 	ArrayList<WifiSpot> scan;
 	double weight;
 	Wscan(double weight,ArrayList<WifiSpot> scan){

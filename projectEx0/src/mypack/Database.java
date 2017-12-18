@@ -16,15 +16,22 @@ public class Database {
 	private HashMap<String,ArrayList<WifiSpot>> macim=new HashMap<>();
 
 
-	public Database(String path){
-		readcsv(path);
+	public Database(String path,String format){
+		
+		if(format.equals("WifiSpots")){
+		    readcsvAll(path);
+		    
+		}
+		else
+			readcsvWifiSpot(path);
+			
 		macim=Macim(DB);
 	}
 
 	public ArrayList<WifiSpots> getDB() {
 		return DB;
 	}
-	public HashMap<String,ArrayList<WifiSpot>>getMacim(){
+	public HashMap<String,ArrayList<WifiSpot>> getMacim(){
 		return macim;
 	}
 
@@ -33,7 +40,7 @@ public class Database {
 	 * @param gets path of a csv file and read him to ArrayList<WifiSpots> DB
 	 * @return void function
 	 */
-	private void readcsv(String path){
+	private void readcsvAll(String path){
 		try{
 			FileReader in = new FileReader(path);
 			Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(in);
@@ -69,6 +76,7 @@ public class Database {
 		}
 	}
 
+	
 	/**
 	 * @param get the ArrayList<WifiSpots> c and set it by the strongest macs with the best signal
 	 * @return ArrayList<WifiSpots>
@@ -89,9 +97,8 @@ public class Database {
 			}
 		}return macim;
 	}	
-private void sortMacim(){
 	
-}
+
 	//searches for the mac address in the macim data structure
 	//returns the index or -1 if not found.
 	private boolean sMacim(String mac,HashMap<String,ArrayList<WifiSpot>> macim){
@@ -99,6 +106,35 @@ private void sortMacim(){
 			return true;
 		}return false;
 	}
+	
+	
+	/**
+	 * // we read the csv we wrote in the csv class.
+	 * @param gets path of a csv file and read him to ArrayList<WifiSpots> DB
+	 * @return void function
+	 */
+	private void readcsvWifiSpot(String path){
+		try{
+			FileReader in = new FileReader(path);
+			ArrayList<WifiSpot> readWifi = new ArrayList<WifiSpot>();
+			Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(in);
+			for (CSVRecord record : records) {
+				
+				String latitude=record.get("Lat");
+				String longtitude=record.get("Lon");
+				String altitude=record.get("Alt");
+				String mac = record.get("MAC");
+				WifiSpot q=new WifiSpot("",mac,"","","",latitude,longtitude,altitude);
+                readWifi.add(q);
+				
+			} 
+			DB.add(new WifiSpots(readWifi));
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
 
 
 }

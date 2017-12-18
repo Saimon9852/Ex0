@@ -14,6 +14,7 @@ import java.util.Scanner;
  *
  */
 public class MacLoc_2 {
+	
 	final static double power=2;
 	final static double norm=100000;
 	final static double sig_diff=0.4;
@@ -23,16 +24,19 @@ public class MacLoc_2 {
 	Database db;
 	Csv_noGPS csv=new Csv_noGPS(path);
 	int nSamples;
-	HashMap<String,Double>scTopi=new HashMap<>();
-	ArrayList<Wscan>scans=new ArrayList<Wscan>();
+	//HashMap<String,Double> scTopi=new HashMap<>();
+	ArrayList<Wscan> scans=new ArrayList<Wscan>();
+	
 	public MacLoc_2(Database DB,int samples,String path){
 		db=DB;
 		csv.path=path;
 		this.path=path;
 		this.nSamples=samples;
 		csv.flil();
+		System.out.println("size:: "+csv.getCsv().size());
 		setWscans();
 	}
+	
 	public void setWscans(){
 
 		for(int k=0;k<csv.getCsv().size();k++){
@@ -42,11 +46,12 @@ public class MacLoc_2 {
 				scans.add(sc);
 			}	
 			Collections.sort(scans,new CompareWscan());
-			setLocation(nSamples,scans,csv,k);
+			setLocation(scans,csv,k);
 
 
 		}scans=new ArrayList<Wscan>();
-		Write_csv.write(csv);
+		Write_csv ws = new Write_csv("outputAlgo2fin");
+		ws.write(csv);
 	}
 
 
@@ -74,7 +79,10 @@ public class MacLoc_2 {
 			}
 		}return -1;
 	}
-	void setLocation(int nSamples,ArrayList<Wscan> scans,Csv_noGPS csv,int index){
+	
+	public void setLocation(ArrayList<Wscan> scans,Csv_noGPS csv,int index){
+		
+		
 		double lat=0;
 		double lon=0;
 		double alt=0;
@@ -93,6 +101,8 @@ public class MacLoc_2 {
 		csv.getCsv().get(index).setAltitude(Double.toString(alt));
 		csv.getCsv().get(index).setLongtitude(Double.toString(lon));
 	}
+
+	
 
 }
 

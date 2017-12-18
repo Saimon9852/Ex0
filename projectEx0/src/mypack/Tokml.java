@@ -39,7 +39,7 @@ public class Tokml {
 		
 	}
 	public Tokml(String path){
-	    db = new Database(path);
+	    db = new Database(path,"WifiSpots");
 		DB = db.getDB();
 		macim= db.getMacim();
 	}
@@ -47,7 +47,7 @@ public class Tokml {
 	public ArrayList<WifiSpots> getDB() {
 		return DB;
 	}
-	public HashMap<String,ArrayList<WifiSpot>>getMacim(){
+	public HashMap<String,ArrayList<WifiSpot>> getMacim(){
 		return macim;
 	}
 	public Database getdb(){

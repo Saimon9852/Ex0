@@ -32,8 +32,8 @@ public class TokmlTest {
 		int  n = rand.nextInt(kml.getMacim().size());
 		for(int i=0;i<kml.getDB().size();i++){
 			for(int j=0;j<kml.getDB().get(i).getSpots().size();j++){
-				if(kml.getMacim().get(n).getMac().equals(kml.getDB().get(i).getSpots().get(j).getMac())){
-					if(Integer.parseInt(kml.getMacim().get(n).getRssi())
+				if(kml.getMacim().get(n).get(j).getMac().equals(kml.getDB().get(i).getSpots().get(j).getMac())){
+					if(Integer.parseInt(kml.getMacim().get(n).get(j).getRssi())
 							<Integer.parseInt(kml.getDB().get(i).getSpots().get(j).getRssi())){
 						fail("the mac in macim isnt the strogenst one");
 					}

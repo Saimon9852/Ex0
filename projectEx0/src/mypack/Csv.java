@@ -107,6 +107,7 @@ public class Csv {
 	{
 		return (s.charAt(s.length() -1) == 'v')&& (s.charAt(s.length() - 2) == 's') && (s.charAt(s.length()-3) == 'c')&&(s.charAt(s.length()-4) == '.');
 	}
+	
 	public void writescan(String name){
 		FileWriter fw;
 

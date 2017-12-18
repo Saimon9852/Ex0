@@ -29,6 +29,11 @@ public class WifiSpots {
 		Collections.sort(spots,new CustomComparator());
 
 	}
+	
+	public WifiSpots(ArrayList<WifiSpot> arr){
+		 spots = arr;
+	}
+	
 	public void wifisort(){
 		Collections.sort(spots,new CustomComparator());
 
