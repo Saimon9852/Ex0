@@ -11,7 +11,7 @@ import org.apache.commons.csv.CSVRecord;
  * function:
  * typical getters and setters.
  * toString method
- * @author 
+ * @author Ehud Plaksin, Saimon Lankry
  *
  */
 public class WifiSpot {

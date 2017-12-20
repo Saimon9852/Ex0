@@ -14,7 +14,7 @@ import java.util.Scanner;
  *
  */
 public class MacLoc_2 {
-	
+	//the constants
 	final static double power=2;
 	final static double norm=100000;
 	final static double sig_diff=0.4;
@@ -26,36 +26,56 @@ public class MacLoc_2 {
 	int nSamples;
 	//HashMap<String,Double> scTopi=new HashMap<>();
 	ArrayList<Wscan> scans=new ArrayList<Wscan>();
-	
+	/**
+	 * class builder
+	 * @param DB- Data base
+	 * @param samples- number of samples to use.
+	 * @param path-the path for the CSV without location.
+	 */
 	public MacLoc_2(Database DB,int samples,String path){
 		db=DB;
 		csv.path=path;
 		this.path=path;
 		this.nSamples=samples;
+		//initializes the virtual csv data base from the csv file.
 		csv.flil();
 		System.out.println("size:: "+csv.getCsv().size());
+		// executes the algorithm and write the results to csv
 		setWscans();
 	}
-	
+	/**
+	 * executes the algorithm and write the results to csv.
+	 */
 	public void setWscans(){
-
+		//goes over the Noloc DB and for every mac there goes over our entire DB.
 		for(int k=0;k<csv.getCsv().size();k++){
 			for(int i=0;i<db.getDB().size();i++){
+				//setting the pi for each scan
 				double pi=setPI(db.getDB().get(i).spots,csv.getCsv().get(k).getSpots());
+				//creating a new weighted scan
 				Wscan sc=new Wscan(pi,(db.getDB().get(i).spots));
+				//adding it to the arraylist of scans
 				scans.add(sc);
 			}	
+			//sorting the weighted scans.
 			Collections.sort(scans,new CompareWscan());
+			//setting the location for the NOGPS csv.
 			setLocation(scans,csv,k);
 
-
+			//new mac new arraylist.
 		}scans=new ArrayList<Wscan>();
+		//writing the macs with the set location to csv.
 		Write_csv ws = new Write_csv("outputAlgo2fin");
 		ws.write(csv);
 	}
 
 
-
+	/**
+	 * setting the PI weight by Boaz's algorithm
+	 * @param db -the full DataBase
+	 * @param csv -Data base of location-less macs.
+	 * @return - the weight of scan in DB.
+	 */
 	public double setPI(ArrayList<WifiSpot> db,ArrayList<WifiSpot> csv){
 		double sig;
 		double diff;
@@ -71,7 +91,12 @@ public class MacLoc_2 {
 			}
 		}return PI;
 	}
-
+	/**
+	 * searches a certain mac in arrays list. returns its index
+	 * @param mac
+	 * @param db
+	 * @return- index of the mac in arraylist
+	 */
 	public int search(String mac,ArrayList<WifiSpot> db){
 		for(int i=0;i<db.size();i++){
 			if(db.get(i).getMac().equals(mac)){
@@ -79,7 +104,12 @@ public class MacLoc_2 {
 			}
 		}return -1;
 	}
-	
+	/**
+	 * 
+	 * @param scans-holds our weighted scans
+	 * @param csv-no GPS csv
+	 * @param index of the mac in the location less CSV.
+	 */
 	public void setLocation(ArrayList<Wscan> scans,Csv_noGPS csv,int index){
 		
 		

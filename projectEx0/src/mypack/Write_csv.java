@@ -5,20 +5,29 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+/**
+ * this class is used to write csv files.
+ * @author Ehud Plaksin, Saimon Lankry
+ *
+ */
 public class Write_csv {
-
+	/**
+	 * Hold the name of the file that we will write.
+	 */
 	private String name;
-
+	/*
+	 * class builder
+	 */
 	public Write_csv(String name)
 	{
 		this.name= name;
 	}
-
+	/**
+	 * writes a CSV file that holds Wifi records, writes it from database.
+	 * @param csv an object of class Csv_noGPS that holds the data base we will write from.
+	 */
 	public void write(Csv_noGPS csv){
 		FileWriter fw;
-		System.out.println("size again"+csv.getCsv().size());
-
 		try {
 			fw = new FileWriter(name +".csv");
 			BufferedWriter bw = new BufferedWriter(fw);
@@ -55,7 +64,10 @@ public class Write_csv {
 	}
 
 
-
+/**
+ * writes an Array list fo Wifispots into a CSV file.
+ * @param ws
+ */
 	public void wifispotToCSV(ArrayList<WifiSpot> ws){
 
 		FileWriter fw;

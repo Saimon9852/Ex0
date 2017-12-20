@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 /**
  * this class is for asserting the location of a Router.
- * @author Ehud Plaksin
+ * @author Ehud Plaksin, Saimon Lankry
  *
  */
 public class MacLoc_1 {
@@ -72,8 +72,10 @@ public class MacLoc_1 {
 		
 		macAddress = MacAddress;
 		double lat=0, lon=0, alt=0,weight=0,sWeight=0;
+		//Sorting the arraylists of each mac, so that we can take the Strongest ones easily.
 		Collections.sort(macMap.get(macAddress),new CompareMac());
 		ArrayList<WifiSpot> cur=macMap.get(macAddress);
+		//the algorithm itself
 		for(int i=0;i<cur.size()&&i<samples;i++){
 			weight=1/Math.pow(Double.parseDouble(cur.get(i).getRssi()), power);
 			sWeight=sWeight+weight;
@@ -93,7 +95,10 @@ public class MacLoc_1 {
 		System.out.println(s.toString());
 		return s;
 	}
-	
+	/**
+	 * writes a csv file with the results of using the algorithm on every mac.
+	 * @param fileName
+	 */
 	public void algorithmOnAllMac(String fileName){
 		
 		ArrayList<WifiSpot> a = new ArrayList<WifiSpot>();
@@ -106,7 +111,10 @@ public class MacLoc_1 {
 		wc.wifispotToCSV(a);
 		
 	}
-	
+	/**
+	 * returns an array list of all macs in hash map.
+	 * @return
+	 */
 	private ArrayList<String> getAllMacs(){
 		ArrayList<String> allmac = new ArrayList<String>();
 		for ( String key : macMap.keySet() ) {

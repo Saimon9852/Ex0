@@ -1,4 +1,4 @@
-package mypack;
+package Tests;
 
 import static org.junit.Assert.*;
 
@@ -7,6 +7,10 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import mypack.Csv;
+import mypack.DataException;
+import mypack.Tokml;
 
 
 public class TokmlTest {

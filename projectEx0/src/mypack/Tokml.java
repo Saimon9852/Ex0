@@ -27,7 +27,7 @@ import de.micromata.opengis.kml.v_2_2_0.TimePrimitive;
  * the class varialbes DB and macim are used to hold the data we want to write.
  * macim holds the location and singal streght of the mac adresses in the scans.
  * it holds 1 instance of each mac adress it holds the location where it is the Strongest
- * @author Rachel Plaksin
+ * @author Ehud Plaksin, Saimon Lankry
  *
  */
 public class Tokml {

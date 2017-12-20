@@ -12,7 +12,7 @@ import java.util.Date;
  * Two wifi spots are considered to be in the same scan if:
  * they share the same "FirstSeen" time, and they share the same device id.
  * the class variable scan is used to store the scan's wifi spots.
- * @author Rachel Plaksin
+ * @author Ehud Plaksin, Saimon Lankry
  *
  */
 public class scan {

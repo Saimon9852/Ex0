@@ -5,7 +5,11 @@ import java.util.ArrayList;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-
+/**
+ * reads a CSV without GPS to arrays list of WifiSpots.
+ * @author Ehud Plaksin, Saimon Lankry
+ *
+ */
 public class Read_CSV_NoGPS {
 	String path;
 	public Read_CSV_NoGPS(String path) {
