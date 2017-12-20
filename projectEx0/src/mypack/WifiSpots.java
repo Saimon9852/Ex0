@@ -24,7 +24,7 @@ public class WifiSpots {
 	private String Latitude;
 	public ArrayList<WifiSpot> spots=new ArrayList<WifiSpot>();
 
-	WifiSpots(String path){
+	public WifiSpots(String path){
 		setWifiSpots(path);
 		Collections.sort(spots,new CustomComparator());
 
@@ -39,7 +39,7 @@ public class WifiSpots {
 
 	}
 
-	WifiSpots(){
+	public WifiSpots(){
 	}
 
 	public String getFirstSeen() {
@@ -93,7 +93,7 @@ public class WifiSpots {
 		}
 	}
 	//reading the csv using commonns api. more info can be found on their website
-	void setWifiSpots(String path){
+	public void setWifiSpots(String path){
 		try{
 			FileReader in = new FileReader(path);
 			BufferedReader br = new BufferedReader(in);

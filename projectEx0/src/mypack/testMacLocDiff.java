@@ -2,6 +2,11 @@ package mypack;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
+/*
+ * able to load to different csv files and compare them by specific argument 
+ * realse the calculations in csv file
+ */
 public class testMacLocDiff {
 	
     private HashMap<String,ArrayList<WifiSpot>> diff = new HashMap<String,ArrayList<WifiSpot>>();
@@ -29,8 +34,11 @@ public class testMacLocDiff {
 	
 	
 	
-	
-	
+	/**
+	 * Compare two csv file by the coordinates(lon,lat,alt) for algo1 and create csv file with the diff data
+	 * @param String name for the new csv file for comparison
+	 * @return void
+	 */
 	public void compateFiles(String name){
 		
 	    double difflon =0,difflat=0,diffalt=0;
@@ -65,6 +73,12 @@ public class testMacLocDiff {
 	
 	}
 	
+	
+	/**
+	 * gets mac address from nDB and search it myDB
+	 * @param String mac
+	 * @return WifiSpot
+	 */
 	private WifiSpot findMac(String mac){
 		
 		for (int i = 0; i < myDB.get(0).getSpots().size(); i++) {
@@ -74,6 +88,11 @@ public class testMacLocDiff {
 		return null;
 	}
 	
+	/**
+	 * gets time as key from myDB and search it nDB
+	 * @param String string
+	 * @return WifiSpots
+	 */
 	private WifiSpots findSpotTime(String time){
 		
 		for (int i = 0; i < nDB.size(); i++) {
@@ -83,6 +102,12 @@ public class testMacLocDiff {
 		return null;
 	}
 	
+	
+	/**
+	 * Compare two csv file by the coordinates(lon,lat,alt) for algo2 and create csv file with the diff data
+	 * @param String name for the new csv file for comparison
+	 * @return void
+	 */
 	public void compateFilesAlgo2(String name){
 		
 		double difflon =0,difflat=0,diffalt=0;
@@ -120,7 +145,11 @@ public class testMacLocDiff {
 	}
 
 	
-	
+	/**
+	 * fix the Time in myDB and nDB to use it as a key,return the original size of the string
+	 * @param void
+	 * @return Integer
+	 */
 	private int fixTime(){
 		
 		int timeLong = nDB.get(0).getFirstSeen().length();

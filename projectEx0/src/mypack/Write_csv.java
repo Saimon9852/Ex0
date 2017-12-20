@@ -56,6 +56,11 @@ public class Write_csv {
 
 
 
+	/**
+	 * gets array list of WifiSpot and create a csv file in the format for Algo1
+	 * @param ArrayList<WifiSpot> ws
+	 * @return void
+	 */
 	public void wifispotToCSV(ArrayList<WifiSpot> ws){
 
 		FileWriter fw;
@@ -90,7 +95,12 @@ public class Write_csv {
 
 	}
 
-
+	/**
+	 * The function create csv file as the format comparison: print all my coordinates and the file's coordinates ,for each mac address and calculate the difference 
+	 * between each one of them and show the total average difference between lon,lat,alt
+	 * @param Double totlon,totlat,totalt HashMap<String,ArrayList<WifiSpot>> diff HashMap<String,ArrayList<Double>> coordDiff
+	 * @return void
+	 */
 	public void csvDifferent(double totlon,double totlat,double totalt,HashMap<String,ArrayList<WifiSpot>> diff,HashMap<String,ArrayList<Double>> coordDiff){
 
 		FileWriter fw;
@@ -136,7 +146,14 @@ public class Write_csv {
 
 	}
 
-
+	
+	
+	/**
+	 * The function create csv file as the format comparison: print all my coordinates and the file's coordinates ,for each time(line) and calculate the difference 
+	 * between each one of them and show the total average difference between lon,lat,alt
+	 * @param Double totlon,totlat,totalt HashMap<String,ArrayList<WifiSpot>> diff HashMap<String,ArrayList<Double>> coordDiff Integer timelong
+	 * @return void
+	 */
 	public void csvDifferentX(double totlon,double totlat,double totalt,HashMap<String,ArrayList<WifiSpots>> diff,
 			HashMap<String,ArrayList<Double>> coordDiff,int timelong){
 

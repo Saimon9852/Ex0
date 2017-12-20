@@ -19,7 +19,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="mypack.CsvTest" project="Ex0" file="/Ex0/projectEx0/src/mypack/CsvTest.java" 
+  <class id="3" language="java" name="Tests.CsvTest" project="Ex0" file="/Ex0/JunitTests/Tests/CsvTest.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="198" y="101"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -82,7 +82,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="10" language="java" name="mypack.scanTest" project="Ex0" file="/Ex0/projectEx0/src/mypack/scanTest.java" 
+  <class id="10" language="java" name="Tests.scanTest" project="Ex0" file="/Ex0/JunitTests/Tests/scanTest.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="169" width="129" x="193" y="354"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -109,7 +109,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="13" language="java" name="mypack.TokmlTest" project="Ex0" file="/Ex0/projectEx0/src/mypack/TokmlTest.java" 
+  <class id="13" language="java" name="Tests.TokmlTest" project="Ex0" file="/Ex0/JunitTests/Tests/TokmlTest.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="144" width="93" x="410" y="15"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -136,8 +136,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="16" language="java" name="mypack.WifiSpotsTest" project="Ex0" 
-    file="/Ex0/projectEx0/src/mypack/WifiSpotsTest.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="16" language="java" name="Tests.WifiSpotsTest" project="Ex0" 
+    file="/Ex0/JunitTests/Tests/WifiSpotsTest.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="168" width="153" x="359" y="428"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -145,8 +145,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="17" language="java" name="mypack.WifiSpotTest" project="Ex0" 
-    file="/Ex0/projectEx0/src/mypack/WifiSpotTest.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="17" language="java" name="Tests.WifiSpotTest" project="Ex0" file="/Ex0/JunitTests/Tests/WifiSpotTest.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
     <position height="182" width="142" x="881" y="411"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -155,43 +155,51 @@
     </display>  
   </class>  
   <association id="18">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="19" name="DB"/>      
-      <multiplicity id="20" minimum="0" maximum="2147483647"/>    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="19" name="scan">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="20" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="15" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="21">    
     <end type="SOURCE" refId="15" navigable="false">      
-      <attribute id="22" name="spots"/>      
-      <multiplicity id="23" minimum="0" maximum="2147483647"/>    
+      <attribute id="22" name="spots">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="23" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="14" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="24">    
     <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="25" name="Scans"/>      
-      <multiplicity id="26" minimum="0" maximum="2147483647"/>    
+      <attribute id="25" name="Scans">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="26" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="9" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="27">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="28" name="scan"/>      
-      <multiplicity id="29" minimum="0" maximum="2147483647"/>    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="28" name="DB">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="29" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="15" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="30">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="31" name="macim"/>      
-      <multiplicity id="32" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
