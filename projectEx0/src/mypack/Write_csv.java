@@ -150,8 +150,8 @@ public class Write_csv {
 
 			for ( String key : diff.keySet() ) {
 				
-				WifiSpots ws = diff.get(key).get(0);
-				WifiSpots myws = diff.get(key).get(1);
+				WifiSpots ws = diff.get(key).get(1);
+				WifiSpots myws = diff.get(key).get(0);
 				ArrayList<Double> numdiff = coordDiff.get(key);
 				int diffsize = key.length() - timelong;
             	String nw = key.substring(0, key.length() - diffsize);

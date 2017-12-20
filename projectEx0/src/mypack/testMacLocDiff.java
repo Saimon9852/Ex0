@@ -10,21 +10,18 @@ public class testMacLocDiff {
 	private HashMap<String,ArrayList<Double>> coordDiff2 = new HashMap<String,ArrayList<Double>>();
 	private ArrayList<WifiSpots> myDB;
 	private ArrayList<WifiSpots> nDB;
-	private String mypath,path;
+	
 	public testMacLocDiff(String pathv,String Mypathv,boolean Algo){
 		
-		mypath = Mypathv;
-		path = pathv;
-		
 		if(Algo){
-			Database mydb = new Database(mypath,"");
-			Database db = new Database(path,"");
+			Database mydb = new Database(Mypathv,"");
+			Database db = new Database(pathv,"");
 			myDB = mydb.getDB();
 			nDB = db.getDB();
 		}
 		else{
-			Database mydb = new Database(mypath,"WifiSpots");
-			Database db = new Database(path,"WifiSpots");
+			Database mydb = new Database(Mypathv,"WifiSpots");
+			Database db = new Database(pathv,"WifiSpots");
 			myDB = mydb.getDB();
 			nDB = db.getDB();
 		}
@@ -47,6 +44,7 @@ public class testMacLocDiff {
 			  s.add(nDB.get(0).getSpots().get(i));
 			  s.add(ws);
 			  diff.put(mac,s);
+			
 			  difflon = Math.abs(Double.parseDouble(nDB.get(0).getSpots().get(i).getLongtitude()) - Double.parseDouble(ws.getLongtitude()));
 			  difflat = Math.abs(Double.parseDouble(nDB.get(0).getSpots().get(i).getLatitude()) - Double.parseDouble(ws.getLatitude()));
 			  diffalt = Math.abs(Double.parseDouble(nDB.get(0).getSpots().get(i).getAltitude()) - Double.parseDouble(ws.getAltitude()));
@@ -97,12 +95,14 @@ public class testMacLocDiff {
 			String time = myDB.get(i).getFirstSeen();
 			WifiSpots ws = findSpotTime(time);
 			ArrayList<WifiSpots> warr = new ArrayList<WifiSpots>();
+			
 			warr.add(myDB.get(i));
 			warr.add(ws);
 			diff2.put(time,warr);
-			  difflon = Math.abs(Double.parseDouble(nDB.get(i).getLongtitude()) - Double.parseDouble(ws.getLongtitude()));
-			  difflat = Math.abs(Double.parseDouble(nDB.get(i).getLatitude()) - Double.parseDouble(ws.getLatitude()));
-			  diffalt = Math.abs(Double.parseDouble(nDB.get(i).getAltitude()) - Double.parseDouble(ws.getAltitude()));
+			
+			  difflon = Math.abs(Double.parseDouble(myDB.get(i).getLongtitude()) - Double.parseDouble(ws.getLongtitude()));
+			  difflat = Math.abs(Double.parseDouble(myDB.get(i).getLatitude()) - Double.parseDouble(ws.getLatitude()));
+			  diffalt = Math.abs(Double.parseDouble(myDB.get(i).getAltitude()) - Double.parseDouble(ws.getAltitude()));
 			  totalLon += difflon;
 			  totalLat += difflat;
 			  totalAlt += diffalt;

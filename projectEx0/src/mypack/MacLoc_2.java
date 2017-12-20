@@ -50,7 +50,7 @@ public class MacLoc_2 {
 
 
 		}scans=new ArrayList<Wscan>();
-		Write_csv ws = new Write_csv("outputAlgo2fin");
+		Write_csv ws = new Write_csv("outputAlgo2XAA");
 		ws.write(csv);
 	}
 
