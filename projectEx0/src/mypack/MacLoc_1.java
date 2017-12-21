@@ -3,6 +3,8 @@ package mypack;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+
+import Comparator.CompareMac;
 /**
  * this class is for asserting the location of a Router.
  * @author Ehud Plaksin, Saimon Lankry

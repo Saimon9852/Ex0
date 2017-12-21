@@ -8,6 +8,8 @@ import java.util.Date;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+
+import Comparator.CustomComparator;
 /**
  * holds sufficient information to describe a collection of wifi spots.
  * a collection of wifi spots can have shared properties.

@@ -10,6 +10,8 @@ import java.util.Scanner;
 
 import javax.swing.plaf.synth.SynthSpinnerUI;
 
+import Comparator.CompareWscan;
+
 /**
  * this class is used for figuring user location by mac's surrounding him.
  * 

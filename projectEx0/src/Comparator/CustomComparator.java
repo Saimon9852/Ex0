@@ -1,6 +1,8 @@
-package mypack;
+package Comparator;
 
 import java.util.Comparator;
+
+import mypack.WifiSpot;
 /*
  * our custom comperator used to compare two objects of type WifiSpot
  * first we check if both objects share the same time stamp

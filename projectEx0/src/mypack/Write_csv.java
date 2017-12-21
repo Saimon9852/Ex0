@@ -61,6 +61,7 @@ public class Write_csv {
 	 * @param ArrayList<WifiSpot> ws
 	 * @return void
 	 */
+	//
 	public void wifispotToCSV(ArrayList<WifiSpot> ws){
 
 		FileWriter fw;
