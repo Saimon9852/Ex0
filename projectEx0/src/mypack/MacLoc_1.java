@@ -92,7 +92,7 @@ public class MacLoc_1 {
 				cur.get(0).getRssi(),String.valueOf(lat),
 				String.valueOf(lon),String.valueOf(alt));
 		
-		System.out.println(s.toString());
+		
 		return s;
 	}
 	/**

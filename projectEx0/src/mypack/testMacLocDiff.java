@@ -124,10 +124,17 @@ public class testMacLocDiff {
 			warr.add(myDB.get(i));
 			warr.add(ws);
 			diff2.put(time,warr);
-			
+			  
+			  if(!ws.getLongtitude().equals("null") && !myDB.get(i).getLongtitude().equals("null")){
 			  difflon = Math.abs(Double.parseDouble(myDB.get(i).getLongtitude()) - Double.parseDouble(ws.getLongtitude()));
 			  difflat = Math.abs(Double.parseDouble(myDB.get(i).getLatitude()) - Double.parseDouble(ws.getLatitude()));
 			  diffalt = Math.abs(Double.parseDouble(myDB.get(i).getAltitude()) - Double.parseDouble(ws.getAltitude()));
+			  }
+			  else{
+				  difflon= 0;
+				  difflat =0;
+				  diffalt = 0;
+			  }
 			  totalLon += difflon;
 			  totalLat += difflat;
 			  totalAlt += diffalt;
