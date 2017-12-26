@@ -19,7 +19,7 @@ public class Database {
 	public Database(String path,String format){
 		
 		if(format.equals("WifiSpots")){
-		    readcsvAll(path);
+		    add(path);
 		    
 		}
 		else
@@ -40,7 +40,7 @@ public class Database {
 	 * @param gets path of a csv file and read him to ArrayList<WifiSpots> DB
 	 * @return void function
 	 */
-	private void readcsvAll(String path){
+	private void add(String path){
 		try{
 			FileReader in = new FileReader(path);
 			Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(in);

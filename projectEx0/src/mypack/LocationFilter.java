@@ -7,7 +7,7 @@ import java.util.Scanner;
  * we then only take samples that are in the radius,
  * and dont use the ones that outside of it.
  */
-public class LocationFilter{
+public class LocationFilter implements Filter{
 	static double Latitude=35.23583;
 	static double Longtitude=31.77617;
 	static double Radius=5;
@@ -16,15 +16,20 @@ public class LocationFilter{
 	 * input:latitude and longtitude of the point we are going to apply the filter to
 	 * output:boolean value coressponding wheater the point is in the radius or not.
 	 */
-	static boolean  Filt(Double Lat,Double Long){
-		if(distance(Latitude,Longtitude,Lat,Long)<=Radius)return true;
+	public boolean  Filt(WifiSpots s){
+		if(distance(Latitude,Longtitude,Double.parseDouble(s.getLatitude()),Double.parseDouble(s.getLongtitude()))<=Radius)return true;
 		return false;
 	}
+	public boolean  Filt(WifiSpot s){
+		if(distance(Latitude,Longtitude,Double.parseDouble(s.getLatitude()),Double.parseDouble(s.getLongtitude()))<=Radius)return true;
+		return false;
+	}
+
 	/*
 	 * getting the user input to set the local class variables.
 	 * we also check the input.
 	 */
-	static void SetData(){
+	public  LocationFilter(){
 		try {	
 			Scanner sc=new Scanner(System.in);
 			System.out.println("please enter the Latitude coordinate");

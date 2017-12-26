@@ -62,30 +62,28 @@ public class Tokml {
 	public void CreateKmlByFilter(String name) throws DataException{
 		boolean isEmpty=false;
 		try {
-			DateFormat format=new SimpleDateFormat("MM/dd/yyyy HH:mm");
-			Date d;
+			 
 			boolean check=false;
 			String tFilter=userInput();
 			final Kml kml = new Kml();
 			Document doc=kml.createAndSetDocument();
-		
+			Filter f=new FakeFilter();
 			switch(tFilter){
-			case "Location":LocationFilter.SetData();
+			case "Location": f=new LocationFilter();
 			break;
-			case "Date":TimeFilter.setfrom();
-			TimeFilter.setTo();
+			case "Date":f=new TimeFilter();
+			
 			break;
-			case "Id":IdFilter.SetData();
+			case "Id":f=new IdFilter();
 			}
 			
 			for (int j = 0; j < DB.size(); j++) {
 				switch(tFilter){
-				case "Location": check=LocationFilter.Filt(Double.parseDouble(DB.get(j).getLatitude())
-						,Double.parseDouble(DB.get(j).getLongtitude()));
+				case "Location": check=f.Filt(DB.get(j));
 				break;
-				case "Date": check=TimeFilter.Filt(d=format.parse(DB.get(j).getFirstSeen()));
+				case "Date": check=f.Filt(DB.get(j));
 				break;
-				case "Id":check=IdFilter.Filt(DB.get(j).getID());
+				case "Id":check=f.Filt(DB.get(j));
 				break;
 				default: check=true;
 				}
@@ -103,10 +101,9 @@ public class Tokml {
 
 			for (String key : macim.keySet()) {
 				switch(tFilter){
-				case "Location": check=LocationFilter.Filt(Double.parseDouble(macim.get(key).get(0).getLatitude()),
-						Double.parseDouble(macim.get(key).get(0).getLongtitude()));
+				case "Location": check=f.Filt(macim.get(key).get(0));
 				break;
-				case "Date": check=TimeFilter.Filt(d=format.parse(macim.get(key).get(0).getFirsseen()));
+				case "Date": check=f.Filt(macim.get(key).get(0));
 				break;
 				default: check=true;
 				}
