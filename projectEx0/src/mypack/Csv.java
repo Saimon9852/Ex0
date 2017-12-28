@@ -20,11 +20,17 @@ public class Csv {
 	private String path;
 	private ArrayList<scan> Scans=new ArrayList<scan>();
 	private ArrayList<String> files=new ArrayList<String>();
+	private ArrayList<WifiSpots> littleDB=new ArrayList<WifiSpots>();
 	/**
 	 * sets the csv object
 	 */
 	public Csv(){
 		
+	}
+	public void ToString(){
+		for(int i=0;i<littleDB.size();i++){
+			littleDB.get(i).toPrint();
+		}
 	}
 	public Csv(String path)  throws DataException
 	{
@@ -80,6 +86,11 @@ public class Csv {
 	 */
 	public ArrayList<String> getFiles()  throws DataException{
 		File folder = new File(path);
+		if(folder.isFile()){
+			ArrayList<String> paths=new ArrayList<String>();
+			paths.add(path);
+			return paths;
+		}
 		File[] listOfFiles = folder.listFiles();
 		ArrayList<String> paths=new ArrayList<String>();
 		
@@ -127,12 +138,14 @@ public class Csv {
 							+","+Scans.get(k).getScan().get(i).getLongtitude()
 							+","+Scans.get(k).getScan().get(i).getAltitude()
 							+","+Scans.get(k).getScan().get(i).spots.size()+",");
+							littleDB.add(Scans.get(k).getScan().get(i));
 					for(int j=0;j<Scans.get(k).getScan().get(i).spots.size();j++){
 						bw.write(
 								Scans.get(k).getScan().get(i).getSpots().get(j).getSsid()
 								+","+Scans.get(k).getScan().get(i).getSpots().get(j).getMac()
 								+","+Scans.get(k).getScan().get(i).getSpots().get(j).getChanel()
 								+","+Scans.get(k).getScan().get(i).getSpots().get(j).getRssi()+","
+								
 								);						
 					}bw.newLine();
 

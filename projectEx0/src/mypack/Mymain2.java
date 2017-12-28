@@ -15,8 +15,10 @@ public class Mymain2 {
 		
 		Csv Ariel=new Csv("C:\\Users\\Rachel Plaksin\\Desktop\\Ariel");
 		Ariel.writescan("take2");
-		Tokml kml=new Tokml("take2.csv");
-        kml.CreateKmlByFilter("nOfilter");
+		Ariel.ToString();
+
+//		Tokml kml=new Tokml("take2.csv");
+       // kml.CreateKmlByFilter("nOfilter");
 //		 Database db=new Database("_comb_all_BM2_.csv","WifiSpots");
 //         MacLoc_2 m2 = new MacLoc_2(db,4,"_comb_no_gps_ts2_.csv");
 //         m2.setWscans("outputAlgo2fin");
