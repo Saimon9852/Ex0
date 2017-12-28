@@ -16,7 +16,7 @@ import java.util.ArrayList;
  *
  */
 public class Csv {
-	
+
 	private String path;
 	private ArrayList<scan> Scans=new ArrayList<scan>();
 	private ArrayList<String> files=new ArrayList<String>();
@@ -25,7 +25,7 @@ public class Csv {
 	 * sets the csv object
 	 */
 	public Csv(){
-		
+
 	}
 	public void ToString(){
 		for(int i=0;i<littleDB.size();i++){
@@ -34,17 +34,17 @@ public class Csv {
 	}
 	public Csv(String path)  throws DataException
 	{
-		
+
 		this.path=path;
 		setCsv(); 
-		
+
 	}
 	/*
 	 * checks if the input file is in the right format.
 	 * if so true false otherwise returns false
 	 */
 	private boolean hasRightFormat(String source){
-		
+
 		boolean b = false;
 		try
 		{
@@ -56,25 +56,30 @@ public class Csv {
 			b = firstLine.contains("WigleWifi");
 			String[] str = {"Type","AccuracyMeters","AltitudeMeters","CurrentLongitude","CurrentLatitude","RSSI","Channel","FirstSeen","AuthMode","SSID","MAC"};
 			for (int i = 0; i < str.length; i++) {
-				  if(secondLine.contains(str[i]) == false) b = false;
+				if(secondLine.contains(str[i]) == false) b = false;
 			}
 		}
 		catch(IOException e){
 			e.printStackTrace();
 		}
-		 
-		 return b;
+
+		return b;
 	}
-/**
- * sets the csv file object variables.
- * @throws DataException
- */
+	/**
+	 * sets the csv file object variables.
+	 * @throws DataException
+	 */
 	public void setCsv()  throws DataException{
 		files=getFiles();
 		for(int i=0; i<files.size();i++){
 			WifiSpots Ariel=new WifiSpots(files.get(i));
 			scan s=new scan(Ariel);
 			Scans.add(s);	
+		}
+		for(int k=0;k<Scans.size();k++){
+			for(int i=0;i<Scans.get(k).getScan().size();i++){
+				littleDB.add(Scans.get(k).getScan().get(i));
+			}
 		}
 	}
 	/**
@@ -93,7 +98,7 @@ public class Csv {
 		}
 		File[] listOfFiles = folder.listFiles();
 		ArrayList<String> paths=new ArrayList<String>();
-		
+
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()){
 				if(isCsv(listOfFiles[i].getName()))
@@ -118,7 +123,7 @@ public class Csv {
 	{
 		return (s.charAt(s.length() -1) == 'v')&& (s.charAt(s.length() - 2) == 's') && (s.charAt(s.length()-3) == 'c')&&(s.charAt(s.length()-4) == '.');
 	}
-	
+
 	public void writescan(String name){
 		FileWriter fw;
 
@@ -138,19 +143,18 @@ public class Csv {
 							+","+Scans.get(k).getScan().get(i).getLongtitude()
 							+","+Scans.get(k).getScan().get(i).getAltitude()
 							+","+Scans.get(k).getScan().get(i).spots.size()+",");
-							littleDB.add(Scans.get(k).getScan().get(i));
 					for(int j=0;j<Scans.get(k).getScan().get(i).spots.size();j++){
 						bw.write(
 								Scans.get(k).getScan().get(i).getSpots().get(j).getSsid()
 								+","+Scans.get(k).getScan().get(i).getSpots().get(j).getMac()
 								+","+Scans.get(k).getScan().get(i).getSpots().get(j).getChanel()
 								+","+Scans.get(k).getScan().get(i).getSpots().get(j).getRssi()+","
-								
+
 								);						
 					}bw.newLine();
 
 				}
-				
+
 			}
 			System.out.println(name + ".csv was created successfully");
 			bw.close();
