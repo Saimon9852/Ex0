@@ -13,10 +13,10 @@ public class Mymain2 {
 
 	public static void main(String[] args)  throws DataException{
 		
-		Csv Ariel=new Csv("C:\\Users\\Rachel Plaksin\\Desktop\\Ariel");
-		Ariel.writescan("take2");
-		Tokml kml=new Tokml("take2.csv");
-        kml.CreateKmlByFilter("nOfilter");
+		//Csv Ariel=new Csv("C:\\Users\\Rachel Plaksin\\Desktop\\Ariel");
+		//Ariel.writescan("take2");
+		//Tokml kml=new Tokml("take2.csv");
+        //kml.CreateKmlByFilter("nOfilter");
 //		 Database db=new Database("_comb_all_BM2_.csv","WifiSpots");
 //         MacLoc_2 m2 = new MacLoc_2(db,4,"_comb_no_gps_ts2_.csv");
 //         m2.setWscans("outputAlgo2fin");
@@ -33,6 +33,7 @@ public class Mymain2 {
 //			mcheck.setWscans("CHECKoutputAlgo2fin");
 //			testMacLocDiff test3 = new testMacLocDiff("asd\\Algo2_BM2_TS1_4.csv","CHECKoutputAlgo2fin.csv",false);
 //			test3.compateFilesAlgo2("checkalgo2");
+		
 		
         
 	}
