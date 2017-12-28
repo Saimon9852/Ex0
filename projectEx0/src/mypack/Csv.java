@@ -32,6 +32,7 @@ public class Csv {
 			littleDB.get(i).toPrint();
 		}
 	}
+	
 	public Csv(String path)  throws DataException
 	{
 
@@ -39,11 +40,16 @@ public class Csv {
 		setCsv(); 
 
 	}
+	
+	public void setPath(String path){
+		this.path = path;
+	}
+	
 	/*
 	 * checks if the input file is in the right format.
 	 * if so true false otherwise returns false
 	 */
-	private boolean hasRightFormat(String source){
+	public boolean hasRightFormat(String source){
 
 		boolean b = false;
 		try
@@ -65,6 +71,7 @@ public class Csv {
 
 		return b;
 	}
+	
 	/**
 	 * sets the csv file object variables.
 	 * @throws DataException
@@ -82,6 +89,7 @@ public class Csv {
 			}
 		}
 	}
+	
 	/**
 	 * checks if the file in the directory is a file,
 	 * and then we check if it is a csv file.
@@ -90,13 +98,17 @@ public class Csv {
 	 * if the file isnt legit it throws and execption
 	 */
 	public ArrayList<String> getFiles()  throws DataException{
+		
 		File folder = new File(path);
+
 		if(folder.isFile()){
 			ArrayList<String> paths=new ArrayList<String>();
 			paths.add(path);
 			return paths;
 		}
+
 		File[] listOfFiles = folder.listFiles();
+		System.out.println("hi");
 		ArrayList<String> paths=new ArrayList<String>();
 
 		for (int i = 0; i < listOfFiles.length; i++) {
@@ -114,12 +126,16 @@ public class Csv {
 		}
 		return paths;
 	}
+	
+	
+	
+	
 	/**
 	 * checks if the file is csv
 	 * @param the path to the file
 	 * @return boolean value, true if csv, false otherwise.
 	 */
-	private boolean isCsv(String s)
+	public boolean isCsv(String s)
 	{
 		return (s.charAt(s.length() -1) == 'v')&& (s.charAt(s.length() - 2) == 's') && (s.charAt(s.length()-3) == 'c')&&(s.charAt(s.length()-4) == '.');
 	}

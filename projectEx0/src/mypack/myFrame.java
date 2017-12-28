@@ -12,10 +12,15 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JRadioButton;
 import javax.swing.JMenu;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
@@ -28,6 +33,8 @@ public class myFrame {
 
 	private JFrame frame;
 	private JTable table;
+	private Database mainDB;
+	private int filesCounter;
 
 	/**
 	 * Launch the application.
@@ -48,14 +55,16 @@ public class myFrame {
 	/**
 	 * Create the application.
 	 */
-	public myFrame() {
+	public myFrame()  throws DataException {
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize()  throws DataException {
+		
+		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1800, 1600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -105,22 +114,102 @@ public class myFrame {
 		menuBar.add(Box.createHorizontalGlue());
 		frame.setJMenuBar(menuBar);
 		
-		JMenu menu_2 = new JMenu("\u05DE\u05D7\u05D9\u05E7\u05D4");
-		menu_2.setFont(new Font("Segoe UI", Font.PLAIN, 40));
-		menuBar.add(menu_2);
-		
-		JMenu menu = new JMenu("\u05D4\u05D5\u05E1\u05E3 \u05EA\u05D9\u05E7\u05D9\u05D9\u05D4");
+		JMenu menu = new JMenu("\u05D4\u05D5\u05E1\u05E4\u05D4");
 		menu.setFont(new Font("Segoe UI", Font.PLAIN, 40));
 		menuBar.add(menu);
 		
-		JMenu menu_1 = new JMenu("\u05D4\u05D5\u05E1\u05E3 \u05E7\u05D5\u05D1\u05E5");
-		menu_1.setFont(new Font("Segoe UI", Font.PLAIN, 40));
-		menu_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		JMenuItem menuItem = new JMenuItem("\u05D4\u05D5\u05E1\u05E3 \u05E7\u05D5\u05D1\u05E5");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				JFileChooser chooser = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				    "CSV files", "csv");
+				chooser.setFileFilter(filter);
+				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				int returnVal = chooser.showOpenDialog(menuItem);
+				if(returnVal == JFileChooser.APPROVE_OPTION) {
+					
+					addFile(chooser.getSelectedFile().getPath());
+				}
 				
 			}
 		});
+		menuItem.setFont(new Font("Segoe UI", Font.PLAIN, 35));
+		menu.add(menuItem);
 		
-		menuBar.add(menu_1);
+		JMenuItem menuItem_1 = new JMenuItem("\u05D4\u05D5\u05E1\u05E3 \u05EA\u05D9\u05E7\u05D9\u05D9\u05D4");
+		menuItem_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				JFileChooser chooser = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				    "CSV files", "csv");
+				chooser.setFileFilter(filter);
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int returnVal = chooser.showOpenDialog(menuItem);
+				if(returnVal == JFileChooser.APPROVE_OPTION) {
+					
+					try 
+					{
+						ArrayList<String>paths = getAllPaths(chooser.getSelectedFile().getPath());
+						for (int i = 0; i < paths.size(); i++) {
+							addFile(paths.get(i));
+						}
+					} 
+					catch (DataException e1) {
+						
+						e1.printStackTrace();
+					}
+					
+				}
+				
+			}
+		});
+		menuItem_1.setFont(new Font("Segoe UI", Font.PLAIN, 35));
+		menu.add(menuItem_1);
+	}
+	
+	
+	
+	public ArrayList<String> getAllPaths(String path)  throws DataException{
+		File folder = new File(path);
+		File[] listOfFiles = folder.listFiles();
+		ArrayList<String> paths=new ArrayList<String>();
+		
+		for (int i = 0; i < listOfFiles.length; i++) {
+			if (listOfFiles[i].isFile()){
+				
+					String str = listOfFiles[i].getPath();
+					paths.add(str);
+				
+			}
+
+		} 
+		if(paths.size()==0){
+			throw new DataException("No currect input files");
+		}
+		return paths;
+	}
+	
+	private void addFile(String path){
+		 Csv myfileC=new Csv();
+		  if(myfileC.hasRightFormat(path)){
+			   
+		     try {
+		    	 Csv myfile = new Csv(path);
+				  myfile.writescan("wiggleToCSV"+ filesCounter);
+				if(filesCounter == 0) mainDB = new Database("wiggleToCSV"+ filesCounter,"WifiSpots");
+				 else mainDB.add("wiggleToCSV"+ filesCounter);
+			 }
+			 catch (DataException e1) {
+				e1.printStackTrace();
+			 }    
+		  }
+		  else{
+			  if(filesCounter == 0) mainDB = new Database(path,"WifiSpots");
+			  else mainDB.add(path);
+		  }
+		  filesCounter++;
 	}
 }

@@ -40,7 +40,7 @@ public class Database {
 	 * @param gets path of a csv file and read him to ArrayList<WifiSpots> DB
 	 * @return void function
 	 */
-	private void add(String path){
+	public void add(String path){
 		try{
 			FileReader in = new FileReader(path);
 			Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(in);
