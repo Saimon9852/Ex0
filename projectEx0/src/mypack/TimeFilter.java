@@ -42,9 +42,32 @@ public class TimeFilter implements Filter {
 		if(from.after(d)&&to.before(d))return true;
 		return false;
 	}
+	
 	/**
 	 * sets the from date.
 	 */
+	public  TimeFilter(String date1,String date2){
+		//Scanner sc=new Scanner(System.in);
+		//System.out.println("Enter Start Date (MM/dd/yyyy HH:mm)");
+		//String date=sc.nextLine();
+		try {
+			from=format.parse(date1);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		//System.out.println("Enter End Date (MM/dd/yyyy HH:mm)");
+		//date=sc.nextLine();
+		try {
+			to=format.parse(date2);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
 	public  TimeFilter(){
 		Scanner sc=new Scanner(System.in);
 		System.out.println("Enter Start Date (MM/dd/yyyy HH:mm)");

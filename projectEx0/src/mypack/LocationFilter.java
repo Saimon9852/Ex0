@@ -52,6 +52,25 @@ public class LocationFilter implements Filter{
 			e.printStackTrace();
 		}
 	}
+	
+	
+	public  LocationFilter(double tLongtitude,double tLatitude,double tRadius){
+		try {	
+			if((tLatitude>=-90&&tLatitude<=90
+					&&tLongtitude>=-180&&tLongtitude<=180
+					&&tRadius>0)){
+				Latitude=tLatitude;
+				Longtitude=tLongtitude;
+				Radius=tRadius;
+			}
+			else{
+				throw new DataException ("User Input for Geographical Data is incorrect");
+			}
+		} catch (DataException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/*
 	 * input: two geographical points (la1,lon1),(lat2,lon2).
 	 * output: the distance in kilometers between them.

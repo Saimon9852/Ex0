@@ -32,6 +32,7 @@ public class Csv {
 			littleDB.get(i).toPrint();
 		}
 	}
+
 	
 	public Csv(String path)  throws DataException
 	{
@@ -70,6 +71,11 @@ public class Csv {
 		}
 
 		return b;
+	}
+	
+	
+	public ArrayList<WifiSpots> getLittleDB(){
+		  return littleDB;
 	}
 	
 	/**

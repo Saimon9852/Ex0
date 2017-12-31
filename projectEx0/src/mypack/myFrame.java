@@ -17,10 +17,12 @@ import javax.swing.JRadioButton;
 import javax.swing.JMenu;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.TableColumn;
 
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Stack;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
@@ -32,8 +34,9 @@ import java.awt.Font;
 public class myFrame {
 
 	private JFrame frame;
-	private JTable table;
+	private JTable lastTable;
 	private Database mainDB;
+	private Stack<Database> filtDB;
 	private int filesCounter;
 
 	/**
@@ -56,6 +59,8 @@ public class myFrame {
 	 * Create the application.
 	 */
 	public myFrame()  throws DataException {
+		
+		filtDB = new Stack<Database>();
 		initialize();
 	}
 
@@ -105,9 +110,12 @@ public class myFrame {
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 35));
 		scrollPane.setColumnHeaderView(lblNewLabel);
 		
-		table = new JTable();
-		table.setBounds(11, 28, 1302, 1247);
-		panel.add(table);
+		JPanel p = new JPanel();
+		p.setBounds(11, 28, 1302, 1247);
+		p.setLayout(null);
+		display(p);
+		panel.add(p);
+		
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setFont(new Font("Segoe UI", Font.PLAIN, 40));
@@ -131,6 +139,7 @@ public class myFrame {
 				if(returnVal == JFileChooser.APPROVE_OPTION) {
 					
 					addFile(chooser.getSelectedFile().getPath());
+					display(p);
 				}
 				
 			}
@@ -156,6 +165,7 @@ public class myFrame {
 						for (int i = 0; i < paths.size(); i++) {
 							addFile(paths.get(i));
 						}
+						display(p);
 					} 
 					catch (DataException e1) {
 						
@@ -166,11 +176,51 @@ public class myFrame {
 				
 			}
 		});
+		
 		menuItem_1.setFont(new Font("Segoe UI", Font.PLAIN, 35));
 		menu.add(menuItem_1);
 	}
 	
-	
+	public void display(JPanel panel){
+		
+		String[] columns = {"Time","ID","Lat","Lon","Alt","#WiFi networks","SSID1","MAC1","Frequancy1","Signal1","SSID2","MAC2","Frequancy2","Signal2","SSID3"
+				 ,"MAC3","Frequancy3","Signal3","SSID4","MAC4","Frequancy4","Signal4","SSID5","MAC5","Frequancy5","Signal5"
+				,"SSID6","MAC6","Frequancy6","Signal6","SSID7","MAC7","Frequancy7","Signal7"
+				,"SSID8","MAC8","Frequancy8","Signal8","SSID9,MAC9","Frequancy9","Signal9","SSID10","MAC10","Frequancy10","Signal10"};
+		
+		int rows = 0;
+		if(filesCounter !=0){
+			rows = mainDB.getDB().size();
+			
+		}
+		
+		String[][]  data = new String[rows][46];
+		
+		for (int i = 0; i < rows; i++) {
+			  data[i][0] = mainDB.getDB().get(i).getFirstSeen();
+			  data[i][1] = mainDB.getDB().get(i).getID();
+			  data[i][2] = mainDB.getDB().get(i).getLatitude();
+			  data[i][3] = mainDB.getDB().get(i).getLongtitude();
+			  data[i][4] = mainDB.getDB().get(i).getAltitude();
+			  data[i][5] = String.valueOf(mainDB.getDB().get(i).getSpots().size());
+			  
+			  int w = 6;
+			  for (int j = 0; j < mainDB.getDB().get(i).getSpots().size(); j++) {
+				   
+				   data[i][w] = mainDB.getDB().get(i).getSpots().get(j).getSsid();w++;
+				   data[i][w] = mainDB.getDB().get(i).getSpots().get(j).getMac();w++;
+				   data[i][w] = mainDB.getDB().get(i).getSpots().get(j).getChanel();w++;
+				   data[i][w] = mainDB.getDB().get(i).getSpots().get(j).getRssi();w++;	 
+			}
+		}
+		
+		JTable table = new JTable(data, columns);
+		JScrollPane scrollPane = new JScrollPane(table);
+		table.setFillsViewportHeight(true);
+		scrollPane.setBounds(11, 28, 1302, 1247);
+		panel.removeAll();
+		panel.add(scrollPane);
+	}
 	
 	public ArrayList<String> getAllPaths(String path)  throws DataException{
 		File folder = new File(path);
@@ -193,14 +243,14 @@ public class myFrame {
 	}
 	
 	private void addFile(String path){
-		 Csv myfileC=new Csv();
+		  Csv myfileC=new Csv();
 		  if(myfileC.hasRightFormat(path)){
 			   
 		     try {
 		    	 Csv myfile = new Csv(path);
-				  myfile.writescan("wiggleToCSV"+ filesCounter);
-				if(filesCounter == 0) mainDB = new Database("wiggleToCSV"+ filesCounter,"WifiSpots");
-				 else mainDB.add("wiggleToCSV"+ filesCounter);
+				  
+			     if(filesCounter == 0) mainDB = new Database(myfile.getLittleDB());
+				 else mainDB.addToDB(myfile.getLittleDB());
 			 }
 			 catch (DataException e1) {
 				e1.printStackTrace();

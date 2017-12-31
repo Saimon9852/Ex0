@@ -20,12 +20,24 @@ public class Database {
 		
 		if(format.equals("WifiSpots")){
 		    add(path);
-		    
 		}
 		else
 			readcsvWifiSpot(path);
 			
 		macim=Macim(DB);
+	}
+	
+	public Database(ArrayList<WifiSpots> upDb){
+		 DB = upDb;
+		 macim = Macim(DB);
+	}
+	
+	public void addToDB(ArrayList<WifiSpots> holdDb)
+	{
+		for (int i = 0; i < holdDb.size(); i++) {
+			 DB.add(holdDb.get(i));
+		}
+		macim = Macim(DB);
 	}
 
 	public ArrayList<WifiSpots> getDB() {
