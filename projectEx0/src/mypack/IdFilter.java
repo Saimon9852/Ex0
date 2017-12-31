@@ -8,11 +8,17 @@ import java.util.Scanner;
 public class IdFilter implements Filter {
 	//holds the user id.
 	static String identifier="";
+	static String type="";
 	/*
 	 * gets input from the user, and sets identifier with it.
 	 */
+	public IdFilter(String type,String identifier){
+		this.type=type;
+		this.identifier=identifier;
+	}
 	
 	public IdFilter(){
+			type="ID";
 		try {	
 			Scanner sc=new Scanner(System.in);
 			System.out.println("please enter the Id");
@@ -31,17 +37,36 @@ public class IdFilter implements Filter {
 	 * input:String id (represents id that we are going to apply the filter on)
 	 * output: boolean value true if the input id is the same as identifier,false otherwise.
 	 */
-	
-	public boolean Filt(WifiSpots s) {		
-		if(!identifier.equals(s.getID()))return false;
-		return true;
-				
+
+	public boolean Filt(WifiSpots s) {
+		switch(type){
+		case "ID":
+			if(!identifier.equals(s.getID()))return false;
+			return true;
+		case "Time":
+			if(!identifier.equals(s.getFirstSeen()))return false;
+			return true;
+		case "Lat":
+			if(!identifier.equals(s.getLatitude()))return false;
+			return true;
+		case "lon":
+			if(!identifier.equals(s.getLongtitude()))return false;
+			return true;
+		case "Alt":
+			if(!identifier.equals(s.getAltitude()))return false;
+			return true;
+		default: return false;
+
+		}
+		
+
 	}
+	
 	public boolean Filt(WifiSpot s) {		
 		return true;
-				
+
 	}
-	
-	
+
+
 
 }
