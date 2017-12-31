@@ -35,6 +35,8 @@ public class FilterFrame extends JFrame {
     private JTextField secTxt2;
     private JTextField secTxt4;
     private JTextField secTxt3;
+    private Filter finalFilter = new FakeFilter();
+   
 
 	/**
 	 * Launch the application.
@@ -59,17 +61,18 @@ public class FilterFrame extends JFrame {
 		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1300, 867);
+		setBounds(100, 100, 1300, 783);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JButton button_1 = new JButton("\u05D1\u05D9\u05D8\u05D5\u05DC");
-		button_1.setBounds(15, 685, 216, 73);
+		button_1.setBounds(15, 616, 216, 73);
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {		
 				dispose();
+				
 				parent.setVisible(true);
 			}
 		});
@@ -157,18 +160,18 @@ public class FilterFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				timeFiltebtn.setSelected(false);
 				panel1.remove(textField_3);
+				panel1.revalidate();
+				 panel1.repaint();
 				keyRadbtn.setSelected(false);
 				if(isKey == true){
 					 panel1.add(textField_2);
-					 //panel1.add(textField_3);
 					 panel1.add(textField);
 					 panel1.remove(comboBox);
 					  isKey = false;
-					}
+				}
 					 textField.setText("0");
 					 textField_1.setText("0");
 					 textField_2.setText("0");
-					 textField_3.setText("0");
 					 label.setText("Lon:");
 					 lblNewLabel.setText("Lat:");
 					 lblNewLabel_1.setText("Radius:");
@@ -179,7 +182,7 @@ public class FilterFrame extends JFrame {
 		contentPane.add(locFiltbtn);
 		
 		keyRadbtn = new JRadioButton("Key word filter");
-		keyRadbtn.setBounds(409, 80, 217, 41);
+		keyRadbtn.setBounds(15, 19, 217, 41);
 		keyRadbtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			     
@@ -385,10 +388,29 @@ public class FilterFrame extends JFrame {
 		rdbtnNone.setBounds(975, 80, 251, 41);
 		contentPane.add(rdbtnNone);
 		
+		JComboBox comboBox_2 = new JComboBox();
+		comboBox_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(((String)comboBox_2.getSelectedItem()).equals("NOT") || ((String)comboBox_2.getSelectedItem()).equals("None"))
+					isNone = true;
+				    rdbtnNone.setSelected(true);
+				    rdLoc2.setSelected(false);
+				    rdTime2.setSelected(false);
+				    rdKey2.setSelected(false);
+				    panel.removeAll();
+			}
+		});
+		comboBox_2.setBounds(601, 370, 65, 41);
+		comboBox_2.addItem("None");
+		comboBox_2.addItem("AND");
+		comboBox_2.addItem("NOT");
+		comboBox_2.addItem("OR");
+		contentPane.add(comboBox_2);
+		
 		JButton button = new JButton("\u05D4\u05D5\u05E1\u05E3 \u05E1\u05D9\u05E0\u05D5\u05DF");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Filter f1,f2;
+				Filter f1= new FakeFilter(),f2 = new FakeFilter();
 				boolean isF1 =false,isF2 = false;
 				if(timeFiltebtn.isSelected()){
 					boolean dataValid = isValid(textField.getText(),'/',2);
@@ -409,6 +431,7 @@ public class FilterFrame extends JFrame {
 					if(textField_1.getText() != ""){
 						String keyWord = (String)comboBox.getSelectedItem();
 						String filtWord = textField_1.getText();
+						f2 = new IdFilter(keyWord,filtWord);
 						isF1 = true;
 					}
 					else
@@ -433,28 +456,91 @@ public class FilterFrame extends JFrame {
 				
 				
 				if(rdTime2.isSelected()){
-					
+					boolean dataValid = isValid(secTxt1.getText(),'/',2);
+					boolean timeValid = isValid(secTxt2.getText(),':',1);
+					boolean dataValid2 = isValid(secTxt3.getText(),'/',2);
+					boolean timeValid2 = isValid(secTxt4.getText(),':',1);
+					if(dataValid && timeValid && dataValid2 && timeValid2){
+						String from = secTxt1.getText() + " " + secTxt2.getText();
+						String to = secTxt3.getText() + " " + secTxt4.getText();
+						f2 = new TimeFilter(from,to);
+						isF2 = true;
+					}
+					else
+						JOptionPane.showMessageDialog(frame, "Wrong format for date filter");
 				}
 				else if(rdLoc2.isSelected()){
-					
+					boolean isLat = isValid(secTxt1.getText(),'.',1);
+					boolean isLon = isValid(secTxt2.getText(),'.',1);
+					boolean isRadius = isValid(secTxt3.getText(),'.',1);
+					if(isLat&&isLon&&isRadius){
+						double lat = Double.parseDouble(secTxt1.getText());
+						double lon = Double.parseDouble(secTxt2.getText());
+						double rad = Double.parseDouble(secTxt3.getText());
+						f2 = new LocationFilter(lon,lat,rad);	
+						isF2 = true;
+					}
+					else
+						JOptionPane.showMessageDialog(frame, "Wrong format for location filter");
 				}
 				else if(rdKey2.isSelected()){
-					
+					if(secTxt2.getText() != ""){
+						String keyWord = (String)comboBox_1.getSelectedItem();
+						String filtWord = secTxt2.getText();
+						f2 = new IdFilter(keyWord,filtWord);
+						isF2 = true;
+					}
+					else
+						JOptionPane.showMessageDialog(frame, "Wrong format for key filter");
 				}
 				else if(rdbtnNone.isSelected()){
-					
+					isF2 = true;
 				}
 				else
 					JOptionPane.showMessageDialog(frame, "You must choose one of the filter buttons");
+				
+				if(isF2&&isF1){
+					if(rdbtnNone.isSelected()){
+						if(((String)comboBox_2.getSelectedItem()).equals("NOT")){
+							  finalFilter = new Not_Filter(f1);
+							  
+							  frame.dispose();
+						}
+						else{
+							finalFilter = f1;
+							
+							frame.dispose();
+						}
+					}
+					else{
+						if(((String)comboBox_2.getSelectedItem()).equals("OR")){
+							finalFilter = new Or_Filter(f1,f2);
+							
+							frame.dispose();
+						}
+						else if(((String)comboBox_2.getSelectedItem()).equals("AND")){
+							finalFilter = new And_Filter(f1,f2);
+							
+							frame.dispose();
+						}
+						else
+							JOptionPane.showMessageDialog(frame, "To use secound filter you must choose AND/OR");
+		
+					}
+				}
+				
+				
 			}
 		});
-		button.setBounds(283, 685, 239, 73);
+		button.setBounds(281, 616, 239, 73);
 		contentPane.add(button);
+	
+		
 	}
 	
 	
 	private void setCombo(JComboBox comb){
-		String[] headers = {"Time","ID","Lat","Lon","Alt","#WiFi networks"};
+		String[] headers = {"Time","ID","Lat","Lon","Alt"};
 		for (int i = 0; i < headers.length; i++) {
 			  comb.addItem(headers[i]);
 		}

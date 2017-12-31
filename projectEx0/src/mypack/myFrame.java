@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 import java.awt.BorderLayout;
 import javax.swing.JTabbedPane;
@@ -37,8 +38,13 @@ public class myFrame {
 	private JTable lastTable;
 	private Database mainDB;
 	private Stack<Database> filtDB;
+	private Stack<Filter> allFilter;
 	private int filesCounter;
+	private int numOfFilts =0;
 
+	public JFrame getFrame(){
+		return frame;
+	}
 	/**
 	 * Launch the application.
 	 */
@@ -61,6 +67,7 @@ public class myFrame {
 	public myFrame()  throws DataException {
 		
 		filtDB = new Stack<Database>();
+		allFilter = new Stack<Filter>();
 		initialize();
 	}
 
@@ -97,6 +104,7 @@ public class myFrame {
 				frame.dispose();
 				FilterFrame f = new FilterFrame(frame);
 				f.setVisible(true);
+				
 			}
 		});
 		panel.add(btnAddFilter);
@@ -222,6 +230,9 @@ public class myFrame {
 		panel.add(scrollPane);
 	}
 	
+	
+	
+
 	public ArrayList<String> getAllPaths(String path)  throws DataException{
 		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
