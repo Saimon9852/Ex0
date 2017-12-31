@@ -35,7 +35,7 @@ public class FilterFrame extends JFrame {
     private JTextField secTxt2;
     private JTextField secTxt4;
     private JTextField secTxt3;
-    private Filter finalFilter = new FakeFilter();
+    private Filter finalFilter = null;
    
 
 	/**
@@ -57,7 +57,7 @@ public class FilterFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FilterFrame(JFrame parent) {
+	public FilterFrame(myFrame parent) {
 		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,8 +72,7 @@ public class FilterFrame extends JFrame {
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {		
 				dispose();
-				
-				parent.setVisible(true);
+				parent.getFrame().setVisible(true);
 			}
 		});
 		contentPane.add(button_1);
@@ -410,7 +409,7 @@ public class FilterFrame extends JFrame {
 		JButton button = new JButton("\u05D4\u05D5\u05E1\u05E3 \u05E1\u05D9\u05E0\u05D5\u05DF");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Filter f1= new FakeFilter(),f2 = new FakeFilter();
+				Filter f1= null,f2 = null;
 				boolean isF1 =false,isF2 = false;
 				if(timeFiltebtn.isSelected()){
 					boolean dataValid = isValid(textField.getText(),'/',2);
@@ -431,7 +430,7 @@ public class FilterFrame extends JFrame {
 					if(textField_1.getText() != ""){
 						String keyWord = (String)comboBox.getSelectedItem();
 						String filtWord = textField_1.getText();
-						f2 = new IdFilter(keyWord,filtWord);
+						f1 = new IdFilter(keyWord,filtWord);
 						isF1 = true;
 					}
 					else
@@ -503,25 +502,32 @@ public class FilterFrame extends JFrame {
 					if(rdbtnNone.isSelected()){
 						if(((String)comboBox_2.getSelectedItem()).equals("NOT")){
 							  finalFilter = new Not_Filter(f1);
-							  
+							  parent.getFrame().setVisible(true);
+							  parent.addFilter(finalFilter);
 							  frame.dispose();
 						}
 						else{
-							finalFilter = f1;
-							
-							frame.dispose();
+							 finalFilter = f1;
+							 System.out.println(finalFilter);
+							 parent.getFrame().setVisible(true);
+							 parent.addFilter(finalFilter);
+							 frame.dispose();
 						}
 					}
 					else{
 						if(((String)comboBox_2.getSelectedItem()).equals("OR")){
 							finalFilter = new Or_Filter(f1,f2);
-							
-							frame.dispose();
+							 parent.getFrame().setVisible(true);
+							 parent.addFilter(finalFilter);
+							 frame.dispose();
+
 						}
 						else if(((String)comboBox_2.getSelectedItem()).equals("AND")){
 							finalFilter = new And_Filter(f1,f2);
+							 parent.getFrame().setVisible(true);
+							 parent.addFilter(finalFilter);
+							 frame.dispose();
 							
-							frame.dispose();
 						}
 						else
 							JOptionPane.showMessageDialog(frame, "To use secound filter you must choose AND/OR");
