@@ -28,6 +28,7 @@ public class MacLoc_2 {
 	private Database db;
 	private Csv_noGPS csv=new Csv_noGPS(path);
 	private int nSamples;
+	private WifiSpots s;
 	//HashMap<String,Double> scTopi=new HashMap<>();
 	ArrayList<Wscan> scans=new ArrayList<Wscan>();
 	/**
@@ -43,13 +44,45 @@ public class MacLoc_2 {
 		this.nSamples=samples;
 		//initializes the virtual csv data base from the csv file.
 		csv.flil();
-		
+
 		// executes the algorithm and write the results to csv
-		
+
+	}
+	public MacLoc_2(Database DB,int samples,WifiSpots s){
+		db=DB;
+		this.nSamples=samples;
+		this.s=s;
 	}
 	/**
 	 * executes the algorithm and write the results to csv.
 	 */
+	public void setWscans(){
+		for(int i=0;i<db.getDB().size();i++){
+			//setting the pi for each scan
+			double pi=setPI(db.getDB().get(i).spots,s.getSpots());
+			//creating a new weighted scan
+			if(pi != -1){
+				Wscan sc=new Wscan(pi,(db.getDB().get(i).spots));
+				//adding it to the arraylist of scans
+				scans.add(sc);
+			}
+
+
+		}	
+		//sorting the weighted scans.
+		if(scans.size()==0){
+			s.setAltitude("null");
+			s.setLongtitude("null");
+			s.setLatitude("null");
+		}
+		else{
+			Collections.sort(scans,new CompareWscan());
+			//setting the location for the NOGPS csv.
+			setLocation(scans,s);
+		}
+	}
+
+
 	public void setWscans(String name){
 		//goes over the Noloc DB and for every mac there goes over our entire DB.
 		for(int k=0;k<csv.getCsv().size();k++){
@@ -62,8 +95,8 @@ public class MacLoc_2 {
 					//adding it to the arraylist of scans
 					scans.add(sc);
 				}
-				
-				
+
+
 			}	
 			//sorting the weighted scans.
 			if(scans.size()==0){
@@ -72,7 +105,7 @@ public class MacLoc_2 {
 				csv.getCsv().get(k).setLatitude("null");
 			}
 			else{
-			    Collections.sort(scans,new CompareWscan());
+				Collections.sort(scans,new CompareWscan());
 				//setting the location for the NOGPS csv.
 				setLocation(scans,csv,k);
 				scans=new ArrayList<Wscan>();
@@ -134,8 +167,8 @@ public class MacLoc_2 {
 	 * @param index of the mac in the location less CSV.
 	 */
 	public void setLocation(ArrayList<Wscan> scans,Csv_noGPS csv,int index){
-		
-		
+
+
 		double lat=0;
 		double lon=0;
 		double alt=0;
@@ -143,23 +176,48 @@ public class MacLoc_2 {
 		for(int j=0;j<nSamples&&j<scans.size();j++){
 			sWeights+=scans.get(j).weight;
 			double weight=scans.get(j).weight;
-			
+
 			lat=lat+weight*Double.parseDouble(scans.get(j).getScan().get(0).getLatitude());
 			lon=lon+weight*Double.parseDouble(scans.get(j).getScan().get(0).getLongtitude());
 			alt=alt+weight*Double.parseDouble(scans.get(j).getScan().get(0).getAltitude());
-		
+
 		}
 		lat=lat/sWeights;
 		lon=lon/sWeights;
 		alt=alt/sWeights;
-		
-		
+
+
 		csv.getCsv().get(index).setLatitude(Double.toString(lat));
 		csv.getCsv().get(index).setAltitude(Double.toString(alt));
 		csv.getCsv().get(index).setLongtitude(Double.toString(lon));
 	}
+	public void setLocation(ArrayList<Wscan> scans,WifiSpots s){
 
-	
+
+		double lat=0;
+		double lon=0;
+		double alt=0;
+		double sWeights=0;
+		for(int j=0;j<nSamples&&j<scans.size();j++){
+			sWeights+=scans.get(j).weight;
+			double weight=scans.get(j).weight;
+
+			lat=lat+weight*Double.parseDouble(scans.get(j).getScan().get(0).getLatitude());
+			lon=lon+weight*Double.parseDouble(scans.get(j).getScan().get(0).getLongtitude());
+			alt=alt+weight*Double.parseDouble(scans.get(j).getScan().get(0).getAltitude());
+
+		}
+		lat=lat/sWeights;
+		lon=lon/sWeights;
+		alt=alt/sWeights;
+
+
+		s.setLatitude(Double.toString(lat));
+		s.setAltitude(Double.toString(alt));
+		s.setLongtitude(Double.toString(lon));
+	}
+
+
 
 }
 
