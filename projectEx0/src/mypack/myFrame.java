@@ -150,6 +150,27 @@ public class myFrame{
 		menuBar.add(Box.createHorizontalGlue());
 		frame.setJMenuBar(menuBar);
 		
+		JMenu mnAlgo = new JMenu("Algo");
+		menuBar.add(mnAlgo);
+		
+		JMenuItem mntmAlgo_1 = new JMenuItem("Algo 2");
+		mntmAlgo_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Algo2_frame algo2=new Algo2_frame (mainDB);
+				algo2.setVisible(true);
+			}
+		});
+		mnAlgo.add(mntmAlgo_1);
+		
+		JMenuItem mntmAlgo = new JMenuItem("Algo 1");
+		mntmAlgo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Algo1_frame Algo1=new Algo1_frame(mainDB);
+				Algo1.setVisible(true);
+			}
+		});
+		mnAlgo.add(mntmAlgo);
+		
 		JMenu menu = new JMenu("\u05D4\u05D5\u05E1\u05E4\u05D4");
 		menu.setFont(new Font("Segoe UI", Font.PLAIN, 40));
 		menuBar.add(menu);
