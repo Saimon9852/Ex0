@@ -159,8 +159,8 @@ public class Algo2_frame extends JFrame {
 					String Signal3=textField_Signal3.getText();
 					if((macValidate.Validate(mac1)||mac1==null)&&
 							(macValidate.Validate(mac3)||mac3==null)&&
-						(macValidate.Validate(mac2)||mac2==null)){
-						
+							(macValidate.Validate(mac2)||mac2==null)){
+
 						WifiSpots s=new WifiSpots();
 						WifiSpot a=new WifiSpot();
 						if(mac1!=null){
@@ -188,24 +188,25 @@ public class Algo2_frame extends JFrame {
 							MacLoc_2 loc=new MacLoc_2(db,5,s);
 							loc.setWscans();
 							lblNewLabel_1.setText("LAT = "+s.getLatitude()+"\n"+" LON = "
-							+s.getLongtitude() +"\n"+"ALT = "+s.getAltitude());
+									+s.getLongtitude() +"\n"+"ALT = "+s.getAltitude());
 						}
-						
-						
-						
-						
+
+
+
+
 					}else{
 						JOptionPane.showMessageDialog(frame, "Not a Mac");
 					}
 
 				}else if(rdbtnScan.isSelected()){
+					
 
 				}
 			}
 		});
 		btnEnter.setBounds(323, 217, 97, 25);
 		contentPane.add(btnEnter);
-		
+
 		lblNewLabel_1 = new JLabel("");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblNewLabel_1.setBounds(215, 136, 205, 68);
