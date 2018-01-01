@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JInternalFrame;
 import javax.swing.JLayeredPane;
@@ -504,14 +505,14 @@ public class FilterFrame extends JFrame {
 							  finalFilter = new Not_Filter(f1);
 							  parent.getFrame().setVisible(true);
 							  parent.addFilter(finalFilter);
-							  frame.dispose();
+							  dispose();
 						}
 						else{
 							 finalFilter = f1;
 							 System.out.println(finalFilter);
 							 parent.getFrame().setVisible(true);
 							 parent.addFilter(finalFilter);
-							 frame.dispose();
+							 dispose();
 						}
 					}
 					else{
@@ -519,15 +520,14 @@ public class FilterFrame extends JFrame {
 							finalFilter = new Or_Filter(f1,f2);
 							 parent.getFrame().setVisible(true);
 							 parent.addFilter(finalFilter);
-							 frame.dispose();
-
+							 dispose();
+							 
 						}
 						else if(((String)comboBox_2.getSelectedItem()).equals("AND")){
 							finalFilter = new And_Filter(f1,f2);
 							 parent.getFrame().setVisible(true);
 							 parent.addFilter(finalFilter);
-							 frame.dispose();
-							
+							 dispose();
 						}
 						else
 							JOptionPane.showMessageDialog(frame, "To use secound filter you must choose AND/OR");

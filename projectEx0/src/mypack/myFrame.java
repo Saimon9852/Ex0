@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -36,13 +37,13 @@ import java.awt.Font;
 public class myFrame{
 
 	private myFrame myframe;
-    private JPanel p;
+    private JPanel p,panel_1;
+    private JScrollPane scrollPane;
 	private JFrame frame;
 	private Database mainDB;
 	private Stack<Database> filtDB;
 	private ArrayList<Filter> allFilter;
 	private int filesCounter;
-	private JScrollPane scrollPane;
 	private JLabel lblNumberOfMacs,lblNumberOfLines;
 	/**
 	 * Launch the application.
@@ -82,7 +83,6 @@ public class myFrame{
 		return frame;
 	}
 	
-	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -92,8 +92,6 @@ public class myFrame{
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1800, 1600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		
 		
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
@@ -117,34 +115,34 @@ public class myFrame{
 		btnCreateKml.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		panel.add(btnCreateKml);
 		
+		
 		JButton btnAddFilter = new JButton("Add filter");
 		btnAddFilter.setBounds(1387, 1194, 308, 81);
 		btnAddFilter.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		btnAddFilter.setForeground(Color.BLACK);
 		btnAddFilter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
-				FilterFrame f = new FilterFrame(myframe);
-				f.setVisible(true);
-				
+				if(filesCounter > 0){
+					frame.setVisible(false);
+					FilterFrame f = new FilterFrame(myframe);
+					f.setVisible(true);
+				}
+				else
+					JOptionPane.showMessageDialog(frame, "You need to add files before");
 			}
 		});
 		panel.add(btnAddFilter);
-		
-		scrollPane = new JScrollPane();
-		scrollPane.setBounds(1339, 28, 403, 1126);
-		panel.add(scrollPane);
-		
-		
-		JLabel lblNewLabel = new JLabel("Filters:");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 35));
-		scrollPane.setColumnHeaderView(lblNewLabel);
 		
 		p = new JPanel();
 		p.setBounds(11, 28, 1302, 1247);
 		p.setLayout(null);
 		display();
 		panel.add(p);
+		
+		panel_1 = new JPanel();
+		panel_1.setBounds(1339, 28, 403, 1138);
+		panel.add(panel_1);
+		panel_1.setLayout(null);
 		
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -210,20 +208,43 @@ public class myFrame{
 		menuItem_1.setFont(new Font("Segoe UI", Font.PLAIN, 35));
 		menu.add(menuItem_1);
 		
-		
-		
 	}
 	
 	
 	private void displayFilters(){
 		
-		for (int i = 0; i < allFilter.size(); i++) {
-			  if(i+1 == allFilter.size()){
-				    
+		JLabel lbl =null;
+		panel_1.removeAll();
+		for (int i = 0; i < filtDB.size(); i++) {
+			  if(i==0) lbl = new JLabel("Datebase");
+			  else lbl = new JLabel("Filter" + i);
+			  lbl.setBounds(120, 10+ i*70, 180, 40);
+			  //panel_1.removeAll();
+			  panel_1.add(lbl);
+			  lbl.setFont(new Font("Tahoma", Font.PLAIN, 36));
+			  if(i == allFilter.size()){
+				  JButton undo = new JButton("X");
+				  undo.setBounds(5, 10 + i*70, 60, 40);
+				  undo.setForeground(Color.RED);
+				  undo.setBorder(BorderFactory.createEmptyBorder());
+				  undo.setFont(new Font("Tahoma", Font.PLAIN, 36));
+				  undo.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							if(allFilter.size() > 0)allFilter.remove(allFilter.size() -1);
+							else {filesCounter =0;}
+							filtDB.pop();
+							display();
+							displayFilters();
+						}
+					});
+				  panel_1.add(undo);
 			  }
+			  panel_1.revalidate();
+			  panel_1.repaint();
 		}
+		panel_1.revalidate();
+		panel_1.repaint();
 	}
-	
 	
 	public void addFilter(Filter f){
 		allFilter.add(f);
