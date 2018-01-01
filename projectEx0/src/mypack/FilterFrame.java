@@ -1,6 +1,5 @@
 package mypack;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -8,22 +7,18 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
-import javax.swing.JInternalFrame;
-import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
-import javax.swing.JToolBar;
-import javax.swing.JDesktopPane;
-import javax.swing.SpringLayout;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 public class FilterFrame extends JFrame {
 
+	/**
+	 * 
+	 */
 	private JPanel contentPane;
     private FilterFrame frame;
     private JRadioButton keyRadbtn;
@@ -119,7 +114,7 @@ public class FilterFrame extends JFrame {
 		panel1.add(textField_3);
 		textField_3.setColumns(10);
 		
-		JComboBox comboBox = new JComboBox();
+		JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.setBounds(26, 149, 236, 39);
 		setCombo(comboBox);
 		
@@ -246,7 +241,7 @@ public class FilterFrame extends JFrame {
 		secLbl4.setBounds(334, 243, 115, 33);
 		panel.add(secLbl4);
 		
-		JComboBox comboBox_1 = new JComboBox();
+		JComboBox<String> comboBox_1 = new JComboBox<String>();
 		comboBox_1.setBounds(26, 148, 236, 39);
 		setCombo(comboBox_1);
 		//panel.add(comboBox_1);
@@ -388,7 +383,7 @@ public class FilterFrame extends JFrame {
 		rdbtnNone.setBounds(975, 80, 251, 41);
 		contentPane.add(rdbtnNone);
 		
-		JComboBox comboBox_2 = new JComboBox();
+		JComboBox<String> comboBox_2 = new JComboBox<String>();
 		comboBox_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(((String)comboBox_2.getSelectedItem()).equals("NOT") || ((String)comboBox_2.getSelectedItem()).equals("None"))
@@ -545,7 +540,7 @@ public class FilterFrame extends JFrame {
 	}
 	
 	
-	private void setCombo(JComboBox comb){
+	private void setCombo(JComboBox<String> comb){
 		String[] headers = {"Time","ID","Lat","Lon","Alt"};
 		for (int i = 0; i < headers.length; i++) {
 			  comb.addItem(headers[i]);

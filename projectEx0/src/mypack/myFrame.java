@@ -1,34 +1,24 @@
 package mypack;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JToolBar;
 import java.awt.BorderLayout;
-import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JRadioButton;
 import javax.swing.JMenu;
-import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.TableColumn;
-
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Queue;
 import java.util.Stack;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
-import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.JLabel;
 import java.awt.Color;
@@ -38,7 +28,6 @@ public class myFrame{
 
 	private myFrame myframe;
     private JPanel p,panel_1;
-    private JScrollPane scrollPane;
 	private JFrame frame;
 	private Database mainDB;
 	private Stack<Database> filtDB;
@@ -263,8 +252,11 @@ public class myFrame{
 			  panel_1.revalidate();
 			  panel_1.repaint();
 		}
-		panel_1.revalidate();
-		panel_1.repaint();
+		
+		if(filesCounter ==0){
+			panel_1.revalidate();
+			panel_1.repaint();
+		}
 	}
 	
 	public void addFilter(Filter f){
