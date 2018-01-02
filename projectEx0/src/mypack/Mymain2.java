@@ -25,9 +25,6 @@ public class Mymain2 {
 		//Tokml kml=new Tokml("take2.csv");
         //kml.CreateKmlByFilter("nOfilter");
 
-	//	Csv Ariel=new Csv("C:\\Users\\Rachel Plaksin\\Desktop\\Ariel");
-		//Ariel.writescan("take2");
-		//Ariel.ToString();
 
 //		Tokml kml=new Tokml("take2.csv");
        // kml.CreateKmlByFilter("nOfilter");
