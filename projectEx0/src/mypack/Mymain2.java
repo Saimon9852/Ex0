@@ -6,6 +6,12 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.NavigableMap;
+import java.util.TreeMap;
+import java.util.Map.Entry;
+
+import javax.swing.JLabel;
 
 
 public class Mymain2 {
@@ -43,7 +49,19 @@ public class Mymain2 {
 //			testMacLocDiff test3 = new testMacLocDiff("asd\\Algo2_BM2_TS1_4.csv","CHECKoutputAlgo2fin.csv",false);
 //			test3.compateFilesAlgo2("checkalgo2");
 		
-		
+		 NavigableMap<String,Integer> pathToModifited = new TreeMap<String, Integer>();
+		 NavigableMap<Integer,Integer> fileRange = new TreeMap<Integer, Integer>();
+		 HashMap<Entry<String,Integer>,Entry<Integer, Integer>> fileInTable = new HashMap<>();
+		 
+		 pathToModifited.put("hello", 123433);
+		 fileRange.put(1, 100);
+		 fileInTable.put(pathToModifited.lastEntry(), fileRange.lastEntry());
+		 
+		 for(Entry key : fileInTable.keySet()){
+			  String s = (String)key.getKey();
+			  System.out.println(s);
+		 }
+		 
         
 	}
 }

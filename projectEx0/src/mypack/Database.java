@@ -146,6 +146,15 @@ public class Database {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	public void UpdateDB(int start,int end,ArrayList<WifiSpots> a){
+		
+		for (int i = start; i < end+1; i++) {
+			  DB.set(i, a.get(i));
+		}
+	}
 
 
 

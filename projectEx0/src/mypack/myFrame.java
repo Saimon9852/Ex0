@@ -15,7 +15,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.NavigableMap;
 import java.util.Stack;
+import java.util.TreeMap;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -33,7 +37,13 @@ public class myFrame{
 	private Stack<Database> filtDB;
 	private ArrayList<Filter> allFilter;
 	private int filesCounter;
+	private NavigableMap<String,Long> pathToModifited = new TreeMap<String, Long>();
 	private JLabel lblNumberOfMacs,lblNumberOfLines;
+	private NavigableMap<Integer,Integer> fileRange = new TreeMap<Integer, Integer>();
+	private HashMap<Entry<String,Long>,Entry<Integer, Integer>> fileInTable = new HashMap<>();
+	private ArrayList<String> allFolders = new ArrayList<String>();
+	
+
 	/**
 	 * Launch the application.
 	 */
@@ -57,6 +67,7 @@ public class myFrame{
 
 	public void setMyframe(myFrame m){
 		myframe =m;
+		
 	}
 	
 	/**
@@ -120,6 +131,30 @@ public class myFrame{
 		panel.add(btnCreateCsv);
 		
 		JButton btnCreateKml = new JButton("Create KML");
+		btnCreateKml.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(filesCounter > 0){
+					
+					JFileChooser chooser = new JFileChooser();
+					int returnVal = chooser.showSaveDialog(btnCreateKml);
+					if(returnVal == JFileChooser.APPROVE_OPTION) {
+						Tokml kml = new Tokml(filtDB.peek());
+						
+						String s = chooser.getSelectedFile().getPath();
+						try {
+							kml.CreateKmlByFilter(chooser.getSelectedFile().getName(), frame, s.substring(0,cutLastinPath(s)));
+						} catch (DataException e1) {
+							
+							e1.printStackTrace();
+						}
+						
+					}
+				}
+				else
+					JOptionPane.showMessageDialog(frame, "You need to add files first");
+				
+			}
+		});
 		btnCreateKml.setBounds(982, 1361, 372, 81);
 		btnCreateKml.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		panel.add(btnCreateKml);
@@ -142,22 +177,33 @@ public class myFrame{
 		});
 		panel.add(btnAddFilter);
 		
-		p = new JPanel();
-		p.setBounds(426, 0, 1342, 1310);
-		p.setLayout(null);
-		display();
-		panel.add(p);
-		
 		panel_1 = new JPanel();
 		panel_1.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		panel_1.setBounds(37, 69, 342, 1130);
 		panel.add(panel_1);
 		panel_1.setLayout(null);
 		
+		p = new JPanel();
+		p.setBounds(426, 0, 1342, 1310);
+		p.setLayout(null);
+		display();
+		panel.add(p);
+		
 		JLabel lblFilters = new JLabel("Filters:");
 		lblFilters.setFont(new Font("Tahoma", Font.BOLD, 40));
 		lblFilters.setBounds(37, 28, 179, 33);
 		panel.add(lblFilters);
+		
+		JButton btnUpdated = new JButton("updated");
+		btnUpdated.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(filesCounter>0){
+				fileWasUpdated();
+				folderWasUpdated();}
+			}
+		});
+		btnUpdated.setBounds(790, 1373, 171, 41);
+		panel.add(btnUpdated);
 		
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -204,6 +250,7 @@ public class myFrame{
 					
 					try 
 					{
+						allFolders.add(chooser.getSelectedFile().getPath());
 						ArrayList<String>paths = getAllPaths(chooser.getSelectedFile().getPath());
 						for (int i = 0; i < paths.size(); i++) {
 							addFile(paths.get(i));
@@ -272,10 +319,16 @@ public class myFrame{
 				  undo.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 							if(allFilter.size() > 0)allFilter.remove(allFilter.size() -1);
-							else {filesCounter =0;}
+							else {
+								filesCounter =0;
+								allFolders = new ArrayList<String>();
+								fileInTable = new HashMap<>();
+								pathToModifited = new TreeMap<String, Long>();
+								fileRange = new TreeMap<Integer, Integer>();
+							}
 							filtDB.pop();
 							display();
-							displayFilters();
+							//displayFilters();
 						}
 					});
 				  panel_1.add(undo);
@@ -302,7 +355,7 @@ public class myFrame{
 		Database newDb = new Database(newlist);
 		filtDB.push(newDb);
 		display();
-		displayFilters();
+		//displayFilters();
 	}
 	
 	private void display(){
@@ -349,6 +402,8 @@ public class myFrame{
 		scrollPane.setBounds(0, 0, 1342, 1310);
 		p.removeAll();
 		p.add(scrollPane);
+		
+		displayFilters();
 	}
 	
 	private ArrayList<String> getAllPaths(String path)  throws DataException{
@@ -376,7 +431,7 @@ public class myFrame{
 		filtDB = new Stack<Database>();
 		filtDB.push(mainDB);
 		for (int i = 0; i < allFilter.size(); i++) {
-			  Database peek = filtDB.pop();
+			  Database peek = filtDB.peek();
 			  ArrayList<WifiSpots> newarray = new ArrayList<WifiSpots>();
 			  for (int j = 0; j < peek.getDB().size(); j++) {
 				   if(allFilter.get(i).Filt(peek.getDB().get(j))){
@@ -397,18 +452,93 @@ public class myFrame{
 		return index;
 	}
 	
-	private void addFile(String path){
+	private void fileWasUpdated(){
+		
+		for(Entry<String,Long> key : fileInTable.keySet()){
+			
+			String path = (String) key.getKey();
+			File file = new File(path);
+			if(file.lastModified() != (long)key.getValue()){
+				 ArrayList<WifiSpots> newFile = readAgain(path);
+				 int start = fileInTable.get(key).getKey();
+				 int end = fileInTable.get(key).getValue();
+				 if(end-start == newFile.size()-1){
+					 mainDB.UpdateDB(start, end, newFile);
+				 }
+				 updateStack();
+				 display();
+			}
+		}
+	}
+
+	private void folderWasUpdated(){
+		
+		for (int i = 0; i < allFolders.size(); i++) {
+			File folder = new File(allFolders.get(i));
+			File[] listOfFiles = folder.listFiles();
+			for (int j = 0; j < listOfFiles.length; j++) {
+				  String pathfile = listOfFiles[j].getPath();
+				  boolean found = false;
+				  for(Entry<String,Long> key : fileInTable.keySet()){
+					   String s = (String)key.getKey();
+					   if(s.equals(pathfile))
+					   {
+						   found = true;
+						   break;
+					   }
+				  }
+				  if(!found){
+					  addFile(pathfile);
+					  updateStack();
+					  display();
+				  }
+			}
+		}
+	}
+	
+	private ArrayList<WifiSpots> readAgain(String path){
 		  Csv myfileC=new Csv();
 		  if(myfileC.hasRightFormat(path)){
 			   
 		     try {
 		    	 Csv myfile = new Csv(path);
-				  
-			     if(filesCounter == 0) {mainDB = new Database(myfile.getLittleDB());filtDB.push(mainDB);}
+		    	 return myfile.getLittleDB();
+			 
+			 }
+			 catch (DataException e1) {
+				e1.printStackTrace();
+			 }    
+		  }
+		  else{
+			  Database b = new Database(path,"WifiSpots");
+			  return b.getDB();
+		  }
+		return null;
+	}
+	
+	private void addFile(String path){
+		  Csv myfileC=new Csv();
+		  File file = new File(path);
+		  if(myfileC.hasRightFormat(path)){
+			   
+		     try {
+		    	 Csv myfile = new Csv(path);
+			     if(filesCounter == 0)
+			     	{
+			    	 	mainDB = new Database(myfile.getLittleDB());
+			    	 	filtDB.push(mainDB);
+			    	 	fileRange.put(0, mainDB.getDB().size()-1);
+			    	    pathToModifited.put(path, file.lastModified());
+			    	 	fileInTable.put(pathToModifited.lastEntry(),fileRange.lastEntry());
+			         }
 				 else {
+					
 					 mainDB.addToDB(myfile.getLittleDB());
+					 fileRange.put(fileRange.lastEntry().getValue()+1,mainDB.getDB().size()-1);
+					 pathToModifited.put(path, file.lastModified());
+			    	 fileInTable.put(pathToModifited.lastEntry(),fileRange.lastEntry());
 					 if(allFilter.size() > 0) updateStack();
-					 else{ filtDB.pop(); filtDB.push(mainDB);}
+					 else{filtDB.pop(); filtDB.push(mainDB);}
 			      }
 			 }
 			 catch (DataException e1) {
@@ -416,9 +546,14 @@ public class myFrame{
 			 }    
 		  }
 		  else{
-			  if(filesCounter == 0){ mainDB = new Database(path,"WifiSpots");filtDB.push(mainDB);}
+			  if(filesCounter == 0){ mainDB = new Database(path,"WifiSpots");filtDB.push(mainDB);
+			                         fileRange.put(0, mainDB.getDB().size() -1);pathToModifited.put(path, file.lastModified());
+			 			    	   	 fileInTable.put(pathToModifited.lastEntry(),fileRange.lastEntry());}
 			  else{
 				  mainDB.add(path);
+				  fileRange.put(fileRange.lastEntry().getValue()+1,mainDB.getDB().size()-1);
+				  pathToModifited.put(path, file.lastModified());
+		    	 	fileInTable.put(pathToModifited.lastEntry(),fileRange.lastEntry());
 				  if(allFilter.size() > 0) updateStack();
 				  else{ filtDB.pop(); filtDB.push(mainDB);}
 			  }

@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import java.awt.Font;
 
 public class FilterFrame extends JFrame {
 
@@ -57,71 +58,73 @@ public class FilterFrame extends JFrame {
 		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1300, 783);
+		setBounds(100, 100, 1220, 672);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton button_1 = new JButton("\u05D1\u05D9\u05D8\u05D5\u05DC");
-		button_1.setBounds(15, 616, 216, 73);
-		button_1.addActionListener(new ActionListener() {
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 35));
+		btnCancel.setBounds(277, 514, 293, 65);
+		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {		
 				dispose();
 				parent.getFrame().setVisible(true);
 			}
 		});
-		contentPane.add(button_1);
+		contentPane.add(btnCancel);
 		
 		JPanel panel1 = new JPanel();
-		panel1.setBounds(20, 148, 580, 436);
+		panel1.setBounds(25, 104, 1169, 108);
 		contentPane.add(panel1);
 		panel1.setLayout(null);
 		
 		textField = new JTextField();
-		textField.setBounds(26, 149, 236, 39);
+		textField.setBounds(26, 57, 236, 39);
 		panel1.add(textField);
 		textField.setColumns(10);
 		
 		textField_1 = new JTextField();
-		textField_1.setBounds(334, 149, 236, 39);
+		textField_1.setBounds(316, 57, 236, 39);
 		panel1.add(textField_1);
 		textField_1.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(26, 88, 115, 33);
+		lblNewLabel.setBounds(26, 12, 115, 33);
 		panel1.add(lblNewLabel);
 		
 		JLabel label = new JLabel("New label");
-		label.setBounds(334, 88, 115, 33);
+		label.setBounds(316, 12, 115, 33);
 		panel1.add(label);
 		
 		JLabel lblNewLabel_1 = new JLabel("New label");
-		lblNewLabel_1.setBounds(26, 244, 115, 33);
+		lblNewLabel_1.setBounds(596, 12, 115, 33);
 		panel1.add(lblNewLabel_1);
 		
 		textField_2 = new JTextField();
-		textField_2.setBounds(26, 305, 236, 39);
+		textField_2.setBounds(596, 57, 236, 39);
 		panel1.add(textField_2);
 		textField_2.setColumns(10);
 		
 		JLabel lblNewLabel_2 = new JLabel("New label");
-		lblNewLabel_2.setBounds(334, 244, 115, 33);
+		lblNewLabel_2.setBounds(880, 12, 115, 33);
 		panel1.add(lblNewLabel_2);
 		
 		textField_3 = new JTextField();
-		textField_3.setBounds(334, 305, 236, 39);
+		textField_3.setBounds(867, 57, 236, 39);
 		panel1.add(textField_3);
 		textField_3.setColumns(10);
 		
 		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setBounds(26, 149, 236, 39);
+		comboBox.setBounds(26, 57, 236, 39);
 		setCombo(comboBox);
+		//panel1.add(comboBox);
 		
 		JRadioButton timeFiltebtn = new JRadioButton("Time Filter");
-		timeFiltebtn.setBounds(15, 80, 171, 41);
+		timeFiltebtn.setBounds(15, 39, 171, 41);
 		JRadioButton locFiltbtn = new JRadioButton("Location Filter");
-		locFiltbtn.setBounds(192, 80, 211, 41);
+		locFiltbtn.setBounds(192, 39, 211, 41);
 		
 		timeFiltebtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -177,7 +180,7 @@ public class FilterFrame extends JFrame {
 		contentPane.add(locFiltbtn);
 		
 		keyRadbtn = new JRadioButton("Key word filter");
-		keyRadbtn.setBounds(15, 19, 217, 41);
+		keyRadbtn.setBounds(421, 39, 217, 41);
 		keyRadbtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			     
@@ -201,48 +204,48 @@ public class FilterFrame extends JFrame {
 		contentPane.add(keyRadbtn);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(668, 148, 589, 436);
+		panel.setBounds(25, 332, 1169, 157);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
 		JLabel secLbl1 = new JLabel("New label");
-		secLbl1.setBounds(26, 87, 115, 33);
+		secLbl1.setBounds(14, 38, 115, 33);
 		panel.add(secLbl1);
 		
 		JLabel secLbl2 = new JLabel("New label");
-		secLbl2.setBounds(334, 87, 115, 33);
+		secLbl2.setBounds(311, 38, 115, 33);
 		panel.add(secLbl2);
 		
 		secTxt1 = new JTextField();
 		secTxt1.setColumns(10);
-		secTxt1.setBounds(26, 148, 236, 39);
+		secTxt1.setBounds(14, 100, 236, 39);
 		panel.add(secTxt1);
 		
 		secTxt2 = new JTextField();
 		secTxt2.setColumns(10);
-		secTxt2.setBounds(334, 148, 236, 39);
+		secTxt2.setBounds(311, 99, 236, 39);
 		panel.add(secTxt2);
 		
 		secTxt4 = new JTextField();
 		secTxt4.setColumns(10);
-		secTxt4.setBounds(334, 304, 236, 39);
+		secTxt4.setBounds(892, 100, 236, 39);
 		panel.add(secTxt4);
 		
 		secTxt3 = new JTextField();
 		secTxt3.setColumns(10);
-		secTxt3.setBounds(26, 304, 236, 39);
+		secTxt3.setBounds(605, 99, 236, 39);
 		panel.add(secTxt3);
 		
 		JLabel secLbl3 = new JLabel("New label");
-		secLbl3.setBounds(26, 243, 115, 33);
+		secLbl3.setBounds(609, 38, 115, 33);
 		panel.add(secLbl3);
 		
 		JLabel secLbl4 = new JLabel("New label");
-		secLbl4.setBounds(334, 243, 115, 33);
+		secLbl4.setBounds(908, 38, 115, 33);
 		panel.add(secLbl4);
 		
 		JComboBox<String> comboBox_1 = new JComboBox<String>();
-		comboBox_1.setBounds(26, 148, 236, 39);
+		comboBox_1.setBounds(14, 99, 236, 39);
 		setCombo(comboBox_1);
 		//panel.add(comboBox_1);
 		
@@ -368,19 +371,19 @@ public class FilterFrame extends JFrame {
 			}
 		});
 		
-		rdTime2.setBounds(696, 80, 171, 41);
+		rdTime2.setBounds(15, 279, 171, 41);
 		contentPane.add(rdTime2);
 		
 		
-		rdLoc2.setBounds(696, 19, 211, 41);
+		rdLoc2.setBounds(204, 279, 211, 41);
 		contentPane.add(rdLoc2);
 		
 		
-		rdKey2.setBounds(975, 19, 217, 41);
+		rdKey2.setBounds(433, 279, 217, 41);
 		contentPane.add(rdKey2);
 		
 		
-		rdbtnNone.setBounds(975, 80, 251, 41);
+		rdbtnNone.setBounds(668, 279, 152, 41);
 		contentPane.add(rdbtnNone);
 		
 		JComboBox<String> comboBox_2 = new JComboBox<String>();
@@ -395,15 +398,16 @@ public class FilterFrame extends JFrame {
 				    panel.removeAll();
 			}
 		});
-		comboBox_2.setBounds(601, 370, 65, 41);
+		comboBox_2.setBounds(534, 222, 116, 41);
 		comboBox_2.addItem("None");
 		comboBox_2.addItem("AND");
 		comboBox_2.addItem("NOT");
 		comboBox_2.addItem("OR");
 		contentPane.add(comboBox_2);
 		
-		JButton button = new JButton("\u05D4\u05D5\u05E1\u05E3 \u05E1\u05D9\u05E0\u05D5\u05DF");
-		button.addActionListener(new ActionListener() {
+		JButton btnAddFilter = new JButton("Add Filter");
+		btnAddFilter.setFont(new Font("Tahoma", Font.PLAIN, 35));
+		btnAddFilter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Filter f1= null,f2 = null;
 				boolean isF1 =false,isF2 = false;
@@ -533,8 +537,8 @@ public class FilterFrame extends JFrame {
 				
 			}
 		});
-		button.setBounds(281, 616, 239, 73);
-		contentPane.add(button);
+		btnAddFilter.setBounds(596, 514, 302, 65);
+		contentPane.add(btnAddFilter);
 	
 		
 	}

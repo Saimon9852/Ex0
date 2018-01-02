@@ -15,6 +15,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
@@ -44,6 +47,12 @@ public class Tokml {
 		macim= db.getMacim();
 	}
 
+	public Tokml(Database mydb){
+	    db = mydb;
+		DB = db.getDB();
+		macim= db.getMacim();
+	}
+	
 	public ArrayList<WifiSpots> getDB() {
 		return DB;
 	}
@@ -129,6 +138,53 @@ public class Tokml {
 
 	}
 
+	
+	public void CreateKmlByFilter(String name,JFrame frame,String path) throws DataException{
+		boolean isEmpty=false;
+		try {
+			 
+			boolean check=true;
+			final Kml kml = new Kml();
+			Document doc=kml.createAndSetDocument();
+			for (int j = 0; j < DB.size(); j++) {
+				
+				if(check){
+					isEmpty=true;
+					Placemark p = doc.createAndAddPlacemark();
+					p.createAndSetTimeStamp().withWhen(DB.get(j).getFirstSeen().replace(' ', 'T'));
+					p.withName(DB.get(j).getID()).withDescription(DB.get(j).getSpots().get(0).getSsid())
+					.createAndSetPoint().addToCoordinates(Double.parseDouble(DB.get(j).getLongtitude()), 
+							Double.parseDouble(DB.get(j).getLatitude()),Double.parseDouble(DB.get(j).getAltitude()));
+				}
+
+			}
+
+			for (String key : macim.keySet()) {
+				
+				if(check){
+					isEmpty=true;
+					Placemark p = doc.createAndAddPlacemark();
+					p.createAndSetTimeStamp().withWhen(macim.get(key).get(0).getFirsseen().replace(' ','T'));
+					p.withName(macim.get(key).get(0).getMac()).withDescription(macim.get(key).get(0).getRssi())
+					.createAndSetPoint().addToCoordinates(Double.parseDouble(macim.get(key).get(0).getLongtitude()), 
+							Double.parseDouble(macim.get(key).get(0).getLatitude()),Double.parseDouble(macim.get(key).get(0).getAltitude()));	
+				}  
+			}
+
+			kml.marshal(new File(path,name+".kml"));
+			JOptionPane.showMessageDialog(frame, name + ".kml was created successfully");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		if(isEmpty==false){
+			throw new DataException("the filter requested didnot match any result");
+		}
+
+	}
+
+	
+	
 	public String userInput(){
 		Scanner sc=new Scanner(System.in);
 		System.out.println("Press 1 for Date Filter,Press 2 for Location Filter,Press 3 for Id filter"
