@@ -8,7 +8,6 @@ import javax.swing.JOptionPane;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -23,6 +22,7 @@ import javax.swing.JTable;
 import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Font;
+import javax.swing.border.MatteBorder;
 
 public class myFrame{
 
@@ -87,26 +87,46 @@ public class myFrame{
 		panel.setLayout(null);
 		
 		lblNumberOfLines = new JLabel("Number of lines: 0");
-		lblNumberOfLines.setBounds(890, 1332, 230, 33);
+		lblNumberOfLines.setFont(new Font("Tahoma", Font.PLAIN, 36));
+		lblNumberOfLines.setBounds(37, 1374, 390, 33);
 		panel.add(lblNumberOfLines);
 		
 		lblNumberOfMacs = new JLabel("Number of Macs: 0");
-		lblNumberOfMacs.setBounds(890, 1398, 230, 33);
+		lblNumberOfMacs.setFont(new Font("Tahoma", Font.PLAIN, 36));
+		lblNumberOfMacs.setBounds(453, 1374, 397, 33);
 		panel.add(lblNumberOfMacs);
 		
 		JButton btnCreateCsv = new JButton("Create csv");
-		btnCreateCsv.setBounds(456, 1332, 372, 99);
+		btnCreateCsv.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(filesCounter > 0){
+					
+					JFileChooser chooser = new JFileChooser();
+					int returnVal = chooser.showSaveDialog(btnCreateCsv);
+					if(returnVal == JFileChooser.APPROVE_OPTION) {
+						Write_csv wc = new Write_csv(chooser.getSelectedFile().getName());
+						String s = chooser.getSelectedFile().getPath();
+						wc.writeGUIcsv(s.substring(0,cutLastinPath(s)), filtDB.peek(), frame);
+					}
+				}
+				else
+					JOptionPane.showMessageDialog(frame, "You need to add files first");
+				
+			}
+		});
+		btnCreateCsv.setBounds(1380, 1362, 372, 81);
 		btnCreateCsv.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		panel.add(btnCreateCsv);
 		
 		JButton btnCreateKml = new JButton("Create KML");
-		btnCreateKml.setBounds(26, 1332, 372, 99);
+		btnCreateKml.setBounds(982, 1361, 372, 81);
 		btnCreateKml.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		panel.add(btnCreateKml);
 		
 		
 		JButton btnAddFilter = new JButton("Add filter");
-		btnAddFilter.setBounds(1387, 1194, 308, 81);
+		btnAddFilter.setBounds(37, 1246, 342, 64);
 		btnAddFilter.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		btnAddFilter.setForeground(Color.BLACK);
 		btnAddFilter.addActionListener(new ActionListener() {
@@ -123,49 +143,34 @@ public class myFrame{
 		panel.add(btnAddFilter);
 		
 		p = new JPanel();
-		p.setBounds(11, 28, 1302, 1247);
+		p.setBounds(426, 0, 1342, 1310);
 		p.setLayout(null);
 		display();
 		panel.add(p);
 		
 		panel_1 = new JPanel();
-		panel_1.setBounds(1339, 28, 403, 1138);
+		panel_1.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
+		panel_1.setBounds(37, 69, 342, 1130);
 		panel.add(panel_1);
 		panel_1.setLayout(null);
+		
+		JLabel lblFilters = new JLabel("Filters:");
+		lblFilters.setFont(new Font("Tahoma", Font.BOLD, 40));
+		lblFilters.setBounds(37, 28, 179, 33);
+		panel.add(lblFilters);
 		
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setFont(new Font("Segoe UI", Font.PLAIN, 40));
-		menuBar.add(Box.createHorizontalGlue());
+		//menuBar.add(Box.createHorizontalGlue());
 		frame.setJMenuBar(menuBar);
 		
-		JMenu mnAlgo = new JMenu("Algo");
-		menuBar.add(mnAlgo);
+		JMenu mnEdit = new JMenu("Edit");
+		mnEdit.setFont(new Font("Segoe UI", Font.PLAIN, 40));
+		menuBar.add(mnEdit);
 		
-		JMenuItem mntmAlgo_1 = new JMenuItem("Algo 2");
-		mntmAlgo_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Algo2_frame algo2=new Algo2_frame (mainDB);
-				algo2.setVisible(true);
-			}
-		});
-		mnAlgo.add(mntmAlgo_1);
-		
-		JMenuItem mntmAlgo = new JMenuItem("Algo 1");
-		mntmAlgo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				Algo1_frame Algo1=new Algo1_frame(mainDB);
-				Algo1.setVisible(true);
-			}
-		});
-		mnAlgo.add(mntmAlgo);
-		
-		JMenu menu = new JMenu("\u05D4\u05D5\u05E1\u05E4\u05D4");
-		menu.setFont(new Font("Segoe UI", Font.PLAIN, 40));
-		menuBar.add(menu);
-		
-		JMenuItem menuItem = new JMenuItem("\u05D4\u05D5\u05E1\u05E3 \u05E7\u05D5\u05D1\u05E5");
-		menuItem.addActionListener(new ActionListener() {
+		JMenuItem mntmAddFile = new JMenuItem("Add File");
+		mntmAddFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				JFileChooser chooser = new JFileChooser();
@@ -173,7 +178,7 @@ public class myFrame{
 				    "CSV files", "csv");
 				chooser.setFileFilter(filter);
 				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				int returnVal = chooser.showOpenDialog(menuItem);
+				int returnVal = chooser.showOpenDialog(mntmAddFile);
 				if(returnVal == JFileChooser.APPROVE_OPTION) {
 					
 					addFile(chooser.getSelectedFile().getPath());
@@ -182,11 +187,11 @@ public class myFrame{
 				
 			}
 		});
-		menuItem.setFont(new Font("Segoe UI", Font.PLAIN, 35));
-		menu.add(menuItem);
+		mntmAddFile.setFont(new Font("Segoe UI", Font.PLAIN, 35));
+		mnEdit.add(mntmAddFile);
 		
-		JMenuItem menuItem_1 = new JMenuItem("\u05D4\u05D5\u05E1\u05E3 \u05EA\u05D9\u05E7\u05D9\u05D9\u05D4");
-		menuItem_1.addActionListener(new ActionListener() {
+		JMenuItem mntmAddFolder = new JMenuItem("Add Folder");
+		mntmAddFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				JFileChooser chooser = new JFileChooser();
@@ -194,7 +199,7 @@ public class myFrame{
 				    "CSV files", "csv");
 				chooser.setFileFilter(filter);
 				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				int returnVal = chooser.showOpenDialog(menuItem);
+				int returnVal = chooser.showOpenDialog(mntmAddFile);
 				if(returnVal == JFileChooser.APPROVE_OPTION) {
 					
 					try 
@@ -215,8 +220,32 @@ public class myFrame{
 			}
 		});
 		
-		menuItem_1.setFont(new Font("Segoe UI", Font.PLAIN, 35));
-		menu.add(menuItem_1);
+		mntmAddFolder.setFont(new Font("Segoe UI", Font.PLAIN, 35));
+		mnEdit.add(mntmAddFolder);
+		
+		JMenu mnAlgo = new JMenu("Algo");
+		mnAlgo.setFont(new Font("Segoe UI", Font.PLAIN, 40));
+		menuBar.add(mnAlgo);
+		
+		JMenuItem mntmAlgo_1 = new JMenuItem("Algo 2");
+		mntmAlgo_1.setFont(new Font("Segoe UI", Font.PLAIN, 35));
+		mntmAlgo_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Algo2_frame algo2=new Algo2_frame (mainDB);
+				algo2.setVisible(true);
+			}
+		});
+		mnAlgo.add(mntmAlgo_1);
+		
+		JMenuItem mntmAlgo = new JMenuItem("Algo 1");
+		mntmAlgo.setFont(new Font("Segoe UI", Font.PLAIN, 35));
+		mntmAlgo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Algo1_frame Algo1=new Algo1_frame(mainDB);
+				Algo1.setVisible(true);
+			}
+		});
+		mnAlgo.add(mntmAlgo);
 		
 	}
 	
@@ -228,15 +257,17 @@ public class myFrame{
 		for (int i = 0; i < filtDB.size(); i++) {
 			  if(i==0) lbl = new JLabel("Datebase");
 			  else lbl = new JLabel("Filter" + i);
-			  lbl.setBounds(120, 10+ i*70, 180, 40);
+			  lbl.setBounds(100, 10+ i*70, 180, 40);
 			  //panel_1.removeAll();
 			  panel_1.add(lbl);
 			  lbl.setFont(new Font("Tahoma", Font.PLAIN, 36));
 			  if(i == allFilter.size()){
 				  JButton undo = new JButton("X");
-				  undo.setBounds(5, 10 + i*70, 60, 40);
+				  undo.setBounds(20, 10 + i*70, 60, 40);
 				  undo.setForeground(Color.RED);
 				  undo.setBorder(BorderFactory.createEmptyBorder());
+				  undo.setOpaque(false);
+				  undo.setContentAreaFilled(false);
 				  undo.setFont(new Font("Tahoma", Font.PLAIN, 36));
 				  undo.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
@@ -312,9 +343,10 @@ public class myFrame{
 		lblNumberOfLines.setText("Number of Lines: "+ rows);
 		lblNumberOfMacs.setText("Number of Macs: "+ macs);
 		JTable table = new JTable(data, columns);
-		JScrollPane scrollPane = new JScrollPane(table);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		table.setFillsViewportHeight(true);
-		scrollPane.setBounds(0, 0, 1302, 1247);
+		scrollPane.setBounds(0, 0, 1342, 1310);
 		p.removeAll();
 		p.add(scrollPane);
 	}
@@ -354,6 +386,15 @@ public class myFrame{
 			  Database newdb = new Database(newarray);
 			  filtDB.push(newdb);
 		}
+	}
+	
+	private int cutLastinPath(String s){
+		int index = -1;
+		for (int i = 0; i < s.length(); i++) {
+			  if(s.charAt(i) == '\\')
+					  index =i;
+		}
+		return index;
 	}
 	
 	private void addFile(String path){

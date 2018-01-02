@@ -1,10 +1,14 @@
 package mypack;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class Write_csv {
 
@@ -15,9 +19,51 @@ public class Write_csv {
 		this.name= name;
 	}
 
+	
+	public void writeGUIcsv(String pathToSave,Database csv,JFrame frame){
+		FileWriter fw;
+		
+		
+		try {
+			fw = new FileWriter(new File(pathToSave, name +".csv"));
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write("Time,ID,Lat,Lon,Alt,#WiFi networks,SSID1,MAC1,Frequancy1,Signal1,SSID2,MAC2,Frequancy2,Signal2,SSID3"
+					+ ",MAC3,Frequancy3,Signal3,SSID4,MAC4,Frequancy4,Signal4,SSID5,MAC5,Frequancy5,Signal5,"
+					+ "SSID6,MAC6,Frequancy6,Signal6,SSID7,MAC7,Frequancy7,Signal7,"
+					+ "SSID8,MAC8,Frequancy8,Signal8,SSID9,MAC9,Frequancy9,Signal9,SSID10,MAC10,Frequancy10,Signal10");
+			bw.newLine();
+			for(int k=0; k<csv.getDB().size();k++){
+				bw.write(csv.getDB().get(k).getFirstSeen()
+						+","+csv.getDB().get(k).getID()
+						+","+csv.getDB().get(k).getLatitude()
+						+","+csv.getDB().get(k).getLongtitude()
+						+","+csv.getDB().get(k).getAltitude()
+						+","+csv.getDB().get(k).spots.size()+",");
+				for(int j=0;j<csv.getDB().get(k).spots.size();j++){
+					bw.write(
+							csv.getDB().get(k).getSpots().get(j).getSsid()
+							+","+csv.getDB().get(k).getSpots().get(j).getMac()
+							+","+csv.getDB().get(k).getSpots().get(j).getChanel()
+							+","+csv.getDB().get(k).getSpots().get(j).getRssi()+","
+							);						
+				}bw.newLine();
+
+			}
+
+			JOptionPane.showMessageDialog(frame, name + ".csv was created successfully");
+			//System.out.println(name + ".csv was created successfully");
+			bw.close();
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+	}
+
+
+	
 	public void write(Csv_noGPS csv){
 		FileWriter fw;
-		System.out.println("size again"+csv.getCsv().size());
+		
 
 		try {
 			fw = new FileWriter(name +".csv");
