@@ -24,12 +24,22 @@ public class WifiSpots {
 	private String Longtitude;
 	private String ID;
 	private String Latitude;
+	private String fromID;
 	public ArrayList<WifiSpot> spots=new ArrayList<WifiSpot>();
 
 	public WifiSpots(String path){
 		setWifiSpots(path);
 		Collections.sort(spots,new CustomComparator());
 
+	}
+	
+	
+	public void setFrom(String from){
+		 fromID = from;
+	}
+	
+	public String getFrom(){
+		return fromID;
 	}
 	
 	public WifiSpots(ArrayList<WifiSpot> arr){

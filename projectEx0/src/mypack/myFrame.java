@@ -15,8 +15,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.Stack;
 import java.util.TreeMap;
@@ -36,11 +34,9 @@ public class myFrame{
 	private Database mainDB;
 	private Stack<Database> filtDB;
 	private ArrayList<Filter> allFilter;
-	private int filesCounter;
+	protected int filesCounter;
 	private NavigableMap<String,Long> pathToModifited = new TreeMap<String, Long>();
 	private JLabel lblNumberOfMacs,lblNumberOfLines;
-	private NavigableMap<Integer,Integer> fileRange = new TreeMap<Integer, Integer>();
-	private HashMap<Entry<String,Long>,Entry<Integer, Integer>> fileInTable = new HashMap<>();
 	private ArrayList<String> allFolders = new ArrayList<String>();
 	
 
@@ -54,6 +50,7 @@ public class myFrame{
 				try {
 					
 					myFrame window = new myFrame();
+					new Thread(new RunModifed(window)).start();;
 					window.frame.setVisible(true);
 					window.setMyframe(window);
 				} catch (Exception e) {
@@ -66,8 +63,7 @@ public class myFrame{
 	}
 
 	public void setMyframe(myFrame m){
-		myframe =m;
-		
+		myframe =m;	
 	}
 	
 	/**
@@ -194,17 +190,6 @@ public class myFrame{
 		lblFilters.setBounds(37, 28, 179, 33);
 		panel.add(lblFilters);
 		
-		JButton btnUpdated = new JButton("updated");
-		btnUpdated.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(filesCounter>0){
-				fileWasUpdated();
-				folderWasUpdated();}
-			}
-		});
-		btnUpdated.setBounds(790, 1373, 171, 41);
-		panel.add(btnUpdated);
-		
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setFont(new Font("Segoe UI", Font.PLAIN, 40));
@@ -294,6 +279,8 @@ public class myFrame{
 		});
 		mnAlgo.add(mntmAlgo);
 		
+		
+		
 	}
 	
 	
@@ -322,9 +309,8 @@ public class myFrame{
 							else {
 								filesCounter =0;
 								allFolders = new ArrayList<String>();
-								fileInTable = new HashMap<>();
 								pathToModifited = new TreeMap<String, Long>();
-								fileRange = new TreeMap<Integer, Integer>();
+								
 							}
 							filtDB.pop();
 							display();
@@ -452,26 +438,32 @@ public class myFrame{
 		return index;
 	}
 	
-	private void fileWasUpdated(){
-		
-		for(Entry<String,Long> key : fileInTable.keySet()){
+	protected void fileWasUpdated(){
+		System.out.println("Hi from file");
+		for(String key : pathToModifited.keySet()){
+			    String path = key;
+				File file = new File(path);
+				
+				if(file.lastModified() != pathToModifited.get(key)){ 
+					int size = mainDB.getDB().size();
+					for (int i = 0; i < size; i++) {
+						  if(mainDB.getDB().get(i).getFrom().equals(path)){
+							  mainDB.getDB().remove(i);
+							  i--;
+							  size = mainDB.getDB().size();
+						  }
+					}
+					pathToModifited.put(key, file.lastModified());
+					ArrayList<WifiSpots> newFile = readAgain(path);
+					mainDB.addToDB(newFile);
+					updateStack();
+					display();
 			
-			String path = (String) key.getKey();
-			File file = new File(path);
-			if(file.lastModified() != (long)key.getValue()){
-				 ArrayList<WifiSpots> newFile = readAgain(path);
-				 int start = fileInTable.get(key).getKey();
-				 int end = fileInTable.get(key).getValue();
-				 if(end-start == newFile.size()-1){
-					 mainDB.UpdateDB(start, end, newFile);
-				 }
-				 updateStack();
-				 display();
-			}
+				}
 		}
 	}
-
-	private void folderWasUpdated(){
+	
+	protected void folderWasUpdated(){
 		
 		for (int i = 0; i < allFolders.size(); i++) {
 			File folder = new File(allFolders.get(i));
@@ -479,8 +471,8 @@ public class myFrame{
 			for (int j = 0; j < listOfFiles.length; j++) {
 				  String pathfile = listOfFiles[j].getPath();
 				  boolean found = false;
-				  for(Entry<String,Long> key : fileInTable.keySet()){
-					   String s = (String)key.getKey();
+				  for(String key : pathToModifited.keySet()){
+					   String s = key;
 					   if(s.equals(pathfile))
 					   {
 						   found = true;
@@ -527,16 +519,12 @@ public class myFrame{
 			     	{
 			    	 	mainDB = new Database(myfile.getLittleDB());
 			    	 	filtDB.push(mainDB);
-			    	 	fileRange.put(0, mainDB.getDB().size()-1);
 			    	    pathToModifited.put(path, file.lastModified());
-			    	 	fileInTable.put(pathToModifited.lastEntry(),fileRange.lastEntry());
 			         }
 				 else {
 					
 					 mainDB.addToDB(myfile.getLittleDB());
-					 fileRange.put(fileRange.lastEntry().getValue()+1,mainDB.getDB().size()-1);
 					 pathToModifited.put(path, file.lastModified());
-			    	 fileInTable.put(pathToModifited.lastEntry(),fileRange.lastEntry());
 					 if(allFilter.size() > 0) updateStack();
 					 else{filtDB.pop(); filtDB.push(mainDB);}
 			      }
@@ -547,13 +535,11 @@ public class myFrame{
 		  }
 		  else{
 			  if(filesCounter == 0){ mainDB = new Database(path,"WifiSpots");filtDB.push(mainDB);
-			                         fileRange.put(0, mainDB.getDB().size() -1);pathToModifited.put(path, file.lastModified());
-			 			    	   	 fileInTable.put(pathToModifited.lastEntry(),fileRange.lastEntry());}
+			                         pathToModifited.put(path, file.lastModified());}
+			 			    	   	 
 			  else{
 				  mainDB.add(path);
-				  fileRange.put(fileRange.lastEntry().getValue()+1,mainDB.getDB().size()-1);
 				  pathToModifited.put(path, file.lastModified());
-		    	 	fileInTable.put(pathToModifited.lastEntry(),fileRange.lastEntry());
 				  if(allFilter.size() > 0) updateStack();
 				  else{ filtDB.pop(); filtDB.push(mainDB);}
 			  }

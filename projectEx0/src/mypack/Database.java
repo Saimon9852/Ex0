@@ -65,6 +65,7 @@ public class Database {
 				String time=record.get("Time");
 				String id=record.get("ID");
 				s.setID(id);
+				s.setFrom(path);
 				s.setAltitude(altitude);
 				s.setFirstSeen(time);
 				s.setLongtitude(longtitude);
@@ -148,13 +149,6 @@ public class Database {
 	}
 	
 	
-	
-	public void UpdateDB(int start,int end,ArrayList<WifiSpots> a){
-		
-		for (int i = start; i < end+1; i++) {
-			  DB.set(i, a.get(i));
-		}
-	}
 
 
 

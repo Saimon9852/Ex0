@@ -86,6 +86,7 @@ public class Csv {
 		files=getFiles();
 		for(int i=0; i<files.size();i++){
 			WifiSpots Ariel=new WifiSpots(files.get(i));
+			Ariel.setFrom(path);
 			scan s=new scan(Ariel);
 			Scans.add(s);	
 		}
