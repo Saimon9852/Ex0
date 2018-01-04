@@ -543,14 +543,14 @@ public class FilterFrame extends JFrame {
 						if(((String)comboBox_2.getSelectedItem()).equals("NOT")){
 							  finalFilter = new Not_Filter(f1);
 							  parent.getFrame().setVisible(true);
-							  parent.addFilter(finalFilter);
+							  parent.getServer().addFilter(finalFilter);
 							  dispose();
 						}
 						else{
 							 finalFilter = f1;
 							 System.out.println(finalFilter);
 							 parent.getFrame().setVisible(true);
-							 parent.addFilter(finalFilter);
+							 parent.getServer().addFilter(finalFilter);
 							 dispose();
 						}
 					}
@@ -558,14 +558,14 @@ public class FilterFrame extends JFrame {
 						if(((String)comboBox_2.getSelectedItem()).equals("OR")){
 							finalFilter = new Or_Filter(f1,f2);
 							 parent.getFrame().setVisible(true);
-							 parent.addFilter(finalFilter);
+							 parent.getServer().addFilter(finalFilter);
 							 dispose();
 							 
 						}
 						else if(((String)comboBox_2.getSelectedItem()).equals("AND")){
 							finalFilter = new And_Filter(f1,f2);
 							 parent.getFrame().setVisible(true);
-							 parent.addFilter(finalFilter);
+							 parent.getServer().addFilter(finalFilter);
 							 dispose();
 						}
 						else

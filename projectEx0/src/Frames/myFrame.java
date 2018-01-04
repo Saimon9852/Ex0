@@ -24,6 +24,7 @@ import mypack.DataException;
 import mypack.Database;
 import mypack.Deserialize;
 import mypack.Serialize;
+import mypack.Server;
 import mypack.Tokml;
 import mypack.WifiSpots;
 import mypack.Write_csv;
@@ -50,13 +51,14 @@ public class myFrame{
 	private myFrame myframe;
     private JPanel p,panel_1;
 	private JFrame frame;
-	private Database mainDB;
-	private Stack<Database> filtDB;
-	private ArrayList<Filter> allFilter;
-	protected int filesCounter;
-	private NavigableMap<String,Long> pathToModifited = new TreeMap<String, Long>();
+	private Server server;
+	//private Database mainDB;
+	//private Stack<Database> filtDB;
+	//private ArrayList<Filter> allFilter;
+	//protected int filesCounter;
+	//private NavigableMap<String,Long> pathToModifited = new TreeMap<String, Long>();
 	private JLabel lblNumberOfMacs,lblNumberOfLines;
-	private ArrayList<String> allFolders = new ArrayList<String>();
+	//private ArrayList<String> allFolders = new ArrayList<String>();
 	
 
 	/**
@@ -89,8 +91,8 @@ public class myFrame{
 	 * Create the application.
 	 */
 	public myFrame()  {
-		filtDB = new Stack<Database>();
-		allFilter = new ArrayList<Filter>();
+		
+		
 		initialize();
 	}
 	
@@ -126,14 +128,14 @@ public class myFrame{
 		btnCreateCsv.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				if(filesCounter > 0){
+				if(getServer().filesCounter > 0){
 					
 					JFileChooser chooser = new JFileChooser();
 					int returnVal = chooser.showSaveDialog(btnCreateCsv);
 					if(returnVal == JFileChooser.APPROVE_OPTION) {
 						Write_csv wc = new Write_csv(chooser.getSelectedFile().getName());
 						String s = chooser.getSelectedFile().getPath();
-						wc.writeGUIcsv(s.substring(0,cutLastinPath(s)), filtDB.peek(), frame);
+						wc.writeGUIcsv(s.substring(0,server.cutLastinPath(s)), server.filtDB.peek(), frame);
 					}
 				}
 				else
@@ -148,16 +150,16 @@ public class myFrame{
 		JButton btnCreateKml = new JButton("Create KML");
 		btnCreateKml.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(filesCounter > 0){
+				if(getServer().filesCounter > 0){
 					
 					JFileChooser chooser = new JFileChooser();
 					int returnVal = chooser.showSaveDialog(btnCreateKml);
 					if(returnVal == JFileChooser.APPROVE_OPTION) {
-						Tokml kml = new Tokml(filtDB.peek());
+						Tokml kml = new Tokml(server.filtDB.peek());
 						
 						String s = chooser.getSelectedFile().getPath();
 						try {
-							kml.CreateKmlByFilter(chooser.getSelectedFile().getName(), frame, s.substring(0,cutLastinPath(s)));
+							kml.CreateKmlByFilter(chooser.getSelectedFile().getName(), frame, s.substring(0,server.cutLastinPath(s)));
 						} catch (DataException e1) {
 							
 							e1.printStackTrace();
@@ -181,7 +183,7 @@ public class myFrame{
 		btnAddFilter.setForeground(Color.BLACK);
 		btnAddFilter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(filesCounter > 0){
+				if(getServer().filesCounter > 0){
 					frame.setVisible(false);
 					FilterFrame f = new FilterFrame(myframe);
 					f.setVisible(true);
@@ -201,7 +203,7 @@ public class myFrame{
 		p = new JPanel();
 		p.setBounds(288, 0, 761, 630);
 		p.setLayout(null);
-		display();
+		
 		panel.add(p);
 		/////////////////////////////////////////////////////////////////////////////
 		JLabel lblFilters = new JLabel("Filters:");
@@ -231,8 +233,8 @@ public class myFrame{
 				int returnVal = chooser.showOpenDialog(mntmAddFile);
 				if(returnVal == JFileChooser.APPROVE_OPTION) {
 					
-					addFile(chooser.getSelectedFile().getPath());
-					display();
+					getServer().addFile(chooser.getSelectedFile().getPath());
+					getServer().display();
 				}
 				
 			}
@@ -254,12 +256,12 @@ public class myFrame{
 					
 					try 
 					{
-						allFolders.add(chooser.getSelectedFile().getPath());
-						ArrayList<String>paths = getAllPaths(chooser.getSelectedFile().getPath());
+						getServer().allFolders.add(chooser.getSelectedFile().getPath());
+						ArrayList<String>paths = server.getAllPaths(chooser.getSelectedFile().getPath());
 						for (int i = 0; i < paths.size(); i++) {
-							addFile(paths.get(i));
+							getServer().addFile(paths.get(i));
 						}
-						display();
+						getServer().display();
 					} 
 					catch (DataException e1) {
 						
@@ -278,7 +280,7 @@ public class myFrame{
 		mntmAddExistFilter.setFont(new Font("Segoe UI", Font.PLAIN, 25));
 		mntmAddExistFilter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(allFilter.size() > 0 && filesCounter >0){
+				if(server.allFilter.size() > 0 && server.filesCounter >0){
 				JFileChooser chooser = new JFileChooser();
 				FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				    "Serializable Files", "ser");
@@ -291,9 +293,9 @@ public class myFrame{
 					 System.out.println(s);
 				     Deserialize des = new Deserialize(s);
 					 Filter f= des.Read();
-				     allFilter.add(f);
-				     updateStack();
-				     display();
+				     server.allFilter.add(f);
+				     server.updateStack();
+				     server.display();
 				}
 				}
 				else
@@ -310,8 +312,8 @@ public class myFrame{
 		mntmAlgo_1.setFont(new Font("Segoe UI", Font.PLAIN, 25));
 		mntmAlgo_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(filesCounter >0){
-				Algo2_frame algo2=new Algo2_frame (mainDB);
+				if(server.filesCounter >0){
+				Algo2_frame algo2=new Algo2_frame (server.mainDB);
 				algo2.setVisible(true);}
 				else
 					JOptionPane.showMessageDialog(frame, "You need to add files first");
@@ -323,8 +325,8 @@ public class myFrame{
 		mntmAlgo.setFont(new Font("Segoe UI", Font.PLAIN, 25));
 		mntmAlgo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(filesCounter >0){
-				Algo1_frame Algo1=new Algo1_frame(mainDB);
+				if(server.filesCounter >0){
+				Algo1_frame Algo1=new Algo1_frame(server.mainDB);
 				Algo1.setVisible(true);}
 				else
 					JOptionPane.showMessageDialog(frame, "You need to add files first");
@@ -332,11 +334,19 @@ public class myFrame{
 		});
 		mnAlgo.add(mntmAlgo);
 		
+		server = new Server(lblNumberOfMacs,lblNumberOfLines,p,panel_1);
+		
+		getServer().display();
 		
 		
 	}
+
+	public Server getServer() {
+		return server;
+	}
+
 	
-	
+	/*
 	private void displayFilters() throws IOException{
 		
 		JLabel lbl =null;
@@ -351,7 +361,7 @@ public class myFrame{
 			  panel_1.add(lbl);
 			  
 			  if(i>0){
-				  JButton importFilter = new JButton("Import");
+				  JButton importFilter = new JButton("Export");
 				  
 				  importFilter.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 				  importFilter.setBounds(120, 10 + i*40, 80, 22);
@@ -634,4 +644,5 @@ public class myFrame{
 		  }
 		  filesCounter++;
 	}
+	*/
 }

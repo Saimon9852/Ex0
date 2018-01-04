@@ -1,8 +1,9 @@
-package mypack;
+package Filter;
 
 import java.io.Serializable;
 
-import Filter.Filter;
+import mypack.WifiSpot;
+import mypack.WifiSpots;
 
 public class FakeFilter implements Filter, Serializable {
 

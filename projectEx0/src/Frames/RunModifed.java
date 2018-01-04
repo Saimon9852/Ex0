@@ -14,9 +14,9 @@ public class RunModifed implements Runnable {
 	public void run() {
 		while (true) {
 			
-			if(frame.filesCounter >0){
-			frame.fileWasUpdated();
-			frame.folderWasUpdated();
+			if(frame.getServer().filesCounter >0){
+			frame.getServer().fileWasUpdated();
+			frame.getServer().folderWasUpdated();
 			}
 			
 			try {

@@ -4,13 +4,13 @@
 	<classpathentry kind="src" path="JunitTests"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="C:/Users/Student/Desktop/API&apos;S (2)/activation-1.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Student/Desktop/API&apos;S (2)/commons-csv-1.5.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Student/Desktop/API&apos;S (2)/JavaAPIforKml-2.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Student/Desktop/API&apos;S (2)/jaxb-api-2.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Student/Desktop/API&apos;S (2)/jaxb-impl-2.1.17.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Student/Desktop/API&apos;S (2)/jsr173_api-1.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Student/Desktop/API&apos;S (2)/org.junit.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Student/Desktop/API&apos;S (2)/org.junit-3.8.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Saimon/Desktop/API&apos;S/API&apos;S (2)/activation-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Saimon/Desktop/API&apos;S/API&apos;S (2)/commons-csv-1.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Saimon/Desktop/API&apos;S/API&apos;S (2)/JavaAPIforKml-2.2.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Saimon/Desktop/API&apos;S/API&apos;S (2)/jaxb-api-2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Saimon/Desktop/API&apos;S/API&apos;S (2)/jaxb-impl-2.1.17.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Saimon/Desktop/API&apos;S/API&apos;S (2)/jsr173_api-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Saimon/Desktop/API&apos;S/API&apos;S (2)/org.junit.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Saimon/Desktop/API&apos;S/API&apos;S (2)/org.junit-3.8.2.jar"/>
 	<classpathentry kind="output" path="projectEx0/bin"/>
 </classpath>

@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
+import Filter.FakeFilter;
 import Filter.Filter;
 import Filter.IdFilter;
 import Filter.LocationFilter;
