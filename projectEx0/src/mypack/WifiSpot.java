@@ -2,6 +2,7 @@ package mypack;
 
 import java.io.FileReader;
 import java.io.Reader;
+import java.io.Serializable;
 import java.util.Comparator;
 
 import org.apache.commons.csv.CSVFormat;
@@ -14,7 +15,7 @@ import org.apache.commons.csv.CSVRecord;
  * @author Ehud Plaksin, Saimon Lankry
  *
  */
-public class WifiSpot {
+public class WifiSpot implements Serializable {
 	private String ssid;
 	private String mac;
 	private String firsseen;

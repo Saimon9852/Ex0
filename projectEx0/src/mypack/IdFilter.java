@@ -1,14 +1,15 @@
 package mypack;
 
+import java.io.Serializable;
 import java.util.Scanner;
 /*
  * we use this class to filter our Database by id.
  * we get id from the user,and filter all the samples that dont have that id.
  */
-public class IdFilter implements Filter {
+public class IdFilter implements Filter ,Serializable {
 	//holds the user id.
-	static String identifier="";
-	static String type="";
+	 String identifier="";
+	 String type="";
 	/*
 	 * gets input from the user, and sets identifier with it.
 	 */
@@ -64,9 +65,11 @@ public class IdFilter implements Filter {
 	
 	public boolean Filt(WifiSpot s) {		
 		return true;
-
 	}
 
-
+	public String toString(){
+		return "Filter by key: Key =" + type + " by word =" + identifier;
+	}
+	
 
 }

@@ -19,6 +19,8 @@ public class Or_Filter implements Filter{
 	}
 
 	public String toString() {
-		return "("+_f1+" or "+_f2+")";
+		return "("+_f1.toString()+" OR "+_f2.toString()+")";
 	}
+	
+	
 }

@@ -7,6 +7,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -14,6 +15,7 @@ import javax.swing.JMenu;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.NavigableMap;
 import java.util.Stack;
@@ -255,6 +257,32 @@ public class myFrame{
 		mntmAddFolder.setFont(new Font("Segoe UI", Font.PLAIN, 35));
 		mnEdit.add(mntmAddFolder);
 		
+		JMenuItem mntmAddExistFilter = new JMenuItem("Add Exist Filter");
+		mntmAddExistFilter.setFont(new Font("Segoe UI", Font.PLAIN, 35));
+		mntmAddExistFilter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				JFileChooser chooser = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				    "Serializable Files", "ser");
+				chooser.setFileFilter(filter);
+				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				int returnVal = chooser.showOpenDialog(mntmAddExistFilter);
+				
+				if(returnVal == JFileChooser.APPROVE_OPTION) {
+					 String s = chooser.getSelectedFile().getPath();
+					 System.out.println(s);
+				     Deserialize des = new Deserialize(s);
+					 Filter f= des.Read();
+				     allFilter.add(f);
+				     updateStack();
+				     display();
+				}
+				
+			}
+		});
+		mnEdit.add(mntmAddExistFilter);
+		
 		JMenu mnAlgo = new JMenu("Algo");
 		mnAlgo.setFont(new Font("Segoe UI", Font.PLAIN, 40));
 		menuBar.add(mnAlgo);
@@ -292,8 +320,34 @@ public class myFrame{
 			  if(i==0) lbl = new JLabel("Datebase");
 			  else lbl = new JLabel("Filter" + i);
 			  lbl.setBounds(100, 10+ i*70, 180, 40);
-			  //panel_1.removeAll();
+			  if(i>0){
+				  lbl.setToolTipText(allFilter.get(i-1).toString());
+			  }
 			  panel_1.add(lbl);
+			  
+			  if(i>0){
+				  JButton importFilter = new JButton("Import");
+				  importFilter.setFont(new Font("Segoe UI", Font.PLAIN, 28));
+				  importFilter.setBounds(230, 10 + i*70, 80, 40);
+				  importFilter.setName(Integer.toString(i));
+				  importFilter.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							
+							JFileChooser chooser = new JFileChooser();
+							int returnVal = chooser.showSaveDialog(importFilter);
+							if(returnVal == JFileChooser.APPROVE_OPTION) {
+								String s = chooser.getSelectedFile().getPath();
+								
+								Serialize ser = new Serialize(s);
+								int a = Integer.parseInt(importFilter.getName());
+								ser.Write(allFilter.get(a-1));
+							}
+						}
+					});
+				  
+				  panel_1.add(importFilter);
+			  }
+			  
 			  lbl.setFont(new Font("Tahoma", Font.PLAIN, 36));
 			  if(i == allFilter.size()){
 				  JButton undo = new JButton("X");
@@ -314,7 +368,6 @@ public class myFrame{
 							}
 							filtDB.pop();
 							display();
-							//displayFilters();
 						}
 					});
 				  panel_1.add(undo);
@@ -382,6 +435,7 @@ public class myFrame{
 		lblNumberOfLines.setText("Number of Lines: "+ rows);
 		lblNumberOfMacs.setText("Number of Macs: "+ macs);
 		JTable table = new JTable(data, columns);
+		table.setFont(new Font("Tahoma", Font.PLAIN, 27));
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		table.setFillsViewportHeight(true);

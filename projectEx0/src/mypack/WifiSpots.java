@@ -2,6 +2,7 @@ package mypack;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -18,7 +19,7 @@ import Comparator.CustomComparator;
  * @author 
  *
  */
-public class WifiSpots {
+public class WifiSpots implements Serializable {
 	private String FirstSeen;
 	private String Altitude;
 	private String Longtitude;

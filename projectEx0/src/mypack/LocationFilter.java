@@ -1,5 +1,6 @@
 package mypack;
 
+import java.io.Serializable;
 import java.util.Scanner;
 /*
  * we use this class as a tool,to filter our database.
@@ -7,7 +8,7 @@ import java.util.Scanner;
  * we then only take samples that are in the radius,
  * and dont use the ones that outside of it.
  */
-public class LocationFilter implements Filter{
+public class LocationFilter implements Filter , Serializable{
 	static double Latitude=35.23583;
 	static double Longtitude=31.77617;
 	static double Radius=5;
@@ -93,4 +94,8 @@ public class LocationFilter implements Filter{
 	}
 
 
+	public String toString(){
+		return "Location Filter: Lon:" + Longtitude + " Lat:" + Latitude + " Radius:" + Radius;
+	}
+	
 }

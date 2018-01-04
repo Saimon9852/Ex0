@@ -16,7 +16,8 @@ public class Not_Filter implements Filter{
 		return !(_Filter.Filt(s));
 	}
 
-	public String toString() {
-		return "not("+_Filter+")";
+	
+	public String toString(){
+		return "Not Filter on" + _Filter.toString();
 	}
 }

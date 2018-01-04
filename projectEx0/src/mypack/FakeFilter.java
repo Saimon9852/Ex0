@@ -1,6 +1,8 @@
 package mypack;
 
-public class FakeFilter implements Filter {
+import java.io.Serializable;
+
+public class FakeFilter implements Filter, Serializable {
 
 	public FakeFilter(){
 		
@@ -13,6 +15,10 @@ public class FakeFilter implements Filter {
 	public boolean Filt(WifiSpot wifiSpot) {
 		// TODO Auto-generated method stub
 		return true;
+	}
+	
+	public String toString(){
+		return "";
 	}
 
 }

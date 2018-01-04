@@ -1,5 +1,6 @@
 package mypack;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,7 +14,7 @@ import sun.util.resources.cldr.aa.CalendarData_aa_ER;
  * @author Ehud Plaksin, Saimon Lankry
  *
  */
-public class TimeFilter implements Filter {
+public class TimeFilter implements Filter ,Serializable {
 	static DateFormat format=new SimpleDateFormat("MM/dd/yyyy HH:mm");
 	static Date from=new Date(0);
 	static Date to=Calendar.getInstance().getTime();
@@ -91,6 +92,10 @@ public class TimeFilter implements Filter {
 	}
 
 
+	public String toString(){
+		return "Time Filter: Start Date:" + from.toString() + " End Date:" + to.toString();
+	}
+	
 	/**
 	 * sets the To date.
 	 */

@@ -17,6 +17,6 @@ public class And_Filter implements Filter {
 		return _f1.Filt(s) && _f2.Filt(s);
 	}
 	public String toString() {
-		return "("+_f1+" and "+_f2+")";
+		return "("+_f1.toString()+" AND "+_f2.toString()+")";
 	}
 }
