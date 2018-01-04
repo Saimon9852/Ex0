@@ -4,9 +4,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+import Filter.Filter;
+
 public class Deserialize {
 	String path;
-	Deserialize(String path){
+	public Deserialize(String path){
 		this.path=path;
 	}
 	

@@ -4,9 +4,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+import Filter.Filter;
+import Filter.IdFilter;
+import Filter.LocationFilter;
+import Filter.TimeFilter;
+import Filter.And_Filter;
+import Filter.Or_Filter;
+import Filter.Not_Filter;
+
 public class Serialize {
 	String path;
-	Serialize(String path){
+	public Serialize(String path){
 		this.path=path;
 	}
 	
@@ -18,8 +26,16 @@ public class Serialize {
 		else if(f instanceof TimeFilter){
 			f = (TimeFilter)f;
 		}
-		else
+		else if(f instanceof LocationFilter)
 			f = (LocationFilter)f;
+		else if(f instanceof And_Filter){
+			f=(And_Filter)f;
+		}else if (f instanceof Or_Filter){
+			f=(Or_Filter)f;
+			
+		}else if(f instanceof Not_Filter){
+			f=(Not_Filter)f;
+		}
 		
 		try {
 			FileOutputStream fileOut =

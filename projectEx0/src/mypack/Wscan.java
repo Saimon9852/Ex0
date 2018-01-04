@@ -9,8 +9,8 @@ import java.util.ArrayList;
 public class Wscan {
 	
 	ArrayList<WifiSpot> scan;
-	double weight;
-	Wscan(double weight,ArrayList<WifiSpot> scan){
+	public double weight;
+	public Wscan(double weight,ArrayList<WifiSpot> scan){
 		this.weight=weight;
 		this.scan=scan;
 	}

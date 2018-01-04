@@ -21,6 +21,10 @@ import javax.swing.JOptionPane;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
+import Filter.Filter;
+import Filter.IdFilter;
+import Filter.LocationFilter;
+import Filter.TimeFilter;
 import de.micromata.opengis.kml.v_2_2_0.Document;
 import de.micromata.opengis.kml.v_2_2_0.Kml;
 import de.micromata.opengis.kml.v_2_2_0.Placemark;

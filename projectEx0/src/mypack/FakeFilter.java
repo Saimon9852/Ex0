@@ -2,6 +2,8 @@ package mypack;
 
 import java.io.Serializable;
 
+import Filter.Filter;
+
 public class FakeFilter implements Filter, Serializable {
 
 	public FakeFilter(){
