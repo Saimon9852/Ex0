@@ -1,0 +1,22 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+archivesBaseName = 'someJar'
+version = '1.0-SNAPSHOT' 
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'Frames.myFrame'
+    }
+}
+
+dependencies {
+	compile files('libs/activation-1.1.jar','libs/commons-csv-1.5.jar','libs/JavaAPIforKml-2.2.jar'
+	,'libs/javadoc.jar','libs/jaxb-api-2.1.jar','libs/jaxb-impl-2117.jar','libs/jgoodies-forms-180.jar',
+	'libs/jgoodies-forms-180-sources.jar','libs/jsr173_api-1.0.jar','libs/org.junit.jar','libs/org.junit-382.jar')
+   compile  'log4j:log4j:1.2.16'
+   
+} 
