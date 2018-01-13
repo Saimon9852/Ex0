@@ -44,6 +44,11 @@ public class WifiSpot implements Serializable {
 		this.mac=mac;
 		this.chanel=chanel;
 	}
+	public WifiSpot(String mac,String rssi){
+		this.rssi=rssi;
+		this.mac=mac;
+	}
+
 
 	public String getSsid() {
 		return ssid;

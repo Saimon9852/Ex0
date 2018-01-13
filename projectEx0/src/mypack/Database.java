@@ -14,6 +14,7 @@ public class Database {
 
 	private ArrayList<WifiSpots> DB=new ArrayList<WifiSpots>();
 	private HashMap<String,ArrayList<WifiSpot>> macim=new HashMap<>();
+	private HashMap<String,SQL_Server> server_watch=new HashMap<>();
 
 
 	public Database(String path,String format){
@@ -27,6 +28,22 @@ public class Database {
 		macim=Macim(DB);
 	}
 	
+	public HashMap<String, SQL_Server> getServer_watch() {
+		return server_watch;
+	}
+
+	public void setServer_watch(HashMap<String, SQL_Server> server_watch) {
+		this.server_watch = server_watch;
+	}
+
+	public void setDB(ArrayList<WifiSpots> dB) {
+		DB = dB;
+	}
+
+	public void setMacim(HashMap<String, ArrayList<WifiSpot>> macim) {
+		this.macim = macim;
+	}
+
 	public Database(ArrayList<WifiSpots> upDb){
 		 DB = upDb;
 		 macim = Macim(DB);

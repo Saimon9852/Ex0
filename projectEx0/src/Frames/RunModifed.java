@@ -17,6 +17,7 @@ public class RunModifed implements Runnable {
 			if(frame.getServer().filesCounter >0){
 			frame.getServer().fileWasUpdated();
 			frame.getServer().folderWasUpdated();
+			frame.getServer().serverwasupdated();
 			}
 			
 			try {

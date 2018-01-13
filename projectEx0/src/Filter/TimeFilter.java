@@ -97,6 +97,9 @@ public class TimeFilter implements Filter ,Serializable {
 	public String toString(){
 		return "Time Filter: Start Date:" + from.toString() + " End Date:" + to.toString();
 	}
+	public String toSQL(String table,String table_schema) {
+		return "time BETWEEN "+from+" AND "+ to;
+	}
 	
 	/**
 	 * sets the To date.

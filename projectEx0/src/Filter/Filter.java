@@ -11,4 +11,5 @@ public interface Filter  extends Serializable {
 	public boolean Filt(WifiSpot wifiSpot);
 	
 	public String toString();
+	
 }

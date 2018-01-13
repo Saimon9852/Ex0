@@ -33,6 +33,14 @@ public class WifiSpots implements Serializable {
 		Collections.sort(spots,new CustomComparator());
 
 	}
+	public WifiSpots(String FirstSeen,String ID,String Latitude,String Longtitude,String Altitude,String fromID) {
+		this.Altitude=Altitude;
+		this.FirstSeen=FirstSeen;
+		this.Latitude=Latitude;
+		this.ID=ID;
+		this.Longtitude=Longtitude;
+		this.fromID=fromID;
+	}
 	
 	
 	public void setFrom(String from){
