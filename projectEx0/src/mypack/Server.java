@@ -41,6 +41,8 @@ public class Server {
 	public ArrayList<String> allFolders = new ArrayList<String>();
 
 	public Server(JLabel macs,JLabel line,JPanel p,JPanel p1){
+		mainDB = new Database();
+		
 		this.lblNumberOfLines =line;
 		this.lblNumberOfMacs = macs;
 		this.p=p;
@@ -339,7 +341,8 @@ public class Server {
 				Csv myfile = new Csv(path);
 				if(filesCounter == 0)
 				{
-					mainDB = new Database(myfile.getLittleDB());
+					//mainDB = new Database(myfile.getLittleDB());
+					mainDB.addToDB(myfile.getLittleDB());
 					filtDB.push(mainDB);
 					pathToModifited.put(path, file.lastModified());
 				}
@@ -356,7 +359,9 @@ public class Server {
 			}    
 		}
 		else{
-			if(filesCounter == 0){ mainDB = new Database(path,"WifiSpots");filtDB.push(mainDB);
+			if(filesCounter == 0){ //mainDB = new Database(path,"WifiSpots");
+			mainDB.add(path);
+			filtDB.push(mainDB);
 			pathToModifited.put(path, file.lastModified());}
 
 			else{

@@ -6,12 +6,26 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import mypack.Database;
+import mypack.Read_fSQL;
+
 import javax.swing.JTextField;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class SQLServer_Frame extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
+	private JTextField txtPass;
+	private JTextField txtUser;
+	private JTextField txtURL;
+	private JTextField txtIp;
+	private JTextField txtTable;
+	private JTextField txtTableSch;
 
 	/**
 	 * Launch the application.
@@ -20,7 +34,7 @@ public class SQLServer_Frame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					SQLServer_Frame frame = new SQLServer_Frame();
+					SQLServer_Frame frame = new SQLServer_Frame(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -32,17 +46,85 @@ public class SQLServer_Frame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public SQLServer_Frame() {
+	public SQLServer_Frame(myFrame mframe) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 836, 422);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		contentPane.setLayout(null);
 		
-		textField = new JTextField();
-		contentPane.add(textField, BorderLayout.CENTER);
-		textField.setColumns(10);
+		txtPass = new JTextField();
+		txtPass.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		txtPass.setBounds(15, 69, 236, 39);
+		contentPane.add(txtPass);
+		txtPass.setColumns(10);
+		
+		JLabel lblPassword = new JLabel("Password:");
+		lblPassword.setBounds(15, 28, 141, 33);
+		contentPane.add(lblPassword);
+		
+		txtUser = new JTextField();
+		txtUser.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		txtUser.setBounds(299, 69, 218, 39);
+		contentPane.add(txtUser);
+		txtUser.setColumns(10);
+		
+		JLabel lblUser = new JLabel("User:");
+		lblUser.setBounds(299, 28, 115, 33);
+		contentPane.add(lblUser);
+		
+		JLabel lblIp = new JLabel("IP:");
+		lblIp.setBounds(299, 160, 115, 33);
+		contentPane.add(lblIp);
+		
+		JLabel lblUrl = new JLabel("URL:");
+		lblUrl.setBounds(567, 28, 141, 33);
+		contentPane.add(lblUrl);
+		
+		txtURL = new JTextField();
+		txtURL.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		txtURL.setColumns(10);
+		txtURL.setBounds(567, 69, 223, 39);
+		contentPane.add(txtURL);
+		
+		txtIp = new JTextField();
+		txtIp.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		txtIp.setColumns(10);
+		txtIp.setBounds(299, 201, 218, 39);
+		contentPane.add(txtIp);
+		
+		txtTable = new JTextField();
+		txtTable.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		txtTable.setBounds(15, 201, 236, 39);
+		contentPane.add(txtTable);
+		txtTable.setColumns(10);
+		
+		txtTableSch = new JTextField();
+		txtTableSch.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		txtTableSch.setBounds(572, 201, 218, 39);
+		contentPane.add(txtTableSch);
+		txtTableSch.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("Table");
+		lblNewLabel.setBounds(15, 160, 115, 33);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lblTableSchema = new JLabel("Table Schema:");
+		lblTableSchema.setBounds(567, 160, 187, 33);
+		contentPane.add(lblTableSchema);
+		
+		JButton btnConnect = new JButton("Connect");
+		btnConnect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Read_fSQL mysql = new Read_fSQL(mframe.getServer().mainDB,txtPass.getText(),txtUser.getText(),txtURL.getText(),txtIp.getText(),txtTable.getText(),txtTableSch.getText());
+				mysql.READ();
+				mframe.getServer().filesCounter++;
+				mframe.getServer().updateStack();
+				mframe.getServer().display();
+			}
+		});
+		btnConnect.setBounds(572, 283, 218, 41);
+		contentPane.add(btnConnect);
 	}
-
 }

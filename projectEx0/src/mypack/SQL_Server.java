@@ -20,12 +20,13 @@ public class SQL_Server {
 	private  String _password;
 	private String table;
 	private String table_Schema;
-	SQL_Server(String lstModified,String _ip,String _user,String _password,String table,String table_Schema){
+	SQL_Server(String lstModified,String _ip,String _user,String _password,String table,String table_Schema,String url){
 		this._ip=_ip;
 		this._password=_password;
 		this.lstModified=lstModified;
 		this._user=_user;
 		this.table=table;
+		this._url = url;
 		this.table_Schema=table_Schema;
 	}
 	public String gettable_Schema() {
@@ -79,7 +80,7 @@ public class SQL_Server {
 		try {     
 			_con = DriverManager.getConnection(_url, _user, _password);
 			st = _con.createStatement();
-			rs = st.executeQuery("SELECT UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = 'oop_course_ariel' AND TABLE_NAME = +"+table);
+			rs = st.executeQuery("SELECT UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = "+"'"+table_Schema+"'"+ "AND TABLE_NAME = "+"'"+table+"'");
 			if (rs.next()) {
 				/*if the last modified time isn't current, then table was modified*/
 				if(rs.getString(1)!=lstModified) {

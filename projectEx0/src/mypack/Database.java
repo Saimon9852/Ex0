@@ -16,7 +16,10 @@ public class Database {
 	private HashMap<String,ArrayList<WifiSpot>> macim=new HashMap<>();
 	private HashMap<String,SQL_Server> server_watch=new HashMap<>();
 
-
+	public Database(){
+		
+	}
+	
 	public Database(String path,String format){
 		
 		if(format.equals("WifiSpots")){
