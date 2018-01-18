@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'application'
 version = '1.0-SNAPSHOT' 
-mainClassName = 'Frames.myFrame'
+mainClassName = 'main.java.Frames.myFrame'
 
 repositories {
     mavenCentral()

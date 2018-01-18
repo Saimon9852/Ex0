@@ -72,7 +72,7 @@ set CMD_LINE_ARGS=%$
 set CLASSPATH=%APP_HOME%\lib\projectEx0-1.0-SNAPSHOT.jar;%APP_HOME%\lib\activation-1.1.jar;%APP_HOME%\lib\commons-csv-1.5.jar;%APP_HOME%\lib\JavaAPIforKml-2.2.jar;%APP_HOME%\lib\javadoc.jar;%APP_HOME%\lib\jaxb-api-2.1.jar;%APP_HOME%\lib\jaxb-impl-2117.jar;%APP_HOME%\lib\jgoodies-forms-180.jar;%APP_HOME%\lib\jgoodies-forms-180-sources.jar;%APP_HOME%\lib\jsr173_api-1.0.jar;%APP_HOME%\lib\org.junit.jar;%APP_HOME%\lib\org.junit-382.jar;%APP_HOME%\lib\log4j-1.2.16.jar
 
 @rem Execute projectEx0
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %PROJECT_EX0_OPTS%  -classpath "%CLASSPATH%" Frames.myFrame %CMD_LINE_ARGS%
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %PROJECT_EX0_OPTS%  -classpath "%CLASSPATH%" main.java.Frames.myFrame %CMD_LINE_ARGS%
 
 :end
 @rem End local scope for the variables with windows NT shell
