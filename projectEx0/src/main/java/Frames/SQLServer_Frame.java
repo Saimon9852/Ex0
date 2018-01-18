@@ -12,6 +12,7 @@ import main.java.mypack.Read_fSQL;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -26,7 +27,7 @@ public class SQLServer_Frame extends JFrame {
 	private JTextField txtIp;
 	private JTextField txtTable;
 	private JTextField txtTableSch;
-
+	private SQLServer_Frame frame;
 	/**
 	 * Launch the application.
 	 */
@@ -35,6 +36,7 @@ public class SQLServer_Frame extends JFrame {
 			public void run() {
 				try {
 					SQLServer_Frame frame = new SQLServer_Frame(null);
+					
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -117,13 +119,19 @@ public class SQLServer_Frame extends JFrame {
 		JButton btnConnect = new JButton("Connect");
 		btnConnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Read_fSQL mysql = new Read_fSQL(mframe.getServer().mainDB,txtPass.getText(),txtUser.getText(),txtURL.getText(),txtIp.getText(),txtTable.getText(),txtTableSch.getText());
-				mysql.READ();
-				mframe.getServer().filesCounter++;
-				mframe.getServer().updateStack();
-				mframe.getServer().display();
-				dispose();
 				
+				if(!txtPass.getText().equals("") && !txtUser.getText().equals("") &&!txtURL.getText().equals("") && !txtIp.getText().equals("")
+						&&!txtTable.getText().equals("") && !txtTableSch.getText().equals(""))
+				{
+					Read_fSQL mysql = new Read_fSQL(mframe.getServer().mainDB,txtPass.getText(),txtUser.getText(),txtURL.getText(),txtIp.getText(),txtTable.getText(),txtTableSch.getText());
+					mysql.READ();
+					mframe.getServer().filesCounter++;
+					mframe.getServer().updateStack();
+					mframe.getServer().display();
+					dispose();
+				}
+				else
+					JOptionPane.showMessageDialog(frame, "All fields can not be empty");
 			}
 		});
 		btnConnect.setBounds(572, 283, 218, 41);

@@ -26,12 +26,10 @@ public class Read_fSQL {
 
 	
 	public Read_fSQL(Database db,String pass,String user,String port,String ip,String table,String tableSch){
-		//ex4_db jdbc:mysql://"+_ip+":3306/oop_course_ariel";
 		
 		this._password = pass;
 		this._user = user;
 		this._url= "jdbc:mysql://" + ip + ":" + port + "/" + tableSch;
-		System.out.println(_url);
 		this._ip=ip;
 		this.table = table;
 		this.table_shcema = tableSch;
