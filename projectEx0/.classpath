@@ -3,17 +3,17 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="lib" path="/home/ehud/git/Ex0/projectEx0/mysql-connector-java-5.1.45/mysql-connector-java-5.1.45-bin.jar"/>
-	<classpathentry kind="lib" path="/home/ehud/git/Ex0/projectEx0/libs/activation-1.1.jar"/>
-	<classpathentry kind="lib" path="/home/ehud/git/Ex0/projectEx0/libs/com.mysql.jdbc_5.1.5.jar.zip"/>
-	<classpathentry kind="lib" path="/home/ehud/git/Ex0/projectEx0/libs/commons-csv-1.5.jar"/>
-	<classpathentry kind="lib" path="/home/ehud/git/Ex0/projectEx0/libs/JavaAPIforKml-2.2.jar"/>
-	<classpathentry kind="lib" path="/home/ehud/git/Ex0/projectEx0/libs/jaxb-api-2.1.jar"/>
-	<classpathentry kind="lib" path="/home/ehud/git/Ex0/projectEx0/libs/jaxb-impl-2117.jar"/>
-	<classpathentry kind="lib" path="/home/ehud/git/Ex0/projectEx0/libs/jgoodies-forms-180.jar"/>
-	<classpathentry kind="lib" path="/home/ehud/git/Ex0/projectEx0/libs/jgoodies-forms-180-sources.jar"/>
-	<classpathentry kind="lib" path="/home/ehud/git/Ex0/projectEx0/libs/jsr173_api-1.0.jar"/>
-	<classpathentry kind="lib" path="/home/ehud/git/Ex0/projectEx0/libs/org.junit.jar"/>
-	<classpathentry kind="lib" path="/home/ehud/git/Ex0/projectEx0/libs/org.junit-382.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Student/git/Ex0/projectEx0/libs/activation-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Student/git/Ex0/projectEx0/libs/com.mysql.jdbc_5.1.5.jar.zip"/>
+	<classpathentry kind="lib" path="C:/Users/Student/git/Ex0/projectEx0/libs/commons-csv-1.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Student/git/Ex0/projectEx0/libs/JavaAPIforKml-2.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Student/git/Ex0/projectEx0/libs/jaxb-api-2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Student/git/Ex0/projectEx0/libs/jaxb-impl-2117.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Student/git/Ex0/projectEx0/libs/jgoodies-forms-180.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Student/git/Ex0/projectEx0/libs/jgoodies-forms-180-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Student/git/Ex0/projectEx0/libs/jsr173_api-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Student/git/Ex0/projectEx0/libs/org.junit.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Student/git/Ex0/projectEx0/libs/org.junit-382.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Student/git/Ex0/projectEx0/mysql-connector-java-5.1.45/mysql-connector-java-5.1.45-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

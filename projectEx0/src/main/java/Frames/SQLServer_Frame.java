@@ -47,7 +47,7 @@ public class SQLServer_Frame extends JFrame {
 	 * Create the frame.
 	 */
 	public SQLServer_Frame(myFrame mframe) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		setBounds(100, 100, 836, 422);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -78,9 +78,9 @@ public class SQLServer_Frame extends JFrame {
 		lblIp.setBounds(299, 160, 115, 33);
 		contentPane.add(lblIp);
 		
-		JLabel lblUrl = new JLabel("URL:");
-		lblUrl.setBounds(567, 28, 141, 33);
-		contentPane.add(lblUrl);
+		JLabel lblPort = new JLabel("Port:");
+		lblPort.setBounds(567, 28, 141, 33);
+		contentPane.add(lblPort);
 		
 		txtURL = new JTextField();
 		txtURL.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -122,9 +122,20 @@ public class SQLServer_Frame extends JFrame {
 				mframe.getServer().filesCounter++;
 				mframe.getServer().updateStack();
 				mframe.getServer().display();
+				dispose();
+				
 			}
 		});
 		btnConnect.setBounds(572, 283, 218, 41);
 		contentPane.add(btnConnect);
+		
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		});
+		btnCancel.setBounds(330, 283, 218, 41);
+		contentPane.add(btnCancel);
 	}
 }

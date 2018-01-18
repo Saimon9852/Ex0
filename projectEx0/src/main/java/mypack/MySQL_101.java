@@ -87,7 +87,7 @@ public class MySQL_101 {
         try {     
             _con = DriverManager.getConnection(_url, _user, _password);
             st = _con.createStatement();
-            rs = st.executeQuery("SELECT UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = 'oop_course_ariel' AND TABLE_NAME = 'ex4_db'");
+            rs = st.executeQuery("SELECT UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = 'oop_course_ariel' AND TABLE_NAME = 's'");
             if (rs.next()) {
                 System.out.println("**** Update: "+rs.getString(1));
             }

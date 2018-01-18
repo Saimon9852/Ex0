@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
  * 
- * @author ehud and Boaz
+ * @author ehusdd and Boaz
  *
  */
 public class Read_fSQL {
@@ -25,11 +25,13 @@ public class Read_fSQL {
 	private Database db;
 
 	
-	public Read_fSQL(Database db,String pass,String user,String url,String ip,String table,String tableSch){
+	public Read_fSQL(Database db,String pass,String user,String port,String ip,String table,String tableSch){
+		//ex4_db jdbc:mysql://"+_ip+":3306/oop_course_ariel";
 		
 		this._password = pass;
 		this._user = user;
-		this._url=url;
+		this._url= "jdbc:mysql://" + ip + ":" + port + "/" + tableSch;
+		System.out.println(_url);
 		this._ip=ip;
 		this.table = table;
 		this.table_shcema = tableSch;
