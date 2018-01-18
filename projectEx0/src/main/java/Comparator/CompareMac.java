@@ -1,10 +1,10 @@
-package Comparator;
+package main.java.Comparator;
 /**
  * a simple comparator for sorting ArrayList of Type WifiSpot by Signal Strength.
  */
 import java.util.Comparator;
 
-import mypack.WifiSpot;
+import main.java.mypack.*;
 
 public class CompareMac implements Comparator<WifiSpot> {
 

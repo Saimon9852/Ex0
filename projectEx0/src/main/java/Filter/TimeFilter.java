@@ -1,4 +1,4 @@
-package Filter;
+package main.java.Filter;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -8,8 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
 
-import mypack.WifiSpot;
-import mypack.WifiSpots;
+import main.java.mypack.*;
 import sun.util.resources.cldr.aa.CalendarData_aa_ER;
 /**
  * this class is used to filter by time.

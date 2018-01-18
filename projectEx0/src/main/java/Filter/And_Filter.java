@@ -1,7 +1,6 @@
-package Filter;
+package main.java.Filter;
 
-import mypack.WifiSpot;
-import mypack.WifiSpots;
+import main.java.mypack.*;
 
 /**
  * 

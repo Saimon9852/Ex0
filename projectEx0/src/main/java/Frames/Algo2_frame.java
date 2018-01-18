@@ -1,4 +1,4 @@
-package Frames;
+package main.java.Frames;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -7,11 +7,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Algorithms.MacLoc_2;
-import mypack.Database;
-import mypack.WifiSpot;
-import mypack.WifiSpots;
-import mypack.macValidate;
+import main.java.Algorithms.*;
+import main.java.Filter.*;
+import main.java.mypack.*;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;

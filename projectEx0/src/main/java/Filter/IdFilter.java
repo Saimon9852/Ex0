@@ -1,11 +1,10 @@
-package Filter;
+package main.java.Filter;
 
 import java.io.Serializable;
 import java.util.Scanner;
 
-import mypack.DataException;
-import mypack.WifiSpot;
-import mypack.WifiSpots;
+import main.java.mypack.*;
+;
 /*
  * we use this class to filter our Database by id.
  * we get id from the user,and filter all the samples that dont have that id.

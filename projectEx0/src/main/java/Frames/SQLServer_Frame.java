@@ -1,4 +1,4 @@
-package Frames;
+package main.java.Frames;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -7,8 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import mypack.Database;
-import mypack.Read_fSQL;
+import main.java.mypack.Database;
+import main.java.mypack.Read_fSQL;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;

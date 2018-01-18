@@ -1,17 +1,13 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
-archivesBaseName = 'someJar'
+apply plugin: 'application'
 version = '1.0-SNAPSHOT' 
+mainClassName = 'Frames.myFrame'
 
 repositories {
     mavenCentral()
 }
 
-jar {
-    manifest {
-        attributes 'Main-Class': 'Frames.myFrame'
-    }
-}
 
 dependencies {
 	compile files('libs/activation-1.1.jar','libs/commons-csv-1.5.jar','libs/JavaAPIforKml-2.2.jar'
@@ -20,3 +16,12 @@ dependencies {
    compile  'log4j:log4j:1.2.16'
    
 } 
+jar {
+        manifest {
+                attributes(
+                        'Class-Path': configurations.compile.collect{it.toURI().toString()}.join(' '),
+                        'Main-Class': 'main.java.Frames.myFrame')
+            }
+        }
+    
+

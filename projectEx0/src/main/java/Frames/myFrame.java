@@ -1,4 +1,4 @@
-package Frames;
+package main.java.Frames;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -18,16 +18,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.sun.prism.Image;
 
-import Filter.Filter;
-import mypack.Csv;
-import mypack.DataException;
-import mypack.Database;
-import mypack.Deserialize;
-import mypack.Serialize;
-import mypack.Server;
-import mypack.Tokml;
-import mypack.WifiSpots;
-import mypack.Write_csv;
+import main.java.Filter.*;
+import main.java.mypack.*;
 
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;

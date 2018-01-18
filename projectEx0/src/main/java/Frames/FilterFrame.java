@@ -1,4 +1,4 @@
-package Frames;
+package main.java.Frames;
 
 import java.awt.EventQueue;
 
@@ -16,13 +16,7 @@ import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.border.MatteBorder;
 
-import Filter.And_Filter;
-import Filter.Filter;
-import Filter.IdFilter;
-import Filter.LocationFilter;
-import Filter.Not_Filter;
-import Filter.Or_Filter;
-import Filter.TimeFilter;
+import main.java.Filter.*;
 
 import java.awt.Color;
 import javax.swing.SwingConstants;

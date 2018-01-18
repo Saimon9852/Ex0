@@ -1,7 +1,7 @@
-package Comparator;
+package main.java.Comparator;
 import java.util.Comparator;
 
-import mypack.Wscan;
+import main.java.mypack.*;
 /*
  * comparing Weighted Scans by their weight. (PI)
  */

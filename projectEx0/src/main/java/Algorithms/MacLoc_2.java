@@ -1,7 +1,4 @@
-package Algorithms;
-import mypack.Wscan;
-import mypack.Csv;
-import mypack.Read_CSV_NoGPS;
+package main.java.Algorithms;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,13 +9,9 @@ import java.util.Scanner;
 
 import javax.swing.plaf.synth.SynthSpinnerUI;
 
-import Comparator.CompareWscan;
-import mypack.Csv_noGPS;
-import mypack.Database;
-import mypack.WifiSpot;
-import mypack.WifiSpots;
-import mypack.Write_csv;
-import mypack.Wscan;
+import main.java.Comparator.*;
+import main.java.mypack.*;
+
 
 /**
  * this class is used for figuring user location by mac's surrounding him.

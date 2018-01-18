@@ -1,15 +1,12 @@
-package Algorithms;
+package main.java.Algorithms;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import Comparator.CompareMac;
-import mypack.DataException;
-import mypack.Database;
-import mypack.WifiSpot;
-import mypack.WifiSpots;
-import mypack.Write_csv;
+import main.java.Comparator.*;
+import main.java.mypack.*;
+
 /**
  * this class is for asserting the location of a Router.
  * @author Ehud Plaksin, Saimon Lankry

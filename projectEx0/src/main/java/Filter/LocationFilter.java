@@ -1,11 +1,10 @@
-package Filter;
+package main.java.Filter;
 
 import java.io.Serializable;
 import java.util.Scanner;
 
-import mypack.DataException;
-import mypack.WifiSpot;
-import mypack.WifiSpots;
+import main.java.mypack.*;
+
 /*
  * we use this class as a tool,to filter our database.
  * we filter by a geographical point, and a radius.

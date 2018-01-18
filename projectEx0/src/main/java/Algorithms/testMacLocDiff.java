@@ -1,11 +1,8 @@
-package Algorithms;
+package main.java.Algorithms;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import mypack.Database;
-import mypack.WifiSpot;
-import mypack.WifiSpots;
-import mypack.Write_csv;
+import main.java.mypack.*;
 
 
 /*
